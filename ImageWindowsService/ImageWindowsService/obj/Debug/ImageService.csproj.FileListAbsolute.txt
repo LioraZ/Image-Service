@@ -1,0 +1,9 @@
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe.config
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageService.csprojResolveAssemblyReference.cache
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageService.ImageService.resources
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageWindowsService.ProjectInstaller.resources
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageService.csproj.GenerateResource.Cache
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageWindowsService.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageWindowsService.pdb
