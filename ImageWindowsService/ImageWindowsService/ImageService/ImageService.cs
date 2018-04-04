@@ -67,9 +67,9 @@ namespace ImageService
 
         protected override void OnContinue() { eventLog1.WriteEntry("In OnContinue."); }
 
-        public void onMsg(string msg)
+        public void onMessageReceived(string msg)
         {
-            eventLog1.WriteEntry(msg);
+            eventLog1.WriteEntry(msg, eventId++);
         }
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
