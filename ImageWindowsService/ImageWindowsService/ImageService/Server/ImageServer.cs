@@ -16,11 +16,11 @@ namespace ImageService.Server
         #region Members
         private IImageController controller;
         private ILoggingService logger;
-        private Dictionary<int, CommandRecievedEventArgs>
+        private Dictionary<int, CommandReceivedEventArgs>
         #endregion
 
         #region Properties
-        public event EventHandler<CommandRecievedEventArgs> CommandRecieved;          // The event that notifies about a new Command being recieved
+        public event EventHandler<CommandReceivedEventArgs> CommandReceived;          // The event that notifies about a new Command being recieved
         #endregion
 
         public ImageServer()
@@ -29,20 +29,20 @@ namespace ImageService.Server
         }
         public void CreateHandler(string directory)
         {
-            Handler h = new Handler(directory, controller);
-            CommandRecieved += h.onCommandReceived();
-            h.onClose += onCloseServer;
+            IDirectoryHandler h = new DirectoryHandler(directory, controller);
+            CommandReceived += h.OnCommandRecieved;
+            h.DirectoryClose += OnCloseServer;
         }
         public void CloseHandler() { }
         public void SendCommand()
         {
-            onCommandReceived("*", CloseHandler);
+            CommandReceived("*", CloseHandler);
         }
-        public void OnCloseServer(object sender)
+        public void OnCloseServer(object sender, DirectoryCloseEventArgs args)
         {
-            h = sender;
-            onCommand -= HashSet.OnCommandReceived;
-            OnCommand -= HashSet.OnCloseSErver;
+            IDirectoryHandler h = (DirectoryHandler)sender; //check that is legal
+            CommandReceived -= h.OnCommandRecieved;
+            CommandReceived -= h.DirectoryClose;
         }
     }
 }

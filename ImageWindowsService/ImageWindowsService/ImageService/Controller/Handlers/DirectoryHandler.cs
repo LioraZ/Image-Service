@@ -13,19 +13,30 @@ using System.Text.RegularExpressions;
 
 namespace ImageService.Controller.Handlers
 {
-    public class DirectoyHandler : IDirectoryHandler
+    public class DirectoryHandler : IDirectoryHandler
     {
         #region Members
         private IImageController controller;              // The Image Processing Controller
         private ILoggingService logger;
         private FileSystemWatcher dirWatcher;             // The Watcher of the Dir
-        private string path;                              // The Path of directory
+        private string dirPath;                              // The Path of directory
         #endregion
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
 
-		// Implement Here!
+        public DirectoryHandler(string path, IImageController imageController)
+        {
+            controller = imageController;
+            dirPath = path;
+        }
         public void StartHandleDirectory(string dirPath) { }
-        public void OnCommandRecieved(object sender, CommandRecievedEventArgs e) { }
+        public void OnCommandRecieved(object sender, CommandReceivedEventArgs e)
+        {
+            string imgPath = e.RequestDirPath;
+            string imgDir = imgPath.Substring(imgPath.LastIndexOf("/"));
+            if (!dirPath.Contains(imgDir)) return;
+            //handle it!
+            //DirectoryClose?.Invoke(this, )
+        }
     }
 }

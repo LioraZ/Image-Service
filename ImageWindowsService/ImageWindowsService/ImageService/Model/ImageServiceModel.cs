@@ -14,13 +14,13 @@ namespace ImageService.Model
     public class ImageServiceModel : IImageServiceModel
     {
         #region Members
-        private string m_OutputFolder;            // The Output Folder
-        private int m_thumbnailSize;              // The Size Of The Thumbnail Size
+        private string outputFolder;            // The Output Folder
+        private int thumbnailSize;              // The Size Of The Thumbnail Size
         #endregion
 
         public string AddFile(string path, out bool result)
         {
-            return MoveFile(path, m_OutputFolder, out result);
+            return MoveFile(path, outputFolder, out result);
         }
         public string CreateFolder(string path, out bool result)
         {
@@ -53,11 +53,11 @@ namespace ImageService.Model
             //check edge cases
             try
             {
-                File.Copy(src, m_OutputFolder);
+                File.Copy(src, outputFolder);
                 result = true;
                 return "File successfully added!";
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 result = false;
                 return "File exists at output folder!";
