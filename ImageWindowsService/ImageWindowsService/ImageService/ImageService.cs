@@ -7,6 +7,7 @@ using ImageService.Server;
 using ImageService.Model;
 using ImageService.Controller;
 using ImageService.Logging;
+using ImageService.Logging.Model;
 
 namespace ImageService
 {
@@ -16,7 +17,7 @@ namespace ImageService
         private System.Diagnostics.EventLog eventLog1;
         private int eventId = 1;
 
-        private ImageServer m_imageServer;          // The Image Server
+        private ImageServer imageServer;          // The Image Server
         private IImageServiceModel model;
         private IImageController controller;
         private ILoggingService logger;
@@ -24,7 +25,6 @@ namespace ImageService
         public ImageService(string[] args)
         {
             InitializeComponent();
-            // ILogging loggingModel = new LoggingModel();
             string eventSourceName = "MySource";
             string logName = "MyNewLog";
             if (args.Count() > 0) { eventSourceName = args[0]; }
@@ -36,13 +36,13 @@ namespace ImageService
             }
             eventLog1.Source = eventSourceName;
             eventLog1.Log = logName;
-            // LoggingModel.onMsgEvent += onMsg("Created Service");
         }
 
         protected override void OnStart(string[] args)
         {
-            m_imageServer = new ImageServer();
+            imageServer = new ImageServer();
             logger = new LoggingService();
+            logger.MessageReceived += onMessageReceived;
 
             eventLog1.WriteEntry("In OnStart");
             // Update the service state to Start Pending.  
@@ -67,9 +67,9 @@ namespace ImageService
 
         protected override void OnContinue() { eventLog1.WriteEntry("In OnContinue."); }
 
-        public void onMessageReceived(string msg)
+        private void onMessageReceived(object sender, MessageRecievedEventArgs args)
         {
-            eventLog1.WriteEntry(msg, eventId++);
+            eventLog1.WriteEntry(args.Message, args.Status, eventId++); //make second args system.diagnostics type
         }
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
@@ -83,7 +83,7 @@ namespace ImageService
 
         private void eventLog1_EntryWritten(object sender, EntryWrittenEventArgs e)
         {
-
+        
         }
     }
 
@@ -109,14 +109,4 @@ namespace ImageService
         public int dwCheckPoint;
         public int dwWaitHint;
     };
-
-   /* public partial class ImageService : ServiceBase
-    {
-        private ImageServer m_imageServer;          // The Image Server
-        private IImageServiceModel model;
-        private IImageController controller;
-        private ILoggingService logger;
-        private System.Diagnostics.EventLog eventLog;
-        private int eventId = 1;
-    }*/
 }

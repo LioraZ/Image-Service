@@ -12,4 +12,5 @@ namespace ImageService.Logging.Model
         WARNING,
         FAIL
     }
+ 
 }
