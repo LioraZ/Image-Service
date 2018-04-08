@@ -40,8 +40,8 @@ namespace ImageService
 
         protected override void OnStart(string[] args)
         {
-            imageServer = new ImageServer();
             logger = new LoggingService();
+            imageServer = new ImageServer(logger);
             logger.MessageReceived += onMessageReceived;
 
             eventLog1.WriteEntry("In OnStart");

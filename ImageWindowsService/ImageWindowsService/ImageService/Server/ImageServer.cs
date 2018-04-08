@@ -1,6 +1,7 @@
 ﻿using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Infrastructure.Enums;
+using ImageService.Logging.Model;
 using ImageService.Logging;
 using ImageService.Model;
 using System;
@@ -16,7 +17,7 @@ namespace ImageService.Server
         #region Members
         private IImageController controller;
         private ILoggingService logger;
-        private Dictionary<string, CommandReceivedEventArgs> commands;
+        private Dictionary<string, int> commands;
         #endregion
 
         #region Properties
@@ -28,12 +29,13 @@ namespace ImageService.Server
             IImageServiceModel imageModel = new ImageServiceModel();
             controller = new ImageController(imageModel);
             logger = imageLogger;
-            commands = new Dictionary<string, CommandReceivedEventArgs>();
+            commands = new Dictionary<string, int>();
         }
 
         private void AddCommands()
         {
-            commands.Add("close handler", );
+            commands.Add("Close Handler", (int)CommandEnum.CloseCommand);
+            commands.Add("Add File", (int)CommandEnum.CloseCommand);
         }
 
         public void CreateHandler(string directory)
@@ -42,17 +44,17 @@ namespace ImageService.Server
             CommandReceived += h.OnCommandRecieved;
             h.DirectoryClose += OnCloseServer;
         }
-        public void CloseHandler() { }
-        public void SendCommand(string command)
+        public void SendCommand(string command, string path, string[] args)
         {
-            //CommandReceived(command, CloseHandler);
-            CommandReceived(this, commands[command]);
+            CommandReceived(this, new CommandReceivedEventArgs(commands[command], args, path));
         }
         public void OnCloseServer(object sender, DirectoryCloseEventArgs args)
         {
+            //check to make sure casting is done right-might throw an exception
             IDirectoryHandler h = (DirectoryHandler)sender; //check that is legal
             CommandReceived -= h.OnCommandRecieved;
-            //h.DirectoryClose -= OnCloseServer;
+            h.DirectoryClose -= OnCloseServer;
+            logger.Log(args.Message, MessageTypeEnum.INFO);//might need to put fail
         }
     }
 }

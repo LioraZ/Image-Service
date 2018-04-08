@@ -1,13 +1,8 @@
 ﻿using ImageService.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ImageService.Model
 {
@@ -18,8 +13,20 @@ namespace ImageService.Model
         private int thumbnailSize;              // The Size Of The Thumbnail Size
         #endregion
 
+        public ImageServiceModel(string outputDir, int imageThumbnailSize)
+        {
+            outputFolder = outputDir;
+            thumbnailSize = imageThumbnailSize;
+            bool result;
+            CreateFolder(outputFolder, out result);
+            //if (!result) 
+        }
         public string AddFile(string path, out bool result)
         {
+            string folderName = ParseDate(DateTaken(path));
+            //bool result;
+            string errorMsg = CreateFolder(folderName, out result);
+            if (!result) return errorMsg;
             return MoveFile(path, outputFolder, out result);
         }
         public string CreateFolder(string path, out bool result)
@@ -31,12 +38,14 @@ namespace ImageService.Model
                 {
                     Directory.CreateDirectory(path);
                     result = true;
-                    return "New folder created successfully!";
+                    return path;
+                    //return "New folder created successfully!";
                 }
                 catch (IOException e)
                 {
                     result = false;
-                    return "An exception ocuured./n Please try again";
+                    return e.Message;
+                    //return "An exception ocuured./n Please try again";
                 }
                 
            }
@@ -53,15 +62,15 @@ namespace ImageService.Model
             //check edge cases
             try
             {
-                File.Copy(src, outputFolder);
+                File.Move(src, dst);
                 result = true;
                 return "File successfully added!";
             }
             catch (Exception e)
             {
                 result = false;
-                return "File exists at output folder!";
-
+                return e.Message;
+                //return "File exists at output folder!";
             }
         }
         private string OutputFolderExists(string dir, out bool result) {
@@ -72,6 +81,38 @@ namespace ImageService.Model
         {
             result = File.Exists(path);
             return "Image not found at path!";
+        }
+
+        public static DateTime DateTaken(string path)
+        {
+            Regex r = new Regex(":");
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (Image myImage = Image.FromStream(fs, false, false))
+            {
+                PropertyItem propItem = myImage.GetPropertyItem(36867);
+                string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                return DateTime.Parse(dateTaken);
+            }
+        }
+
+        private string ParseDate(DateTime date)
+        {
+            return date.Year.ToString() + date.Month.ToString();
+        }
+
+        private void OnChanged(object source, FileSystemEventArgs e)
+        {
+            //DateTime date = DateTaken(e.Name);
+            string folderName = ParseDate(DateTaken(e.Name));
+            bool result;
+            CreateFolder(folderName, out result);
+            //CreateFolder(outputFolder + "/" + folderName, out result);
+            if (!result) return;
+            
+
+
+            // Specify what is done when a file is changed, created, or deleted.
+            //Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
         }
     }
 }

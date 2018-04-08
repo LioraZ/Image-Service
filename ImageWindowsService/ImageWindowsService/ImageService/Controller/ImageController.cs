@@ -1,12 +1,7 @@
 ﻿using ImageService.Commands;
-using ImageService.Infrastructure;
 using ImageService.Infrastructure.Enums;
 using ImageService.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageService.Controller
 {
@@ -17,16 +12,20 @@ namespace ImageService.Controller
 
         public ImageController(IImageServiceModel imageModel)
         {
-            model = imageModel;                    // Storing the Modal Of The System
+            model = imageModel;
             commands = new Dictionary<int, ICommand>()
             {
-				// For Now will contain NEW_FILE_COMMAND
+                {(int)CommandEnum.NewFileCommand, new NewFileCommand(model)}
             };
         }
         public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
         {
-            ICommand command = commands[commandID];
-           // Write Code Here
+            if (commands.ContainsKey(commandID))
+            {
+                return commands[commandID].Execute(args, out resultSuccesful);
+            }
+            resultSuccesful = false;
+            return "Wrong command!";
         }
     }
 }
