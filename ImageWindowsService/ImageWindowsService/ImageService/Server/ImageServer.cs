@@ -35,7 +35,7 @@ namespace ImageService.Server
         private void AddCommands()
         {
             commands.Add("Close Handler", (int)CommandEnum.CloseCommand);
-            commands.Add("Add File", (int)CommandEnum.CloseCommand);
+            //commands.Add("Add File", (int)CommandEnum.CloseCommand);
         }
 
         public void CreateHandler(string directory)

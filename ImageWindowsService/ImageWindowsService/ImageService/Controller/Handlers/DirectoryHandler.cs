@@ -28,12 +28,12 @@ namespace ImageService.Controller.Handlers
             dirWatcher = new FileSystemWatcher(dirPath, "*.gif|jpe?g|bmp|png");
             //check notifiers
             dirWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
-           | NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.OnChanged;
+           | NotifyFilters.FileName | NotifyFilters.DirectoryName;
         }
         public void StartHandleDirectory(string dirPath)
         {
             dirWatcher.EnableRaisingEvents = true;
-            dirWatcher.Created += new FileSystemEventHandler(OnChanged);
+            dirWatcher.Created += new FileSystemEventHandler(CallNewFileCommand);
         }
         public void OnCommandRecieved(object sender, CommandReceivedEventArgs e)
         {
@@ -41,14 +41,15 @@ namespace ImageService.Controller.Handlers
             string imgPath = e.RequestDirPath;
             //if (imgPath) file is valid
             if (!IsSubFile(imgPath)) return;
+            string msg;
             if (e.CommandID == (int)CommandEnum.CloseCommand)
             {
-                CloseHandler();
-                return;
+                msg = "Directory closing";
+                DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(dirPath, msg));
+                logger.Log(msg, GetMessageType(true));
             }
-            string msg = controller.ExecuteCommand(e.CommandID, e.Args, out result);
-            logger.Log(msg, GetMessageType(result));
-            //DirectoryClose?.Invoke(this, )
+            //else msg = controller.ExecuteCommand(e.CommandID, e.Args, out result);
+            //logger.Log(msg, GetMessageType(result));
         }
         private bool IsSubFile(string file)
         {
@@ -70,29 +71,11 @@ namespace ImageService.Controller.Handlers
             //some code
             DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(dirPath, "Closing direcotry"));
         }
-        private void CallCommand(object source, FileSystemEventArgs e)
+        private void CallNewFileCommand(object source, FileSystemEventArgs e)
         {
-
-        }
-
-        public static DateTime DateTaken(string path)
-        {
-            Regex r = new Regex(":");
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (Image myImage = Image.FromStream(fs, false, false))
-            {
-                PropertyItem propItem = myImage.GetPropertyItem(36867);
-                string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                return DateTime.Parse(dateTaken);
-            }
-        }
-
-        private void OnChanged(object source, FileSystemEventArgs e)
-        {
-            DateTime date = DateTaken(e.Name);
-            
-            // Specify what is done when a file is changed, created, or deleted.
-            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+            bool result;
+            string[] args = { e.Name };
+            controller.ExecuteCommand((int)CommandEnum.NewFileCommand, args, out result);
         }
     }
 }

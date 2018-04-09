@@ -24,54 +24,42 @@ namespace ImageService.Model
         public string AddFile(string path, out bool result)
         {
             string folderName = ParseDate(DateTaken(path));
-            //bool result;
             string errorMsg = CreateFolder(folderName, out result);
             if (!result) return errorMsg;
             return MoveFile(path, outputFolder, out result);
         }
         public string CreateFolder(string path, out bool result)
         {
-           PathExists(path, out result);
-           if (!result)
-           {
-                try
-                {
-                    Directory.CreateDirectory(path);
-                    result = true;
-                    return path;
-                    //return "New folder created successfully!";
-                }
-                catch (IOException e)
-                {
-                    result = false;
-                    return e.Message;
-                    //return "An exception ocuured./n Please try again";
-                }
-                
-           }
-            result = true;
-            return "Folder already exists!";
-
-        }
-        public string MoveFile(string src, string dst, out bool result)
-        {
-            string errorMsg = OutputFolderExists(dst, out result);
-            if (!result) { return errorMsg; }
-            errorMsg = PathExists(src, out result);
-            if (!result) { return errorMsg; }
-            //check edge cases
             try
             {
-                File.Move(src, dst);
+                Directory.CreateDirectory(path);
                 result = true;
-                return "File successfully added!";
+                return path;
             }
             catch (Exception e)
             {
                 result = false;
                 return e.Message;
-                //return "File exists at output folder!";
             }
+        }
+        public string MoveFile(string src, string dstFolder, out bool result)
+        {
+            string dst = GetDstFileFromFolder(src, dstFolder);
+            try
+            {
+                File.Move(src, dst);
+                result = true;
+                return dst;
+            }
+            catch (Exception e)
+            {
+                result = false;
+                return e.Message;
+            }
+        }
+        private string GetDstFileFromFolder(string srcFile, string dstFolder)
+        {
+            return dstFolder + srcFile.Substring(srcFile.LastIndexOf("\\"), srcFile.LastIndexOf(srcFile));
         }
         private string OutputFolderExists(string dir, out bool result) {
             result = Directory.Exists(dir);
@@ -82,6 +70,7 @@ namespace ImageService.Model
             result = File.Exists(path);
             return "Image not found at path!";
         }
+
 
         public static DateTime DateTaken(string path)
         {
@@ -98,21 +87,6 @@ namespace ImageService.Model
         private string ParseDate(DateTime date)
         {
             return date.Year.ToString() + date.Month.ToString();
-        }
-
-        private void OnChanged(object source, FileSystemEventArgs e)
-        {
-            //DateTime date = DateTaken(e.Name);
-            string folderName = ParseDate(DateTaken(e.Name));
-            bool result;
-            CreateFolder(folderName, out result);
-            //CreateFolder(outputFolder + "/" + folderName, out result);
-            if (!result) return;
-            
-
-
-            // Specify what is done when a file is changed, created, or deleted.
-            //Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
         }
     }
 }
