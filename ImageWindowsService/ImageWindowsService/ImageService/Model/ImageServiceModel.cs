@@ -3,6 +3,9 @@ using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Configuration;
+using System.Drawing.Imaging;
+using System.Drawing;
 
 namespace ImageService.Model
 {
@@ -13,20 +16,21 @@ namespace ImageService.Model
         private int thumbnailSize;              // The Size Of The Thumbnail Size
         #endregion
 
-        public ImageServiceModel(string outputDir, int imageThumbnailSize)
+        public ImageServiceModel()
         {
-            outputFolder = outputDir;
-            thumbnailSize = imageThumbnailSize;
+            outputFolder = ConfigurationSettings.AppSettings["OutputDir"];
+            thumbnailSize = int.Parse(ConfigurationSettings.AppSettings["ThumbnailSize"]);
             bool result;
             CreateFolder(outputFolder, out result);
+            CreateFolder(outputFolder + "\\Thumbnails", out result);
             //if (!result) 
         }
         public string AddFile(string path, out bool result)
         {
-            string folderName = ParseDate(DateTaken(path));
+            string folderName = outputFolder + "\\" + ParseDate(DateTaken(path));
             string errorMsg = CreateFolder(folderName, out result);
             if (!result) return errorMsg;
-            return MoveFile(path, outputFolder, out result);
+            return MoveFile(path, folderName, out result);
         }
         public string CreateFolder(string path, out bool result)
         {
@@ -44,10 +48,11 @@ namespace ImageService.Model
         }
         public string MoveFile(string src, string dstFolder, out bool result)
         {
-            string dst = GetDstFileFromFolder(src, dstFolder);
+            string dst = dstFolder + "\\" + Path.GetFileName(src);
             try
             {
-                File.Move(src, dst);
+                if (File.Exists(dst)) File.Delete(src);
+                else File.Move(src, dst);
                 result = true;
                 return dst;
             }
@@ -57,10 +62,7 @@ namespace ImageService.Model
                 return e.Message;
             }
         }
-        private string GetDstFileFromFolder(string srcFile, string dstFolder)
-        {
-            return dstFolder + srcFile.Substring(srcFile.LastIndexOf("\\"), srcFile.LastIndexOf(srcFile));
-        }
+        
         private string OutputFolderExists(string dir, out bool result) {
             result = Directory.Exists(dir);
             return "Output folder not found at path!";
@@ -74,19 +76,26 @@ namespace ImageService.Model
 
         public static DateTime DateTaken(string path)
         {
-            Regex r = new Regex(":");
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (Image myImage = Image.FromStream(fs, false, false))
+           try
             {
-                PropertyItem propItem = myImage.GetPropertyItem(36867);
-                string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                return DateTime.Parse(dateTaken);
+                Regex r = new Regex(":");
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (Image myImage = Image.FromStream(fs, false, false))
+                {
+                    PropertyItem propItem = myImage.GetPropertyItem(36867);
+                    string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                    return DateTime.Parse(dateTaken);
+                }
+            }
+            catch
+            {
+                return File.GetCreationTime(path);
             }
         }
 
         private string ParseDate(DateTime date)
         {
-            return date.Year.ToString() + date.Month.ToString();
+            return date.Year.ToString() + "\\" + date.Month.ToString();
         }
     }
 }

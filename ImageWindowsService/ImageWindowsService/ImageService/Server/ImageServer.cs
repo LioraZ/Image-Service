@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace ImageService.Server
 {
@@ -24,10 +25,10 @@ namespace ImageService.Server
         public event EventHandler<CommandReceivedEventArgs> CommandReceived;          // The event that notifies about a new Command being recieved
         #endregion
 
-        public ImageServer(ILoggingService imageLogger)
+        public ImageServer(ILoggingService imageLogger, IImageController imageController)
         {
-            IImageServiceModel imageModel = new ImageServiceModel();
-            controller = new ImageController(imageModel);
+            //IImageServiceModel imageModel = new ImageServiceModel();
+            controller = imageController;
             logger = imageLogger;
             commands = new Dictionary<string, int>();
         }
@@ -40,9 +41,10 @@ namespace ImageService.Server
 
         public void CreateHandler(string directory)
         {
-            IDirectoryHandler h = new DirectoryHandler(directory, controller);
+            IDirectoryHandler h = new DirectoryHandler(directory, controller, logger);
             CommandReceived += h.OnCommandRecieved;
             h.DirectoryClose += OnCloseServer;
+            h.StartHandleDirectory(directory);
         }
         public void SendCommand(string command, string path, string[] args)
         {
@@ -56,5 +58,6 @@ namespace ImageService.Server
             h.DirectoryClose -= OnCloseServer;
             logger.Log(args.Message, MessageTypeEnum.INFO);//might need to put fail
         }
+        //public void CloseServer
     }
 }

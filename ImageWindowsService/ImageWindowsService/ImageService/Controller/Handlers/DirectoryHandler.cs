@@ -21,14 +21,16 @@ namespace ImageService.Controller.Handlers
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
 
-        public DirectoryHandler(string path, IImageController imageController)
+        public DirectoryHandler(string path, IImageController imageController, ILoggingService imageLogger)
         {
             controller = imageController;
             dirPath = path;
-            dirWatcher = new FileSystemWatcher(dirPath, "*.gif|jpe?g|bmp|png");
+            logger = imageLogger;
+            logger.Log("Handling " + path, MessageTypeEnum.INFO);
+            //dirWatcher = new FileSystemWatcher(dirPath, "*.*");
+            dirWatcher = new FileSystemWatcher(dirPath, "*.[gif|jpe?g|bmp|png]");
             //check notifiers
-            dirWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
-           | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            //dirWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
         }
         public void StartHandleDirectory(string dirPath)
         {
@@ -74,7 +76,7 @@ namespace ImageService.Controller.Handlers
         private void CallNewFileCommand(object source, FileSystemEventArgs e)
         {
             bool result;
-            string[] args = { e.Name };
+            string[] args = { e.FullPath };
             controller.ExecuteCommand((int)CommandEnum.NewFileCommand, args, out result);
         }
     }

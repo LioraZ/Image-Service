@@ -8,6 +8,7 @@ using ImageService.Model;
 using ImageService.Controller;
 using ImageService.Logging;
 using ImageService.Logging.Model;
+using System.Configuration;
 
 namespace ImageService
 {
@@ -25,10 +26,10 @@ namespace ImageService
         public ImageService(string[] args)
         {
             InitializeComponent();
-            string eventSourceName = "MySource";
-            string logName = "MyNewLog";
-            if (args.Count() > 0) { eventSourceName = args[0]; }
-            if (args.Count() > 1) { logName = args[1]; }
+            string eventSourceName = ConfigurationSettings.AppSettings["SourceName"];
+            string logName = ConfigurationSettings.AppSettings["LogName"];
+            //if (args.Count() > 0) { eventSourceName = args[0]; }
+            //if (args.Count() > 1) { logName = args[1]; }
             eventLog1 = new System.Diagnostics.EventLog();
             if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
             {
@@ -41,8 +42,11 @@ namespace ImageService
         protected override void OnStart(string[] args)
         {
             logger = new LoggingService();
-            imageServer = new ImageServer(logger);
+            model = new ImageServiceModel();
+            controller = new ImageController(model);
+            imageServer = new ImageServer(logger, controller);
             logger.MessageReceived += onMessageReceived;
+            CreateHandlers();
 
             eventLog1.WriteEntry("In OnStart");
             // Update the service state to Start Pending.  
@@ -69,7 +73,18 @@ namespace ImageService
 
         private void onMessageReceived(object sender, MessageRecievedEventArgs args)
         {
-            eventLog1.WriteEntry(args.Message, args.Status, eventId++); //make second args system.diagnostics type
+            eventLog1.WriteEntry(args.Message); //make second args system.diagnostics type
+        }
+
+        private void CreateHandlers()
+        {
+            imageServer.CreateHandler(ConfigurationSettings.AppSettings["Handler"]);
+            /*string handlerPaths = ConfigurationSettings.AppSettings["Handler"];
+            string[] paths = handlerPaths.Split(',');
+            foreach (string path in paths)
+            {
+                imageServer.CreateHandler(path);
+            }*/
         }
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
