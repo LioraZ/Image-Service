@@ -27,8 +27,8 @@ namespace ImageService.Controller.Handlers
             dirPath = path;
             logger = imageLogger;
             logger.Log("Handling " + path, MessageTypeEnum.INFO);
-            //dirWatcher = new FileSystemWatcher(dirPath, "*.*");
-            dirWatcher = new FileSystemWatcher(dirPath, "*.[gif|jpe?g|bmp|png]");
+            dirWatcher = new FileSystemWatcher(dirPath);
+            //dirWatcher = new FileSystemWatcher(dirPath, "^*\\.(jpe?g|gif|png|bmp)$");
             //check notifiers
             //dirWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
         }
@@ -77,7 +77,15 @@ namespace ImageService.Controller.Handlers
         {
             bool result;
             string[] args = { e.FullPath };
-            controller.ExecuteCommand((int)CommandEnum.NewFileCommand, args, out result);
+            if (FilterExtension(e.FullPath))
+            {
+                controller.ExecuteCommand((int)CommandEnum.NewFileCommand, args, out result);
+            }
+            
+        }
+        private bool FilterExtension(string path)
+        {
+            return (Regex.IsMatch(path, "^*\\.(jpe?g|png|bmp|gif)$", RegexOptions.IgnoreCase));
         }
     }
 }

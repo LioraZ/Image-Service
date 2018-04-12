@@ -27,16 +27,12 @@ namespace ImageService.Server
 
         public ImageServer(ILoggingService imageLogger, IImageController imageController)
         {
-            //IImageServiceModel imageModel = new ImageServiceModel();
             controller = imageController;
             logger = imageLogger;
-            commands = new Dictionary<string, int>();
-        }
-
-        private void AddCommands()
-        {
-            commands.Add("Close Handler", (int)CommandEnum.CloseCommand);
-            //commands.Add("Add File", (int)CommandEnum.CloseCommand);
+            commands = new Dictionary<string, int>()
+            {
+                {"Close Handler", (int)CommandEnum.CloseCommand }
+            };
         }
 
         public void CreateHandler(string directory)

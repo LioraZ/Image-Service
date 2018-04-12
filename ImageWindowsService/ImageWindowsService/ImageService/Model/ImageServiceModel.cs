@@ -18,8 +18,8 @@ namespace ImageService.Model
 
         public ImageServiceModel()
         {
-            outputFolder = ConfigurationSettings.AppSettings["OutputDir"];
-            thumbnailSize = int.Parse(ConfigurationSettings.AppSettings["ThumbnailSize"]);
+            outputFolder = ConfigurationManager.AppSettings["OutputDir"];
+            thumbnailSize = int.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
             bool result;
             CreateFolder(outputFolder, out result);
             CreateFolder(outputFolder + "\\Thumbnails", out result);
@@ -51,9 +51,9 @@ namespace ImageService.Model
             string dst = dstFolder + "\\" + Path.GetFileName(src);
             try
             {
-                if (File.Exists(dst)) File.Delete(src);
-                else File.Move(src, dst);
-                result = true;
+                if (File.Exists(dst)) File.Delete(dst);
+                File.Move(src, dst);
+                CreateThumbnail(dst, out result);
                 return dst;
             }
             catch (Exception e)
@@ -62,17 +62,16 @@ namespace ImageService.Model
                 return e.Message;
             }
         }
-        
-        private string OutputFolderExists(string dir, out bool result) {
-            result = Directory.Exists(dir);
-            return "Output folder not found at path!";
-        }
-        private string PathExists(string path, out bool result)
-        {
-            result = File.Exists(path);
-            return "Image not found at path!";
-        }
 
+        public void CreateThumbnail(string fileName, out bool result)
+        {
+            Image image = Image.FromFile(fileName);
+            Image thumb = image.GetThumbnailImage(thumbnailSize, thumbnailSize, () => false, IntPtr.Zero);
+            string thumbnailPath = fileName.Replace(outputFolder, outputFolder + "\\Thumbnails");
+            string thumbnailFolder = thumbnailPath.Replace("\\" + Path.GetFileName(thumbnailPath), "");
+            CreateFolder(thumbnailFolder, out result);//should check for !result
+            thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
+        }
 
         public static DateTime DateTaken(string path)
         {
@@ -94,8 +93,27 @@ namespace ImageService.Model
         }
 
         private string ParseDate(DateTime date)
+        { 
+            return date.Year.ToString() + "\\" + GetMonth(date.Month);
+        }
+        private string GetMonth(int month)
         {
-            return date.Year.ToString() + "\\" + date.Month.ToString();
+            switch(month)
+            {
+                case (1): return "Jan";
+                case (2): return "Feb";
+                case (3): return "Mar";
+                case (4): return "Apr";
+                case (5): return "May";
+                case (6): return "Jun";
+                case (7): return "Jul";
+                case (8): return "Aug";
+                case (9): return "Sep";
+                case (10): return "Oct";
+                case (11):return "Nov";
+                case (12): return "Dec";
+            }
+            return "";
         }
     }
 }

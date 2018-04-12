@@ -26,10 +26,8 @@ namespace ImageService
         public ImageService(string[] args)
         {
             InitializeComponent();
-            string eventSourceName = ConfigurationSettings.AppSettings["SourceName"];
-            string logName = ConfigurationSettings.AppSettings["LogName"];
-            //if (args.Count() > 0) { eventSourceName = args[0]; }
-            //if (args.Count() > 1) { logName = args[1]; }
+            string eventSourceName = ConfigurationManager.AppSettings["SourceName"];
+            string logName = ConfigurationManager.AppSettings["LogName"];
             eventLog1 = new System.Diagnostics.EventLog();
             if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
             {
@@ -55,44 +53,34 @@ namespace ImageService
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            // Set up a timer to trigger every minute.  
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Enabled = true;
-            timer.Interval = 60000; // 60 seconds  
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
-            timer.Start();
-
             // Update the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
 
-        protected override void OnStop() { eventLog1.WriteEntry("In onStop."); }
+        protected override void OnStop()
+        {
+            imageServer.SendCommand("Close Server", "", null);
+            logger.Log("In onStop", MessageTypeEnum.INFO);
+        }
 
         protected override void OnContinue() { eventLog1.WriteEntry("In OnContinue."); }
 
         private void onMessageReceived(object sender, MessageRecievedEventArgs args)
         {
-            eventLog1.WriteEntry(args.Message); //make second args system.diagnostics type
+            eventLog1.WriteEntry(args.Message, logger.GetMessageType(args.Status)); //make second args system.diagnostics type
         }
 
         private void CreateHandlers()
         {
-            imageServer.CreateHandler(ConfigurationSettings.AppSettings["Handler"]);
-            /*string handlerPaths = ConfigurationSettings.AppSettings["Handler"];
-            string[] paths = handlerPaths.Split(',');
+            imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
+            /*string handlerPaths = ConfigurationManager.AppSettings["Handler"];
+            string[] paths = handlerPaths.Split(';');
             foreach (string path in paths)
             {
                 imageServer.CreateHandler(path);
             }*/
         }
-
-        public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
-        {
-            // TODO: Insert monitoring activities here.  
-            eventLog1.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
-        }
-
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
