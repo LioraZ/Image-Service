@@ -1,16 +1,26 @@
 ﻿using ImageService.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageService.Controller.Handlers
 {
     public interface IDirectoryHandler
     {
-        event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
-        void StartHandleDirectory(string dirPath);             // The Function Recieves the directory to Handle
-        void OnCommandRecieved(object sender, CommandReceivedEventArgs e);     // The Event that will be activated upon new Command
+        /// <summary>
+        /// The Event notifies when the directory it's watching is being used.
+        /// </summary>
+        event EventHandler<DirectoryCloseEventArgs> DirectoryClose;
+
+        /// <summary>
+        /// The method calls to start watching the directory.
+        /// </summary>
+        /// <param name="dirPath"></param> THe directory's path.
+        void StartHandleDirectory(string dirPath);
+
+        /// <summary>
+        /// The event that will be activated upon receiving a new command.
+        /// </summary>
+        /// <param name="sender"></param> The event invoker.
+        /// <param name="e"></param> The event's parameters.
+        void OnCommandRecieved(object sender, CommandReceivedEventArgs e);
     }
 }

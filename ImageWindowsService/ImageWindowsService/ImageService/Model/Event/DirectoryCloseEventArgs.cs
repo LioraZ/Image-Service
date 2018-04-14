@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageService.Model
 {
     public class DirectoryCloseEventArgs : EventArgs
     {
-        public string DirectoryPath { get; set; }
+        public string DirectoryPath { get; set; }       // The Directory Path
+        public string Message { get; set; }             // The Logged Message
 
-        public string Message { get; set; }             // The Message That goes to the logger
-
+        /// <summary>
+        /// The DirectoryCloseEventArgs constructor.
+        /// </summary>
+        /// <param name="dirPath"></param> The directory path.
+        /// <param name="message"></param> The message to be logged.
         public DirectoryCloseEventArgs(string dirPath, string message)
         {
-            DirectoryPath = dirPath;                    // Setting the Directory Name
-            Message = message;                          // Storing the String
+            DirectoryPath = dirPath;
+            Message = message;
         }
 
     }

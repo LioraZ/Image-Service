@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.ServiceProcess;
 using System.Runtime.InteropServices;
 using ImageService.Server;
@@ -14,15 +13,17 @@ namespace ImageService
 {
     public partial class ImageService : ServiceBase
     {
-
-        private System.Diagnostics.EventLog eventLog1;
-        private int eventId = 1;
-
+        #region Members
         private ImageServer imageServer;          // The Image Server
-        private IImageServiceModel model;
-        private IImageController controller;
-        private ILoggingService logger;
+        private IImageServiceModel model;         // The Image Model
+        private IImageController controller;      // The Commands Controller
+        private ILoggingService logger;           // The Image Event Logger
+        #endregion
 
+        /// <summary>
+        /// The ImageServer's constructor.
+        /// </summary>
+        /// <param name="args"></param> The proogram's arguments.
         public ImageService(string[] args)
         {
             InitializeComponent();
@@ -37,6 +38,10 @@ namespace ImageService
             eventLog1.Log = logName;
         }
 
+        /// <summary>
+        /// The method ovverides the onStart method from serviceBase to start the service.
+        /// </summary>
+        /// <param name="args"></param> Args for the service.
         protected override void OnStart(string[] args)
         {
             eventLog1.WriteEntry("In OnStart");
@@ -59,17 +64,23 @@ namespace ImageService
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
 
+        /// <summary>
+        /// The method overrides the onStop method from ServiceBase to stop the service.
+        /// </summary>
         protected override void OnStop()
         {
             imageServer.SendCommand("Close Handler", "", null);
             logger.Log("In onStop", MessageTypeEnum.INFO);
         }
 
-        protected override void OnContinue() { eventLog1.WriteEntry("In OnContinue."); }
-
+        /// <summary>
+        /// The method logs the given message to the EventLogger.
+        /// </summary>
+        /// <param name="sender"></param> The object the invoked the event that this method was registered to.
+        /// <param name="args"></param> THe args for the event invoked.
         private void onMessageReceived(object sender, MessageRecievedEventArgs args)
         {
-            eventLog1.WriteEntry(args.Message, logger.GetMessageType(args.Status)); //make second args system.diagnostics type
+            eventLog1.WriteEntry(args.Message, logger.GetMessageType(args.Status));
         }
 
         /// <summary>
@@ -99,7 +110,7 @@ namespace ImageService
         /// <param name="e"></param>
         private void eventLog1_EntryWritten(object sender, EntryWrittenEventArgs e) { }
     }
-
+    
     public enum ServiceState
     {
         SERVICE_STOPPED = 0x00000001,

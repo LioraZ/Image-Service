@@ -1,12 +1,10 @@
-﻿using ImageService.Infrastructure;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace ImageService.Model
@@ -18,15 +16,24 @@ namespace ImageService.Model
         private int thumbnailSize;              // The Size Of The Thumbnail Size
         #endregion
 
+        /// <summary>
+        /// The ImageServiceModel's constructor.
+        /// </summary>
         public ImageServiceModel()
         {
             outputFolder = ConfigurationManager.AppSettings["OutputDir"];
             thumbnailSize = int.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
-            bool result;
-            CreateFolder(outputFolder, out result);
-            CreateFolder(outputFolder + "\\Thumbnails", out result);
-            //if (!result) 
+          //  bool result;
+          //  CreateFolder(outputFolder, out result);
+          //  CreateFolder(outputFolder + "\\Thumbnails", out result);
         }
+
+        /// <summary>
+        /// The method adds the moves the given file to the output folder.
+        /// </summary>
+        /// <param name="path">The given path</param>
+        /// <param name="result">True if the move was successful, and else false</param>
+        /// <returns>A string with the path or an error message</returns>
         public string AddFile(string path, out bool result)
         {
             string folderName = outputFolder + "\\" + ParseDate(DateTaken(path));
@@ -34,6 +41,13 @@ namespace ImageService.Model
             if (!result) return errorMsg;
             return MoveFile(path, folderName, out result);
         }
+
+        /// <summary>
+        /// The method crreates a new folder given the path.
+        /// </summary>
+        /// <param name="path">The given path</param>
+        /// <param name="result">The action's result</param>
+        /// <returns>A string with the path or an error message</returns>
         public string CreateFolder(string path, out bool result)
         {
             try
@@ -48,6 +62,11 @@ namespace ImageService.Model
                 return e.Message;
             }
         }
+
+        /// <summary>
+        /// The method tries to delete a given file.
+        /// </summary>
+        /// <param name="path">The given file</param>
         public void TryDeleteFile(string path)
         {
             const int NumberOfRetries = 3;
@@ -66,6 +85,13 @@ namespace ImageService.Model
             }
         }
 
+        /// <summary>
+        /// The method moves a file from its source to its destination.
+        /// </summary>
+        /// <param name="src">he file's source</param>
+        /// <param name="dstFolder">The file's destination folder</param>
+        /// <param name="result">>The actin's result</param>
+        /// <returns>A string with the path or an error message</returns>
         public string MoveFile(string src, string dstFolder, out bool result)
         {
             string dst = dstFolder + "\\" + Path.GetFileName(src);
@@ -83,7 +109,12 @@ namespace ImageService.Model
             }
         }
 
-        public void CreateThumbnail(string fileName, out bool result)
+        /// <summary>
+        /// The method creates a thumbnail for the file/picture.
+        /// </summary>
+        /// <param name="fileName">Thr given file/image</param>
+        /// <param name="result">The action's result</param>
+        private void CreateThumbnail(string fileName, out bool result)
         {
             Image image = Image.FromFile(fileName);
             Image thumb = image.GetThumbnailImage(thumbnailSize, thumbnailSize, () => false, IntPtr.Zero);
@@ -93,7 +124,12 @@ namespace ImageService.Model
             thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
         }
 
-        public static DateTime DateTaken(string path)
+        /// <summary>
+        /// The method return the DateTime of the file.
+        /// </summary>
+        /// <param name="path">The given file's path</param>
+        /// <returns>The extracted DateTime</returns>
+        private DateTime DateTaken(string path)
         {
            try
             {
@@ -112,10 +148,21 @@ namespace ImageService.Model
             }
         }
 
+        /// <summary>
+        /// The method parses the dateTime received to a directory extension.
+        /// </summary>
+        /// <param name="date">The DateTime received</param>
+        /// <returns>The parsed directory extension</returns>
         private string ParseDate(DateTime date)
         { 
             return date.Year.ToString() + "\\" + GetMonth(date.Month);
         }
+
+        /// <summary>
+        /// The method returns the month name given its numeric representation.
+        /// </summary>
+        /// <param name="month">The month in its numeric representation</param>
+        /// <returns>The month's name</returns>
         private string GetMonth(int month)
         {
             switch(month)

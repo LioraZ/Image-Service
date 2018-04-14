@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ImageService.Logging.Model
+﻿namespace ImageService.Logging.Model
 {
+    /// <summary>
+    /// Message type enums.
+    /// </summary>
     public enum MessageTypeEnum : int
     {
         INFO,

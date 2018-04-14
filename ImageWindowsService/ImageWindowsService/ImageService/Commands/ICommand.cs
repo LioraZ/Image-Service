@@ -1,14 +1,13 @@
-﻿using ImageService.Infrastructure.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ImageService.Commands
+﻿namespace ImageService.Commands
 {
     public interface ICommand
     {
-        string Execute(string[] args, out bool result);          // The Function That will Execute The 
+        /// <summary>
+        /// The method will execute the given command with its arguments.
+        /// </summary>
+        /// <param name="args"></param> The command's arguments.
+        /// <param name="result"></param> The result of the command success/failure.
+        /// <returns></returns>
+        string Execute(string[] args, out bool result);
     }
 }
