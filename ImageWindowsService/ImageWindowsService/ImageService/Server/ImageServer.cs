@@ -52,8 +52,7 @@ namespace ImageService.Server
             IDirectoryHandler h = (DirectoryHandler)sender; //check that is legal
             CommandReceived -= h.OnCommandRecieved;
             h.DirectoryClose -= OnCloseServer;
-            logger.Log(args.Message, MessageTypeEnum.INFO);//might need to put fail
+            //logger.Log(args.Message, MessageTypeEnum.INFO);//might need to put fail
         }
-        //public void CloseServer
     }
 }

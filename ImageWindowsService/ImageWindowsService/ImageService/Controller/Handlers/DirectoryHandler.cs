@@ -26,39 +26,34 @@ namespace ImageService.Controller.Handlers
             controller = imageController;
             dirPath = path;
             logger = imageLogger;
-            logger.Log("Handling " + path, MessageTypeEnum.INFO);
             dirWatcher = new FileSystemWatcher(dirPath);
-            //dirWatcher = new FileSystemWatcher(dirPath, "^*\\.(jpe?g|gif|png|bmp)$");
-            //check notifiers
-            //dirWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
         }
         public void StartHandleDirectory(string dirPath)
         {
             dirWatcher.EnableRaisingEvents = true;
             dirWatcher.Created += new FileSystemEventHandler(CallNewFileCommand);
+            logger.Log("Watching " + dirPath, MessageTypeEnum.INFO);
         }
         public void OnCommandRecieved(object sender, CommandReceivedEventArgs e)
         {
-            bool result;
-            string imgPath = e.RequestDirPath;
-            //if (imgPath) file is valid
-            if (!IsSubFile(imgPath)) return;
             string msg;
+            bool result = true;
             if (e.CommandID == (int)CommandEnum.CloseCommand)
             {
-                msg = "Directory closing";
+                msg = "Directory " + dirPath + " is closing";
+                dirWatcher.EnableRaisingEvents = false;
                 DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(dirPath, msg));
-                logger.Log(msg, GetMessageType(true));
             }
-            //else msg = controller.ExecuteCommand(e.CommandID, e.Args, out result);
-            //logger.Log(msg, GetMessageType(result));
+            else
+            {
+                if (!IsSubFile(e.RequestDirPath)) return;
+                msg = controller.ExecuteCommand(e.CommandID, e.Args, out result);
+            }
+            logger.Log(msg, GetMessageType(result));
         }
         private bool IsSubFile(string file)
         {
-            while (Directory.GetParent(file).Name != dirPath)
-            {
-                file = Directory.GetParent(file).Name;
-            }
+            while (Directory.GetParent(file).Name != dirPath) file = Directory.GetParent(file).Name;
             return file != "";
         }
         private MessageTypeEnum GetMessageType(bool result)
@@ -79,7 +74,8 @@ namespace ImageService.Controller.Handlers
             string[] args = { e.FullPath };
             if (FilterExtension(e.FullPath))
             {
-                controller.ExecuteCommand((int)CommandEnum.NewFileCommand, args, out result);
+                string msg = controller.ExecuteCommand((int)CommandEnum.NewFileCommand, args, out result);
+                logger.Log(msg, GetMessageType(result));
             }
             
         }

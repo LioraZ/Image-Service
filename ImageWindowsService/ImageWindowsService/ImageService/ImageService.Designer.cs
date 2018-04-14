@@ -33,7 +33,8 @@
             // 
             // eventLog1
             // 
-            this.eventLog1.Log = "MyNewLog";
+            this.eventLog1.Log = "MyLogFile1";
+            this.eventLog1.Source = "MySource1";
             this.eventLog1.EntryWritten += new System.Diagnostics.EntryWrittenEventHandler(this.eventLog1_EntryWritten);
             // 
             // ImageService

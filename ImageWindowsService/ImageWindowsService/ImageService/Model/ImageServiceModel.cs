@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ImageService.Model
 {
@@ -46,12 +48,30 @@ namespace ImageService.Model
                 return e.Message;
             }
         }
+        public void TryDeleteFile(string path)
+        {
+            const int NumberOfRetries = 3;
+            const int DelayOnRetry = 1000;
+            for (int i = 1; i <= NumberOfRetries; ++i)
+            {
+                try
+                {
+                    File.Delete(path);
+                    break;
+                }
+                catch when (i <= NumberOfRetries)
+                {
+                    Thread.Sleep(DelayOnRetry);
+                }
+            }
+        }
+
         public string MoveFile(string src, string dstFolder, out bool result)
         {
             string dst = dstFolder + "\\" + Path.GetFileName(src);
             try
             {
-                if (File.Exists(dst)) File.Delete(dst);
+                if (File.Exists(dst)) TryDeleteFile(dst);
                 File.Move(src, dst);
                 CreateThumbnail(dst, out result);
                 return dst;
@@ -81,7 +101,7 @@ namespace ImageService.Model
                 using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
                 using (Image myImage = Image.FromStream(fs, false, false))
                 {
-                    PropertyItem propItem = myImage.GetPropertyItem(36867);
+                    PropertyItem propItem = myImage.GetPropertyItem(36867);//306
                     string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                     return DateTime.Parse(dateTaken);
                 }

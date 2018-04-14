@@ -39,6 +39,8 @@ namespace ImageService
 
         protected override void OnStart(string[] args)
         {
+            eventLog1.WriteEntry("In OnStart");
+
             logger = new LoggingService();
             model = new ImageServiceModel();
             controller = new ImageController(model);
@@ -46,7 +48,6 @@ namespace ImageService
             logger.MessageReceived += onMessageReceived;
             CreateHandlers();
 
-            eventLog1.WriteEntry("In OnStart");
             // Update the service state to Start Pending.  
             ServiceStatus serviceStatus = new ServiceStatus();
             serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
@@ -60,7 +61,7 @@ namespace ImageService
 
         protected override void OnStop()
         {
-            imageServer.SendCommand("Close Server", "", null);
+            imageServer.SendCommand("Close Handler", "", null);
             logger.Log("In onStop", MessageTypeEnum.INFO);
         }
 
@@ -71,23 +72,32 @@ namespace ImageService
             eventLog1.WriteEntry(args.Message, logger.GetMessageType(args.Status)); //make second args system.diagnostics type
         }
 
+        /// <summary>
+        /// The method creates directory handlers based on the directories received from app.config.
+        /// </summary>
         private void CreateHandlers()
         {
-            imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
-            /*string handlerPaths = ConfigurationManager.AppSettings["Handler"];
+            //imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
+            string handlerPaths = ConfigurationManager.AppSettings["Handler"];
             string[] paths = handlerPaths.Split(';');
-            foreach (string path in paths)
-            {
-                imageServer.CreateHandler(path);
-            }*/
+            foreach (string path in paths) imageServer.CreateHandler(path);
         }
+
+        /// <summary>
+        /// The method sets the service status.
+        /// </summary>
+        /// <param name="handle"></param> The handler.
+        /// <param name="serviceStatus"></param> The service status.
+        /// <returns></returns>
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
-        private void eventLog1_EntryWritten(object sender, EntryWrittenEventArgs e)
-        {
-        
-        }
+        /// <summary>
+        /// The method ovverides a method from EventLog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void eventLog1_EntryWritten(object sender, EntryWrittenEventArgs e) { }
     }
 
     public enum ServiceState
