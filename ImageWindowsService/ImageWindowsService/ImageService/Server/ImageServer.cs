@@ -43,7 +43,11 @@ namespace ImageService.Server
         /// <param name="directory">The directory path</param>
         public void CreateHandler(string directory)
         {
-            if (!Directory.Exists(directory)) return;
+            if (!Directory.Exists(directory))
+            {
+                try { Directory.CreateDirectory(directory); }
+                catch { return; }
+            }
             IDirectoryHandler h = new DirectoryHandler(directory, controller, logger);
             CommandReceived += h.OnCommandRecieved;
             h.DirectoryClose += OnCloseServer;

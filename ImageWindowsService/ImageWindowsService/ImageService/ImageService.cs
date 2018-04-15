@@ -88,7 +88,6 @@ namespace ImageService
         /// </summary>
         private void CreateHandlers()
         {
-            //imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
             string handlerPaths = ConfigurationManager.AppSettings["Handler"];
             string[] paths = handlerPaths.Split(';');
             foreach (string path in paths) imageServer.CreateHandler(path);

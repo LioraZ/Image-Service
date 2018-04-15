@@ -1,4 +1,5 @@
 ﻿using ImageService.Model;
+using System.Threading.Tasks;
 
 namespace ImageService.Commands
 {

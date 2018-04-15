@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.Threading;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ImageService.Model
 {
@@ -37,7 +38,7 @@ namespace ImageService.Model
         /// <returns>A string with the path or an error message</returns>
         public string AddFile(string path, out bool result)
         {
-            string folderName = outputFolder + "\\" + ParseDate(DateTaken(path));
+            string folderName = outputFolder + "\\" + ParseDate(DateTaken(path, 3));
             string errorMsg = CreateFolder(folderName, out result);
             if (!result) return errorMsg;
             return MoveFile(path, folderName, out result);
@@ -54,7 +55,7 @@ namespace ImageService.Model
             try
             {
                 DirectoryInfo di = Directory.CreateDirectory(path);
-                //di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                 result = true;
                 return path;
             }
@@ -95,11 +96,11 @@ namespace ImageService.Model
         private string CreateCopy(string path)
         {
             int i = 1;
-            string newPath = path + "(" + i + ")";
+            string fileName = Path.GetFileNameWithoutExtension(path);
+            string newPath = path.Replace(fileName, fileName + "(" + i + ")");
             while (File.Exists(newPath))
             {
-                i++;
-                newPath = path + "(" + i + ")";
+                newPath = newPath.Replace("(" + i + ")", "(" + (++i) + ")");
             }
             return newPath;
         }
@@ -116,7 +117,7 @@ namespace ImageService.Model
             string dst = dstFolder + "\\" + Path.GetFileName(src);
             try
             {
-                if (File.Exists(dst)) dst = CreateCopy(src);
+                if (File.Exists(dst)) dst = CreateCopy(dst);
                 File.Move(src, dst);
                 string errorMsg = CreateThumbnail(dst, out result);
                 if (!result) return errorMsg;
@@ -155,30 +156,37 @@ namespace ImageService.Model
         /// </summary>
         /// <param name="path">The given file's path</param>
         /// <returns>The extracted DateTime</returns>
-        private DateTime DateTaken(string path)
+        private DateTime DateTaken(string path, int i)
         {
-            //Thread.Sleep(1000);
-            Regex r = new Regex(":");
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (Image myImage = Image.FromStream(fs, false, false))
+            try
             {
-                try
+                Regex r = new Regex(":");
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (Image myImage = Image.FromStream(fs, false, false))
                 {
-                    PropertyItem propItem;
-                    if (myImage.PropertyIdList.Any(p => p == 36867)) { propItem = myImage.GetPropertyItem(36867); }
-                    else { propItem = myImage.GetPropertyItem(306); }
-                    string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                    return DateTime.Parse(dateTaken);
+                    try
+                    {
+                        PropertyItem propItem;
+                        if (myImage.PropertyIdList.Any(p => p == 36867)) { propItem = myImage.GetPropertyItem(36867); }
+                        else { propItem = myImage.GetPropertyItem(306); }
+                        string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                        return DateTime.Parse(dateTaken);
+                    }
+                    catch
+                    {
+                        return File.GetLastWriteTime(path);
+                    }
                 }
-                catch
-                {
-                    return File.GetLastWriteTime(path);
-                    //return File.GetCreationTime(path);
-                }
-
             }
-
+            catch
+            {
+                if (i < 0) { return File.GetLastWriteTime(path); }
+                Thread.Sleep(1000);
+                return DateTaken(path, i--);
+            }
+            
         }
+
 
         /// <summary>
         /// The method parses the dateTime received to a directory extension.
