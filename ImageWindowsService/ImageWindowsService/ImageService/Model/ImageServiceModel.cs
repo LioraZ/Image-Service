@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Threading;
+using System.Linq;
 
 namespace ImageService.Model
 {
@@ -52,7 +53,8 @@ namespace ImageService.Model
         {
             try
             {
-                Directory.CreateDirectory(path);
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                //di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                 result = true;
                 return path;
             }
@@ -86,6 +88,23 @@ namespace ImageService.Model
         }
 
         /// <summary>
+        /// The method replaces a path that  exists with it's copy
+        /// </summary>
+        /// <param name="path">The existing path</param>
+        /// <returns>The new path</returns>
+        private string CreateCopy(string path)
+        {
+            int i = 1;
+            string newPath = path + "(" + i + ")";
+            while (File.Exists(newPath))
+            {
+                i++;
+                newPath = path + "(" + i + ")";
+            }
+            return newPath;
+        }
+
+        /// <summary>
         /// The method moves a file from its source to its destination.
         /// </summary>
         /// <param name="src">he file's source</param>
@@ -97,9 +116,10 @@ namespace ImageService.Model
             string dst = dstFolder + "\\" + Path.GetFileName(src);
             try
             {
-                if (File.Exists(dst)) TryDeleteFile(dst);
+                if (File.Exists(dst)) dst = CreateCopy(src);
                 File.Move(src, dst);
-                CreateThumbnail(dst, out result);
+                string errorMsg = CreateThumbnail(dst, out result);
+                if (!result) return errorMsg;
                 return dst;
             }
             catch (Exception e)
@@ -114,14 +134,20 @@ namespace ImageService.Model
         /// </summary>
         /// <param name="fileName">Thr given file/image</param>
         /// <param name="result">The action's result</param>
-        private void CreateThumbnail(string fileName, out bool result)
+        /// <returns>A string with the path or an error message</returns>
+        private string CreateThumbnail(string fileName, out bool result)
         {
-            Image image = Image.FromFile(fileName);
-            Image thumb = image.GetThumbnailImage(thumbnailSize, thumbnailSize, () => false, IntPtr.Zero);
-            string thumbnailPath = fileName.Replace(outputFolder, outputFolder + "\\Thumbnails");
-            string thumbnailFolder = thumbnailPath.Replace("\\" + Path.GetFileName(thumbnailPath), "");
-            CreateFolder(thumbnailFolder, out result);//should check for !result
-            thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
+            string msg;
+            using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using (Image myImage = Image.FromStream(fs, false, false))
+            {
+                Image thumb = myImage.GetThumbnailImage(thumbnailSize, thumbnailSize, () => false, IntPtr.Zero);
+                string thumbnailPath = fileName.Replace(outputFolder, outputFolder + "\\Thumbnails");
+                string thumbnailFolder = thumbnailPath.Replace("\\" + Path.GetFileName(thumbnailPath), "");
+                msg = CreateFolder(thumbnailFolder, out result);
+                if (result) { thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb")); }
+            }
+            return msg;
         }
 
         /// <summary>
@@ -131,21 +157,27 @@ namespace ImageService.Model
         /// <returns>The extracted DateTime</returns>
         private DateTime DateTaken(string path)
         {
-           try
+            //Thread.Sleep(1000);
+            Regex r = new Regex(":");
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (Image myImage = Image.FromStream(fs, false, false))
             {
-                Regex r = new Regex(":");
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-                using (Image myImage = Image.FromStream(fs, false, false))
+                try
                 {
-                    PropertyItem propItem = myImage.GetPropertyItem(36867);//306
+                    PropertyItem propItem;
+                    if (myImage.PropertyIdList.Any(p => p == 36867)) { propItem = myImage.GetPropertyItem(36867); }
+                    else { propItem = myImage.GetPropertyItem(306); }
                     string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                     return DateTime.Parse(dateTaken);
                 }
+                catch
+                {
+                    return File.GetLastWriteTime(path);
+                    //return File.GetCreationTime(path);
+                }
+
             }
-            catch
-            {
-                return File.GetCreationTime(path);
-            }
+
         }
 
         /// <summary>

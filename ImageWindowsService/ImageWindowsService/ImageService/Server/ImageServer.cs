@@ -6,6 +6,7 @@ using ImageService.Logging.Model;
 using ImageService.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ImageService.Server
 {
@@ -42,6 +43,7 @@ namespace ImageService.Server
         /// <param name="directory">The directory path</param>
         public void CreateHandler(string directory)
         {
+            if (!Directory.Exists(directory)) return;
             IDirectoryHandler h = new DirectoryHandler(directory, controller, logger);
             CommandReceived += h.OnCommandRecieved;
             h.DirectoryClose += OnCloseServer;
