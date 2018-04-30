@@ -8,6 +8,7 @@ using ImageService.Controller;
 using ImageService.Logging;
 using ImageService.Logging.Model;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace ImageService
 {
@@ -50,6 +51,8 @@ namespace ImageService
             model = new ImageServiceModel();
             controller = new ImageController(model);
             imageServer = new ImageServer(logger, controller);
+            //imageServer.Start();
+            Task.Run(() => { imageServer.Start(); } );
             logger.MessageReceived += onMessageReceived;
             CreateHandlers();
 

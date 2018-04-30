@@ -7,6 +7,8 @@ using ImageService.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 
 namespace ImageService.Server
 {
@@ -35,6 +37,28 @@ namespace ImageService.Server
             {
                 {"Close Handler", (int)CommandEnum.CloseCommand }
             };
+        }
+
+        public void Start()
+        {///do this in task
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
+            TcpListener listener = new TcpListener(ep);
+            listener.Start();
+            Console.WriteLine("Waiting for client connections...");
+            TcpClient client = listener.AcceptTcpClient();
+            Console.WriteLine("Client connected");
+            using (NetworkStream stream = client.GetStream())
+            using (BinaryReader reader = new BinaryReader(stream))
+            using (BinaryWriter writer = new BinaryWriter(stream))
+            {
+                Console.WriteLine("Waiting for a message...");
+                string command = reader.ReadString();
+                Console.WriteLine(command);
+                //SendCommand(command, "", null);
+                //writer.Write(num);
+            }
+            client.Close();
+            listener.Stop();
         }
 
         /// <summary>

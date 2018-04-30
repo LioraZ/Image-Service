@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageServieGUI.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ImageServieGUI.View
@@ -17,11 +19,12 @@ namespace ImageServieGUI.View
     /// <summary>
     /// Interaction logic for LogsView.xaml
     /// </summary>
-    public partial class LogsView : Window
+    public partial class LogsView : UserControl
     {
         public LogsView()
         {
             InitializeComponent();
+            this.DataContext = new LogsViewModel();
         }
     }
 }

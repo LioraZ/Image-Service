@@ -46,3 +46,51 @@ Affected parameters are:
    logtoconsole = 
    logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
    assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Installing assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Installing service ImageService...
+Creating EventLog source ImageService in log Application...
+Rolling back assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Restoring event log to previous state for source ImageService.
+Installing assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Installing service ImageService...
+Creating EventLog source ImageService in log Application...
+Rolling back assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Restoring event log to previous state for source ImageService.
+Uninstalling assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Removing EventLog source ImageService.
+An exception occurred during the uninstallation of the System.Diagnostics.EventLogInstaller installer.
+System.Security.SecurityException: Requested registry access is not allowed.
+An exception occurred while uninstalling. This exception will be ignored and the uninstall will continue. However, the application might not be fully uninstalled after the uninstall is complete.
+Installing assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Installing service ImageService...
+Creating EventLog source ImageService in log Application...
+Rolling back assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Restoring event log to previous state for source ImageService.
