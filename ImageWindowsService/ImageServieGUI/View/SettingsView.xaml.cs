@@ -25,6 +25,8 @@ namespace ImageServieGUI.View
         {
             InitializeComponent();
             this.DataContext = new SettingsViewModel();
+           
         }
+        
     }
 }

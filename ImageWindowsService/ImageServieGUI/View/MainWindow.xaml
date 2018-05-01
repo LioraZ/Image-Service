@@ -11,6 +11,7 @@
         <TabControl Grid.ColumnSpan="4">
             <TabItem Header="Settings">
                 <local:SettingsView/>
+                
             </TabItem>
             <TabItem Header="Logs">
                 <local:LogsView/>

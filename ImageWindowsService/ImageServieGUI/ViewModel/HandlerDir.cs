@@ -22,5 +22,7 @@ namespace ImageServieGUI.ViewModel
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
             }
         }
+
+        public override string ToString() { return name; }
     }
 }

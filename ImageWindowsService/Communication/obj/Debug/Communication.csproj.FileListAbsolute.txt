@@ -1,0 +1,6 @@
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Communication\bin\Debug\Communication.exe.config
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Communication\bin\Debug\Communication.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Communication\bin\Debug\Communication.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Communication\obj\Debug\Communication.csprojResolveAssemblyReference.cache
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Communication\obj\Debug\Communication.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Communication\obj\Debug\Communication.pdb

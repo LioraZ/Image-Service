@@ -17,3 +17,11 @@ C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\obj\Deb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\obj\Debug\ImageServieGUI.exe
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\obj\Debug\ImageServieGUI.pdb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\obj\Debug\App.g.cs
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Prism.dll
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Prism.Wpf.dll
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Microsoft.Practices.ServiceLocation.xml
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Prism.xml
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Prism.Wpf.xml

@@ -4,8 +4,10 @@ using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
 using ImageService.Logging.Model;
 using ImageService.Model;
+using ImageWindowsService.ImageService.Server;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -19,6 +21,8 @@ namespace ImageService.Server
         private ILoggingService logger;             // The Image Service Event Logger
         private Dictionary<string, int> commands;   // The Commands Dictionary
         #endregion
+        private TcpListener listener;
+        private bool stop = false;
 
         #region Properties
         public event EventHandler<CommandReceivedEventArgs> CommandReceived;          // The event that notifies about a new Command being recieved
@@ -35,29 +39,50 @@ namespace ImageService.Server
             logger = imageLogger;
             commands = new Dictionary<string, int>()
             {
-                {"Close Handler", (int)CommandEnum.CloseCommand }
+                {"Close Handler", (int)CommandEnum.CloseCommand },
+                {"GetConfigCommand", (int)CommandEnum.GetConfigCommand }
             };
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
+            listener = new TcpListener(ep);
         }
 
         public void Start()
         {///do this in task
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-            TcpListener listener = new TcpListener(ep);
+            
             listener.Start();
             Console.WriteLine("Waiting for client connections...");
             TcpClient client = listener.AcceptTcpClient();
             Console.WriteLine("Client connected");
-            using (NetworkStream stream = client.GetStream())
-            using (BinaryReader reader = new BinaryReader(stream))
-            using (BinaryWriter writer = new BinaryWriter(stream))
+            logger.Log("Client" + client.ToString() + "is connected", MessageTypeEnum.INFO);
+            while (!stop)
             {
-                Console.WriteLine("Waiting for a message...");
-                string command = reader.ReadString();
-                Console.WriteLine(command);
-                //SendCommand(command, "", null);
-                //writer.Write(num);
+                using (NetworkStream stream = client.GetStream())
+                using (BinaryReader reader = new BinaryReader(stream))
+                using (BinaryWriter writer = new BinaryWriter(stream))
+                {
+                    Debug.WriteLine("Waiting for a message...");
+                    string command = reader.ReadString();
+                    Debug.WriteLine(command);
+                    bool result = false;
+                    string commandResult = "";
+                    try
+                    {
+                        int commandID = commands[command];
+                        commandResult = controller.ExecuteCommand(commandID, null, out result);
+                    }
+                    catch { }
+                    writer.Write(commandResult);
+                    //SendCommand(command, "", null);
+                    //writer.Write(num);
+                }
             }
+            
             client.Close();
+            Stop();
+        }
+
+        public void Stop()
+        {
             listener.Stop();
         }
 
@@ -101,6 +126,7 @@ namespace ImageService.Server
                 IDirectoryHandler h = (DirectoryHandler)sender;
                 CommandReceived -= h.OnCommandRecieved;
                 h.DirectoryClose -= OnCloseServer;
+                Stop();
             }
             catch
             {

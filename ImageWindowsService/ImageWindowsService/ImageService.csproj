@@ -57,6 +57,7 @@
     <Compile Include="ImageService.Logging\LoggingService.cs" />
     <Compile Include="ImageService.Logging\Model\MessageRecievedEventArgs.cs" />
     <Compile Include="ImageService.Logging\Model\MessageTypeEnum.cs" />
+    <Compile Include="ImageService\Commands\GetCongigCommand.cs" />
     <Compile Include="ImageService\Commands\ICommand.cs" />
     <Compile Include="ImageService\Commands\NewFileCommand.cs" />
     <Compile Include="ImageService\Controller\Handlers\DirectoryHandler.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="ImageService\Model\ImageServiceModel.cs" />
     <Compile Include="ImageService\Program.cs" />
     <Compile Include="ImageService\Server\ImageServer.cs" />
+    <Compile Include="ImageService\Server\ServerBase.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>

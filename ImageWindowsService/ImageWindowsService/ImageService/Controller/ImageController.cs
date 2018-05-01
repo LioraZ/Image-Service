@@ -1,6 +1,7 @@
 ﻿using ImageService.Commands;
 using ImageService.Infrastructure.Enums;
 using ImageService.Model;
+using ImageWindowsService.ImageService.Commands;
 using System.Collections.Generic;
 
 namespace ImageService.Controller
@@ -21,7 +22,8 @@ namespace ImageService.Controller
             model = imageModel;
             commands = new Dictionary<int, ICommand>()
             {
-                {(int)CommandEnum.NewFileCommand, new NewFileCommand(model)}
+                {(int)CommandEnum.NewFileCommand, new NewFileCommand(model)},
+                {(int)CommandEnum.GetConfigCommand, new GetCongigCommand() }
             };
         }
 

@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ImageServieGUI.View"
+             xmlns:local="clr-namespace:ImageServieGUI.ViewModel"
+             d:DataContext="ImageServieGUI.ViewModel.SettingsViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
@@ -23,14 +24,23 @@
             <TextBlock Text="Thumbnail Size: " />
             <TextBox Text="{Binding ThumbnailSize}" Width="200" />
         </WrapPanel>
-
         <DockPanel Margin="10">
             <StackPanel DockPanel.Dock="Right" Margin="10,0,0,0">
-                <Button Name="btnAddUser" Margin="4" Padding="4" Height="20">+</Button>
-                <Button Name="btnDeleteUser" Margin="4" Padding="4" Height="20" Width="20">-</Button>
+                <Button x:Name="addHandlerButton" Margin="4" Padding="4" Height="20" Command="{Binding AddHandler}" Content="+"/>
+                <Button x:Name="btnDeleteUser" Margin="4" Padding="4" Height="20" Width="150" Command="{Binding RemoveHandler}" 
+                         IsEnabled="{Binding ElementName=Handlers, Path=IsSelected}">
+                    <DataTrigger Binding="{Binding ElementName=handlersList, Path=IsSelected}" Value="True">
+                    </DataTrigger>
+                </Button>
             </StackPanel>
-            <ListBox ItemsSource="{Binding Handlers}" 
-		SelectedItem="{Binding SelectedHandler}"></ListBox>
+            <ListBox Name="handlersList" ItemsSource="{Binding Handlers}" SelectedItem="{Binding SelectedHandler}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ListBoxItem IsSelected="{Binding IsSelected}" Content="{Binding SelectedHandler}" >
+                        </ListBoxItem>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </DockPanel>
     </StackPanel>
     
