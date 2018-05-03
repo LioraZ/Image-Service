@@ -1,0 +1,1 @@
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\obj\Debug\Infrastructure.csprojResolveAssemblyReference.cache

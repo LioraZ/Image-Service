@@ -13,7 +13,12 @@ namespace ImageWindowsService.ImageService.Commands
         public string Execute(string[] args, out bool result)
         {
             StringBuilder sb = new StringBuilder();
-            string handlers = ConfigurationManager.AppSettings["Handler"];
+            sb.Append(ConfigurationManager.AppSettings["OutputDir"]);
+            sb.Append(ConfigurationManager.AppSettings["OutputDir"]);
+            sb.Append(ConfigurationManager.AppSettings["OutputDir"]);
+            sb.Append(ConfigurationManager.AppSettings["OutputDir"]);
+            result = true;
+            return sb.ToString();
         }
     }
 }

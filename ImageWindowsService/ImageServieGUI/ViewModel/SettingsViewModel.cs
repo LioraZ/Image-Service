@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Prism.Commands;
+using ImageServieGUI.Model;
 
 namespace ImageServieGUI.ViewModel
 {
     class SettingsViewModel : INotifyPropertyChanged
     {
+        private SettingsModel settingsModel;
         public ObservableCollection<HandlerDir> handlers = new ObservableCollection<HandlerDir>();
         public ObservableCollection<HandlerDir> Handlers
         {
@@ -33,30 +35,29 @@ namespace ImageServieGUI.ViewModel
             set
             {
                 if (value != this.selectedHandler)
+                {
                     selectedHandler = value;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedHandler"));
+                RaiseCanExecuteChange();
             }
         }
 
-        public ICommand AddHandler { get; private set; }
-        public ICommand RemoveHandler { get; private set; }
+        public ICommand AddHandler { get; set; }
+        public ICommand RemoveHandler { get; set; }
 
-        private int thumbnailSize = 120;
         public string OutputDir { get; set; }
         public string SourceName { get; set; }
         public string LogName { get; set; }
-        public int ThumbnailSize {
-            get { return thumbnailSize; }
-            set { thumbnailSize = value; }
-        }
+        public int ThumbnailSize { get; set; }
 
         public SettingsViewModel()
         {
+            this.settingsModel = new SettingsModel();
             this.RemoveHandler = new DelegateCommand<object>(this.OnRemoveHandler, this.CanRemoveHandler);
             this.AddHandler = new DelegateCommand(this.OnAddHandler);
             handlers.Add(new HandlerDir() { Name = "Liora" });
             handlers.Add(new HandlerDir() { Name = "Atara" });
-            
         }
         private bool isSelected;
         public bool IsSelected
@@ -73,48 +74,30 @@ namespace ImageServieGUI.ViewModel
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSelected"));
             }
         }
-        /*private void addHandlerButton(object sender, RoutedEventArgs e)
-        {
-            handlers.Add(new HandlerDir() { Name = "Liora" });
-        }
-        private void btnDeleteUser_Click(object sender, RoutedEventArgs e)
-        {
-         
-            if (SelectedItem != null)
-                handlers.Remove(lbUsers.SelectedItem as string);
-        }*/
+
         private bool CanRemoveHandler(object obj)
         {
-            return IsSelected;
-            if (obj == null)  return false;
-           /* foreach (HandlerDir h in Handlers)
-                if (Handlers.SelectedItems.Contains(h))
-                    h.Value = true;
-                else
-                    MyObject.Value = false;*/
-            /*if (this.QuestionnaireViewModel.Questionnaire.Age < 0 || this.QuestionnaireViewModel.Questionnaire.Age > 120)
+            if (selectedHandler != null)
             {
-                return false;
+                Debug.WriteLine(selectedHandler.ToString());
+                return true;
             }
-            if (string.IsNullOrEmpty(this.QuestionnaireViewModel.Questionnaire.Quest))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(this.QuestionnaireViewModel.Questionnaire.FavoriteColor))
-            {
-                return false;
-            }*/
-            return true;
+            Debug.WriteLine("nothing selected yet!");
+            return false;
+        }
+        private void RaiseCanExecuteChange()
+        {
+            DelegateCommand<object> command = RemoveHandler as DelegateCommand<object>;
+            command.RaiseCanExecuteChanged();
         }
         private void OnRemoveHandler(object obj)
         {
-            Debug.WriteLine("handler removed");
+            handlers.Remove(selectedHandler);
+            selectedHandler = null;
         }
         private void OnAddHandler() {
             handlers.Add(new HandlerDir() { Name = "Liora" });
         }
-
-       
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

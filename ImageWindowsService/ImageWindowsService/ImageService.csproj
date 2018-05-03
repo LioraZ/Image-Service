@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageService.Infrastructure\Enums\CommandEnum.cs" />
     <Compile Include="ImageService.Logging\ILoggingService.cs" />
     <Compile Include="ImageService.Logging\LoggingService.cs" />
     <Compile Include="ImageService.Logging\Model\MessageRecievedEventArgs.cs" />
@@ -88,7 +87,12 @@
   <ItemGroup>
     <None Include="ImageService\App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{7f63acc4-1e84-405e-99a0-f14f89a583cb}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ImageService\ImageService.resx">
       <DependentUpon>ImageService.cs</DependentUpon>

@@ -27,6 +27,7 @@ namespace ImageServieGUI.View
             this.DataContext = new SettingsViewModel();
            
         }
+
         
     }
 }
