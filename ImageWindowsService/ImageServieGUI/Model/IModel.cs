@@ -8,5 +8,6 @@ namespace ImageServieGUI.Model
 {
     interface IModel
     {
+        void MessageFromServer(object sender, string message);
     }
 }

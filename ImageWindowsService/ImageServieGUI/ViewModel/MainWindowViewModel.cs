@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageServieGUI.Communication;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,15 +14,18 @@ namespace ImageServieGUI.ViewModel
 {
     class MainWindowViewModel
     {
-        private TcpClient client;
+        //private TcpClient client;
+        public bool ServerConnected { get; set; }
         public Brush WindowColor { get; set; }
 
         public MainWindowViewModel()
         {
-
+            ServerConnected = CLient.GetInstance().isConnected;
+            WindowColor = Brushes.Gray;
+            if (ServerConnected) WindowColor = Brushes.Pink;
         }
 
-        public void ConnectToServer()
+        /*public void ConnectToServer()
         {
             WindowColor = Brushes.Gray;
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
@@ -49,13 +53,13 @@ namespace ImageServieGUI.ViewModel
                 // Get result from server
                 //nt result = reader.ReadInt32();
                 //Console.WriteLine("Result = {0}", result);
-            }**/
+            }
             
-        }
-        public void DisconnectFromServer()
+        }*/
+       /* public void DisconnectFromServer()
         {
             WindowColor = Brushes.Gray;
             client.Close();
-        }
+        }*/
     }
 }

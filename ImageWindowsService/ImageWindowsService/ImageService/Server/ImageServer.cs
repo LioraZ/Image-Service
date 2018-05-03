@@ -61,13 +61,14 @@ namespace ImageService.Server
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     Debug.WriteLine("Waiting for a message...");
-                    string command = reader.ReadString();
-                    Debug.WriteLine(command);
+                    //string command = reader.ReadString();
+                    //Debug.WriteLine(command);
                     bool result = false;
                     string commandResult = "";
                     try
                     {
-                        int commandID = commands[command];
+                        int commandID = reader.ReadInt32();
+                        //int commandID = commands[command];
                         commandResult = controller.ExecuteCommand(commandID, null, out result);
                     }
                     catch { }

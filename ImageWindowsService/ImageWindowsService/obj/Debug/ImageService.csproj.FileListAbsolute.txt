@@ -7,3 +7,5 @@ C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\ob
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageService.csproj.GenerateResource.Cache
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageWindowsService.exe
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageWindowsService.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Infrastructure.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Infrastructure.pdb

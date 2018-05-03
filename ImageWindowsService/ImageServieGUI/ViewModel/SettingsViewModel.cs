@@ -15,7 +15,7 @@ namespace ImageServieGUI.ViewModel
 {
     class SettingsViewModel : INotifyPropertyChanged
     {
-        private SettingsModel settingsModel;
+        private IModel settingsModel;
         public ObservableCollection<HandlerDir> handlers = new ObservableCollection<HandlerDir>();
         public ObservableCollection<HandlerDir> Handlers
         {

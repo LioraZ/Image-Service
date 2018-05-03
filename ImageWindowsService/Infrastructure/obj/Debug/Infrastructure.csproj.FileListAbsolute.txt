@@ -1,1 +1,6 @@
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\obj\Debug\Infrastructure.csprojResolveAssemblyReference.cache
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\bin\Debug\Infrastructure.exe.config
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\bin\Debug\Infrastructure.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\bin\Debug\Infrastructure.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\obj\Debug\Infrastructure.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\obj\Debug\Infrastructure.pdb

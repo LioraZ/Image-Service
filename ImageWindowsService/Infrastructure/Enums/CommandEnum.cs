@@ -16,4 +16,9 @@ namespace ImageService.Infrastructure.Enums
         GetConfigCommand,
         LogCommand
     }
+    public static class ProgramMain
+    {
+        public static void Main(string[] args) { }
+    }
+    
 }

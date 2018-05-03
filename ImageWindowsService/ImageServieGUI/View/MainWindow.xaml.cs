@@ -26,7 +26,7 @@ namespace ImageServieGUI.View
             InitializeComponent();
             MainWindowViewModel m = new MainWindowViewModel();
             this.DataContext = m;
-            m.ConnectToServer();
+           // m.ConnectToServer();
             
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageService.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,9 +14,10 @@ namespace ImageServieGUI.Communication
     {
         private static CLient instance = null;
         private TcpClient client;
-        public static event EventHandler<string> MessageReceived; 
+        public bool isConnected;
+        public event EventHandler<string> MessageReceived; 
 
-        public CLient GetInstance()
+        public static CLient GetInstance()
         {
             if (instance == null) instance = new CLient();
             return instance;
@@ -26,34 +28,45 @@ namespace ImageServieGUI.Communication
             ConnectToServer();
         }
 
-        public void ConnectToServer()
+        public bool ConnectToServer()
         {
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             client = new TcpClient();
             try
             {
                 client.Connect(ep);
+                isConnected = true;
                 Console.WriteLine("You are connected");
-                MessageReceived?.Invoke(this, "initial connection");
+               // MessageReceived?.Invoke(this, "initial connection");
+                return true;
             }
             catch
             {
                 Console.WriteLine("Unable to connect to server. Please check your connection.");
+                isConnected = false;
+                return false;
             }
         }
-        public void EstablishStream()
+
+        public void SendMessageToServer(CommandEnum e)
         {
+            if (!isConnected) return;
             using (NetworkStream stream = client.GetStream())
             using (BinaryReader reader = new BinaryReader(stream))
             using (BinaryWriter writer = new BinaryWriter(stream))
             {
                 // Send data to server
-                writer.Write("settings");
-                Console.Write("waiting to receives settings...");
-                string settings = reader.ReadString();
-                Console.WriteLine(settings + "recieved");
-                writer.Write("Settings received" + settings);
-               // SettingModel.
+                writer.Write((int)e);
+                Console.Write("send message to server waiting for response");
+                //string message = reader.ReadString();
+                string message = reader.ReadString();
+                if (message == "") return;
+                Console.WriteLine(message + "recieved");
+                MessageReceived?.Invoke(this, message);
+                //Console.WriteLine(message + "recieved");
+                //MessageReceived?.Invoke(this, message);
+                //writer.Write("Settings received" + settings);
+                // SettingModel.
             }
         }
         public string GetMessage()
