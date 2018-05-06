@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageService.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace ImageServieGUI.Model
             Debug.WriteLine("after Imodel invoke");
         }
         public abstract void MessageFromServer(object sender, string message);
+        public abstract void SendMessageToServer(CommandEnum commandID, string args);
     }
 }

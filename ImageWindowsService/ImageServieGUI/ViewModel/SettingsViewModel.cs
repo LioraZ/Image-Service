@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Prism.Commands;
+using ImageService.Infrastructure.Enums;
 using ImageServieGUI.Model;
 
 namespace ImageServieGUI.ViewModel
@@ -57,8 +58,6 @@ namespace ImageServieGUI.ViewModel
             settingsModel.changeInModel += this.SettingsEvent;
             this.RemoveHandler = new DelegateCommand<object>(this.OnRemoveHandler, this.CanRemoveHandler);
             this.AddHandler = new DelegateCommand(this.OnAddHandler);
-            handlers.Add(new HandlerDir() { Name = "Liora" });
-            handlers.Add(new HandlerDir() { Name = "Atara" });
         }
         private bool isSelected;
         public bool IsSelected
@@ -93,7 +92,9 @@ namespace ImageServieGUI.ViewModel
         }
         private void OnRemoveHandler(object obj)
         {
+            Task.Run(() => { settingsModel.SendMessageToServer(CommandEnum.RemoveHandlerCommand, selectedHandler.Name); });
             handlers.Remove(selectedHandler);
+            //settingsModel.MessageFromServer()
             selectedHandler = null;
         }
         private void OnAddHandler() {
@@ -107,6 +108,10 @@ namespace ImageServieGUI.ViewModel
             SourceName = e.SourceName;
             LogName = e.LogName;
             ThumbnailSize = e.ThumbnailSize;
+            foreach (string handler in e.Handlers)
+            {
+                handlers.Add(new HandlerDir() { Name = handler });
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

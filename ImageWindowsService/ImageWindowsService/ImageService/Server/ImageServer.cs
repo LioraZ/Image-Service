@@ -68,8 +68,9 @@ namespace ImageService.Server
                     try
                     {
                         int commandID = reader.ReadInt32();
+                        string[] args = { reader.ReadString() };
                         //int commandID = commands[command];
-                        commandResult = controller.ExecuteCommand(commandID, null, out result);
+                        commandResult = controller.ExecuteCommand(commandID, args, out result);
                     }
                     catch { }
                     writer.Write(commandResult);

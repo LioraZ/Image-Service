@@ -48,7 +48,7 @@ namespace ImageServieGUI.Communication
             }
         }
 
-        public void SendMessageToServer(CommandEnum e)
+        public void SendMessageToServer(CommandEnum e, string args)
         {
             if (!isConnected) return;
             using (NetworkStream stream = client.GetStream())
@@ -57,6 +57,7 @@ namespace ImageServieGUI.Communication
             {
                 // Send data to server
                 writer.Write((int)e);
+                writer.Write(args);
                 Console.WriteLine("send message to server waiting for response");
                 //string message = reader.ReadString();
                 string message = reader.ReadString();

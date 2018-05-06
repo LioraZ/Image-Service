@@ -14,7 +14,8 @@ namespace ImageService.Infrastructure.Enums
         NewFileCommand,
         CloseCommand,
         GetConfigCommand,
-        LogCommand
+        LogCommand,
+        RemoveHandlerCommand
     }
     public static class ProgramMain
     {
