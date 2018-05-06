@@ -73,6 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Communication\Client.cs" />
     <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\SettingsEventArgs.cs" />
     <Compile Include="Model\SettingsModel.cs" />
     <Compile Include="ViewModel\HandlerDir.cs" />
     <Compile Include="ViewModel\LogsViewModel.cs" />

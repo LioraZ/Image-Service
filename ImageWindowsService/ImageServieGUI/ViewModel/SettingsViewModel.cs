@@ -54,6 +54,7 @@ namespace ImageServieGUI.ViewModel
         public SettingsViewModel()
         {
             this.settingsModel = new SettingsModel();
+            settingsModel.changeInModel += this.SettingsEvent;
             this.RemoveHandler = new DelegateCommand<object>(this.OnRemoveHandler, this.CanRemoveHandler);
             this.AddHandler = new DelegateCommand(this.OnAddHandler);
             handlers.Add(new HandlerDir() { Name = "Liora" });
@@ -97,6 +98,15 @@ namespace ImageServieGUI.ViewModel
         }
         private void OnAddHandler() {
             handlers.Add(new HandlerDir() { Name = "Liora" });
+        }
+
+        public void SettingsEvent(object sender, SettingsEventArgs e)
+        {
+            Debug.WriteLine("Settings Event in settings view model");
+            OutputDir = e.OutputDir;
+            SourceName = e.SourceName;
+            LogName = e.LogName;
+            ThumbnailSize = e.ThumbnailSize;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -57,12 +57,12 @@ namespace ImageServieGUI.Communication
             {
                 // Send data to server
                 writer.Write((int)e);
-                Console.Write("send message to server waiting for response");
+                Console.WriteLine("send message to server waiting for response");
                 //string message = reader.ReadString();
                 string message = reader.ReadString();
                 if (message == "") return;
-                Console.WriteLine(message + "recieved");
-                MessageReceived?.Invoke(this, message);
+                Console.WriteLine(message + " recieved");
+                Task.Run(()=>{ MessageReceived?.Invoke(this, message); });
                 //Console.WriteLine(message + "recieved");
                 //MessageReceived?.Invoke(this, message);
                 //writer.Write("Settings received" + settings);

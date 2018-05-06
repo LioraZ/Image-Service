@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ImageServieGUI.Model
 {
-    interface IModel
+    abstract class IModel
     {
-        void MessageFromServer(object sender, string message);
+        public virtual event EventHandler<SettingsEventArgs> changeInModel;
+        protected virtual void InvokeEvent(SettingsEventArgs e)
+        {
+            Debug.WriteLine("before Imodel invoke");
+           // Delegate[] d = changeInModel.GetInvocationList();
+            //foreach (Delegate s in d) Debug.WriteLine(s.ToString());
+            changeInModel?.Invoke(this, e);
+            Debug.WriteLine("after Imodel invoke");
+        }
+        public abstract void MessageFromServer(object sender, string message);
     }
 }
