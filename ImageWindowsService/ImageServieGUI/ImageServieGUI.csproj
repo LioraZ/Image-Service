@@ -76,6 +76,7 @@
     <Compile Include="Model\SettingsEventArgs.cs" />
     <Compile Include="Model\SettingsModel.cs" />
     <Compile Include="ViewModel\HandlerDir.cs" />
+    <Compile Include="ViewModel\LogInfo.cs" />
     <Compile Include="ViewModel\LogsViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />

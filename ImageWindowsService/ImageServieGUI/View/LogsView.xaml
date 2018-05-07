@@ -7,9 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBox>"Hii"</TextBox>
-        <DataGrid>
-           HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" Height="110" Width="280"
-        </DataGrid>
+        <DataGrid HorizontalAlignment="Left" Margin="10,33,0,0" 
+                  VerticalAlignment="Top" ItemsSource="{Binding Logs}"
+                  Height="110" Width="280"></DataGrid>
     </Grid>
 </UserControl>

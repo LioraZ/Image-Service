@@ -37,7 +37,6 @@ namespace ImageServieGUI.Communication
                 client.Connect(ep);
                 isConnected = true;
                 Console.WriteLine("You are connected");
-               // MessageReceived?.Invoke(this, "initial connection");
                 return true;
             }
             catch
@@ -50,7 +49,10 @@ namespace ImageServieGUI.Communication
 
         public void SendMessageToServer(CommandEnum e, string args)
         {
-            if (!isConnected) return;
+            if (!client.Connected)
+            {
+                if (!ConnectToServer()) return;
+            }
             using (NetworkStream stream = client.GetStream())
             using (BinaryReader reader = new BinaryReader(stream))
             using (BinaryWriter writer = new BinaryWriter(stream))
