@@ -1,4 +1,5 @@
 ﻿using ImageService.Commands;
+using ImageService.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,20 +13,25 @@ namespace ImageWindowsService.ImageService.Commands
     {
         public string Execute(string[] args, out bool result)
         {
+            int commandID = (int)CommandEnum.RemoveHandlerCommand; 
             string h = args[0];
             string handlers = ConfigurationManager.AppSettings["Handler"];
             int handlerIndex = handlers.IndexOf(h);
-            if (handlerIndex > 0)
+            if (handlerIndex >= 0)
             {
-                string newHandlersList = handlers.Remove(handlerIndex);
-                ConfigurationManager.AppSettings["Handler"] = newHandlersList;
+                string newHandlersList = handlers.Remove(handlerIndex);//make sure to change
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings["Handler"].Value = newHandlersList;
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+                
                 result = true;
-                return h + "successfully removed fro handlers list";
+                return commandID + h + "successfully removed from handlers list";
             }
             else
             {
                 result = false;
-                return "couldn't remove handler";
+                return commandID + "couldn't remove handler";
             }
            
             //throw new NotImplementedException();

@@ -15,7 +15,8 @@ namespace ImageServieGUI.Communication
         private static CLient instance = null;
         private TcpClient client;
         public bool isConnected;
-        public event EventHandler<string> MessageReceived; 
+        public event EventHandler<string> MessageReceived;
+        public event EventHandler<bool> CheckConnection;
 
         public static CLient GetInstance()
         {
@@ -51,7 +52,10 @@ namespace ImageServieGUI.Communication
         {
             if (!client.Connected)
             {
-                if (!ConnectToServer()) return;
+                ConnectToServer();
+                CheckConnection?.Invoke(this, client.Connected);
+                //return;
+             //   if (!ConnectToServer()) return;
             }
             using (NetworkStream stream = client.GetStream())
             using (BinaryReader reader = new BinaryReader(stream))

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace ImageService.Server
 {
@@ -51,36 +52,40 @@ namespace ImageService.Server
             
             listener.Start();
             Console.WriteLine("Waiting for client connections...");
-            TcpClient client = listener.AcceptTcpClient();
-            Console.WriteLine("Client connected");
-            logger.Log("Client" + client.ToString() + "is connected", MessageTypeEnum.INFO);
+            
             while (!stop)
             {
-                using (NetworkStream stream = client.GetStream())
-                using (BinaryReader reader = new BinaryReader(stream))
-                using (BinaryWriter writer = new BinaryWriter(stream))
-                {
-                    Debug.WriteLine("Waiting for a message...");
-                    //string command = reader.ReadString();
-                    //Debug.WriteLine(command);
-                    bool result = false;
-                    string commandResult = "";
-                    try
-                    {
-                        int commandID = reader.ReadInt32();
-                        string[] args = { reader.ReadString() };
-                        //int commandID = commands[command];
-                        commandResult = controller.ExecuteCommand(commandID, args, out result);
-                    }
-                    catch { }
-                    writer.Write(commandResult);
-                    //SendCommand(command, "", null);
-                    //writer.Write(num);
-                }
+                TcpClient client = listener.AcceptTcpClient();
+                Console.WriteLine("Client connected");
+                logger.Log("Client" + client.ToString() + "is connected", MessageTypeEnum.INFO);
+                Task.Run(() => OpenCommunicationStream(client) );
             }
             
-            client.Close();
-            Stop();
+           // client.Close();
+            //Stop();
+        }
+
+        public void OpenCommunicationStream(TcpClient client)
+        {
+            using (NetworkStream stream = client.GetStream())
+            using (BinaryReader reader = new BinaryReader(stream))
+            using (BinaryWriter writer = new BinaryWriter(stream))
+            {
+                Debug.WriteLine("Waiting for a message...");
+                //string command = reader.ReadString();
+                //Debug.WriteLine(command);
+                bool result = false;
+                string commandResult = "";
+                try
+                {
+                    int commandID = reader.ReadInt32();
+                    string[] args = { reader.ReadString() };
+                    //int commandID = commands[command];
+                    commandResult = controller.ExecuteCommand(commandID, args, out result);
+                }
+                catch { }
+                writer.Write(commandResult);
+            }
         }
 
         public void Stop()

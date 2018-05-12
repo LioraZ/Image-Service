@@ -9,6 +9,7 @@
     <Grid>
         <DataGrid HorizontalAlignment="Left" Margin="10,33,0,0" 
                   VerticalAlignment="Top" ItemsSource="{Binding Logs}"
+                  Background="{Binding LogInfo}"
                   Height="110" Width="280"></DataGrid>
     </Grid>
 </UserControl>

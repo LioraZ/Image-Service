@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace ImageServieGUI.ViewModel
 {
@@ -21,6 +22,24 @@ namespace ImageServieGUI.ViewModel
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Logs"));
             }
         }
+
+
+        /*public Brush LogTypeColor
+        {
+            get
+            {
+                switch (LogInfo.LogType)
+                {
+                    case 1:
+                        return Brushes.LightGreen;
+                    case 2:
+                        return Brushes.Red;
+                    case 3:
+                        return Brushes.Yellow;
+                }
+                return Brushes.Transparent;
+            }
+        }*/
 
         public LogsViewModel()
         {

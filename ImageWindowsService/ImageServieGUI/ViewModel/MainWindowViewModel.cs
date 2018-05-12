@@ -1,6 +1,7 @@
 ﻿using ImageServieGUI.Communication;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,18 +13,36 @@ using System.Windows.Media;
 
 namespace ImageServieGUI.ViewModel
 {
-    class MainWindowViewModel
+    class MainWindowViewModel : INotifyPropertyChanged
     {
         //private TcpClient client;
-        public bool ServerConnected { get; set; }
+        private bool serverConnected;
+        public bool ServerConnected {
+            get { return serverConnected; }
+            set
+            {
+                serverConnected = value;
+                if (serverConnected) WindowColor = Brushes.Pink;
+                else WindowColor = Brushes.Gray;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WindowColor"));
+            }
+        }
         public Brush WindowColor { get; set; }
 
         public MainWindowViewModel()
         {
-            ServerConnected = CLient.GetInstance().isConnected;
+            CLient client = CLient.GetInstance();
+            ServerConnected = client.isConnected;
+            client.CheckConnection += CheckConnection;
             WindowColor = Brushes.Gray;
             if (ServerConnected) WindowColor = Brushes.Pink;
         }
+
+        public void CheckConnection(object sender, bool isConnected)
+        {
+            ServerConnected = isConnected;
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /*public void ConnectToServer()
         {
@@ -56,10 +75,10 @@ namespace ImageServieGUI.ViewModel
             }
             
         }*/
-       /* public void DisconnectFromServer()
-        {
-            WindowColor = Brushes.Gray;
-            client.Close();
-        }*/
+        /* public void DisconnectFromServer()
+         {
+             WindowColor = Brushes.Gray;
+             client.Close();
+         }*/
     }
 }

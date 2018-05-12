@@ -12,17 +12,7 @@ namespace ImageServieGUI.Model
 {
     class SettingsModel : IModel
     {
-        /*private string outputDir;
-        private string sourceName;
-        private string logName;
-        private int thumbnailSize;*/
-        //private List<string> handlers;
         public override event EventHandler<SettingsEventArgs> changeInModel;
-
-        /*public string OutputDir { get; set; }
-        public string SourceName { get; set; }
-        public string LogName { get; set; }
-        public int ThumbnailSize { get; set; }*/
 
         public SettingsModel()
         {
@@ -47,10 +37,15 @@ namespace ImageServieGUI.Model
         
         public override void MessageFromServer(object sender, string message)
         {
-            CLient client = (CLient)sender;
-            string settings = message.Substring(1);
-            SettingsEventArgs e = ParseSettingsFromString(settings);
-            changeInModel?.Invoke(this, e);
+            Debug.WriteLine("In message from server settings model meessage recieved is" + message);
+            int commadID = int.Parse(message[0].ToString());
+            if (commadID == (int)CommandEnum.GetConfigCommand)
+            {
+                CLient client = (CLient)sender;
+                string settings = message.Substring(1);
+                SettingsEventArgs e = ParseSettingsFromString(settings);
+                changeInModel?.Invoke(this, e);
+            }    
         }
 
         public override void SendMessageToServer(CommandEnum commandID, string args)

@@ -23,7 +23,8 @@ namespace ImageService.Controller
             commands = new Dictionary<int, ICommand>()
             {
                 {(int)CommandEnum.NewFileCommand, new NewFileCommand(model)},
-                {(int)CommandEnum.GetConfigCommand, new GetCongigCommand() }
+                {(int)CommandEnum.GetConfigCommand, new GetCongigCommand() },
+                {(int)CommandEnum.RemoveHandlerCommand, new RemoveHandlerCommand() }
             };
         }
 
