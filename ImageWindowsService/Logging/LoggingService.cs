@@ -33,5 +33,6 @@ namespace ImageService.Logging
             }
             return EventLogEntryType.Information;
         }
+
     }
 }

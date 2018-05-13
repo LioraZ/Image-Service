@@ -9,3 +9,5 @@ C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\ob
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\obj\Debug\ImageWindowsService.pdb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Infrastructure.exe
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Infrastructure.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Logging.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Logging.pdb

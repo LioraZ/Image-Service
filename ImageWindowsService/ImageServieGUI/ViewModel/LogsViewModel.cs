@@ -24,7 +24,7 @@ namespace ImageServieGUI.ViewModel
         }
 
 
-        /*public Brush LogTypeColor
+        public Brush LogTypeColor
         {
             get
             {
@@ -39,7 +39,7 @@ namespace ImageServieGUI.ViewModel
                 }
                 return Brushes.Transparent;
             }
-        }*/
+        }
 
         public LogsViewModel()
         {

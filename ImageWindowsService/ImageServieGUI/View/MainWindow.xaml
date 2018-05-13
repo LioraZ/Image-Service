@@ -10,11 +10,14 @@
     <Grid>
         <TabControl Grid.ColumnSpan="4">
             <TabItem Header="Settings">
-                <local:SettingsView/>
-                
+                <ScrollViewer>
+                    <local:SettingsView/>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Logs">
-                <local:LogsView/>
+                <ScrollViewer>
+                    <local:LogsView/>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </Grid>

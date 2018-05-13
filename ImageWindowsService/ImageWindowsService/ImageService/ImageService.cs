@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 using ImageService.Server;
 using ImageService.Model;
 using ImageService.Controller;
-using ImageService.Logging;
-using ImageService.Logging.Model;
 using System.Configuration;
 using System.Threading.Tasks;
+using ImageService.Logging;
+using ImageService.Logging.Model;
 
 namespace ImageService
 {
@@ -84,6 +84,7 @@ namespace ImageService
         private void onMessageReceived(object sender, MessageRecievedEventArgs args)
         {
             eventLog1.WriteEntry(args.Message, logger.GetMessageType(args.Status));
+            //EventLogEntryCollection entries = eventLog1.Entries;
         }
 
         /// <summary>

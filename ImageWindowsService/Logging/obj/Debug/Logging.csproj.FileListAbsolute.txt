@@ -1,0 +1,5 @@
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Logging\bin\Debug\Logging.exe.config
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Logging\bin\Debug\Logging.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Logging\bin\Debug\Logging.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Logging\obj\Debug\Logging.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Logging\obj\Debug\Logging.pdb

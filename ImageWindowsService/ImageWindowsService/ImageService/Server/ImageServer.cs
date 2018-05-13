@@ -38,6 +38,7 @@ namespace ImageService.Server
         {
             controller = imageController;
             logger = imageLogger;
+            logger.MessageReceived += OnLogMessageReceived;
             commands = new Dictionary<string, int>()
             {
                 {"Close Handler", (int)CommandEnum.CloseCommand },
@@ -91,6 +92,12 @@ namespace ImageService.Server
         public void Stop()
         {
             listener.Stop();
+        }
+
+        public void OnLogMessageReceived(object sender, MessageRecievedEventArgs args)
+        {
+            bool result;
+            controller.ExecuteCommand((int)CommandEnum.LogCommand, new string[] { args.Message, args.Status.ToString()}, out result);
         }
 
         /// <summary>

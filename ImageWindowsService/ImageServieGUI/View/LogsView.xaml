@@ -6,10 +6,20 @@
              xmlns:local="clr-namespace:ImageServieGUI.View"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <DataGrid HorizontalAlignment="Left" Margin="10,33,0,0" 
+    <StackPanel>
+        <TextBlock Text="Logs" HorizontalAlignment="Center"></TextBlock>
+        <DataGrid
+            HorizontalAlignment="Center" Margin="10,33,0,0" 
                   VerticalAlignment="Top" ItemsSource="{Binding Logs}"
-                  Background="{Binding LogInfo}"
-                  Height="110" Width="280"></DataGrid>
-    </Grid>
+                  Background="{Binding LogInfo}"  Height="110" Width="280">
+            
+
+        </DataGrid>
+        <DataGrid HorizontalAlignment="Center" Margin="10,10,0,0" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Type" Binding="{Binding amount}"/>
+                <DataGridTextColumn Header="Message" Binding="{Binding chargeDate}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 </UserControl>

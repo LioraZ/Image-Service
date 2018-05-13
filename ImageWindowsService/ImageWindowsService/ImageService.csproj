@@ -52,12 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageService.Logging\ILoggingService.cs" />
-    <Compile Include="ImageService.Logging\LoggingService.cs" />
-    <Compile Include="ImageService.Logging\Model\MessageRecievedEventArgs.cs" />
-    <Compile Include="ImageService.Logging\Model\MessageTypeEnum.cs" />
     <Compile Include="ImageService\Commands\GetCongigCommand.cs" />
     <Compile Include="ImageService\Commands\ICommand.cs" />
+    <Compile Include="ImageService\Commands\LogCommand.cs" />
     <Compile Include="ImageService\Commands\NewFileCommand.cs" />
     <Compile Include="ImageService\Commands\RemoveHandlerCommand.cs" />
     <Compile Include="ImageService\Controller\Handlers\DirectoryHandler.cs" />
@@ -92,6 +89,10 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{7f63acc4-1e84-405e-99a0-f14f89a583cb}</Project>
       <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{d0ac5591-d2a0-41e6-b138-55a79bfa5887}</Project>
+      <Name>Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
