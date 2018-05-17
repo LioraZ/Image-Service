@@ -4,7 +4,6 @@ using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
 using ImageService.Logging.Model;
 using ImageService.Model;
-using ImageWindowsService.ImageService.Server;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +11,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Communication;
 
 namespace ImageService.Server
 {
@@ -23,6 +23,7 @@ namespace ImageService.Server
         private Dictionary<string, int> commands;   // The Commands Dictionary
         #endregion
         private TcpListener listener;
+        private TCPServerChannel serverChannel;
         private bool stop = false;
 
         #region Properties
@@ -46,12 +47,16 @@ namespace ImageService.Server
             };
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             listener = new TcpListener(ep);
+            //serverChannel = new TCPServerChannel(listener);
+            serverChannel.OnMessageToServer += OnMessageToServerReceived;
         }
 
         public void Start()
         {///do this in task
+
             
             listener.Start();
+            //serverChannel = new TCPServerChannel(listener);
             Console.WriteLine("Waiting for client connections...");
             
             while (!stop)
@@ -59,6 +64,7 @@ namespace ImageService.Server
                 TcpClient client = listener.AcceptTcpClient();
                 Console.WriteLine("Client connected");
                 logger.Log("Client" + client.ToString() + "is connected", MessageTypeEnum.INFO);
+                //serverChannel.SendMessageToClient();
                 Task.Run(() => OpenCommunicationStream(client) );
             }
             
@@ -97,7 +103,19 @@ namespace ImageService.Server
         public void OnLogMessageReceived(object sender, MessageRecievedEventArgs args)
         {
             bool result;
-            controller.ExecuteCommand((int)CommandEnum.LogCommand, new string[] { args.Message, args.Status.ToString()}, out result);
+            string message = controller.ExecuteCommand((int)CommandEnum.LogCommand, new string[] { args.Message, args.Status.ToString()}, out result);
+            serverChannel.SendMessageToClient(new CommandEventArgs() { CommandID = CommandEnum.LogCommand, CommandArgs = new string[] { args.Message, args.Status.ToString() } });
+            //Task.Run(() => OpenCommunicationStream(client));
+        }
+
+        public void OnMessageToServerReceived(object sender, CommandEventArgs args)
+        {
+            bool result;
+            string logMessage = controller.ExecuteCommand((int)args.CommandID, args.CommandArgs, out result); //make sure controller has try/catch
+            if (!result)
+            {
+                logger.Log(logMessage, MessageTypeEnum.FAIL);
+            }
         }
 
         /// <summary>

@@ -27,3 +27,5 @@ C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Deb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Prism.Wpf.xml
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Infrastructure.exe
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Infrastructure.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Logging.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Logging.pdb

@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Communication\Client.cs" />
+    <Compile Include="Communication\CommandManager.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\LogsModel.cs" />
     <Compile Include="Model\SettingsEventArgs.cs" />
@@ -137,9 +138,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Communication\Communication.csproj">
+      <Project>{0cd3dde5-43f2-4490-9d19-b889728d55a4}</Project>
+      <Name>Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{7f63acc4-1e84-405e-99a0-f14f89a583cb}</Project>
       <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{d0ac5591-d2a0-41e6-b138-55a79bfa5887}</Project>
+      <Name>Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

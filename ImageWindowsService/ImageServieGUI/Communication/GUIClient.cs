@@ -1,0 +1,78 @@
+﻿using ImageService.Infrastructure.Enums;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ImageServieGUI.Communication
+{
+    class GUIClient
+    {
+        private static GUIClient instance = null;
+        private TCPClientChannel clientChannel;
+        private TcpClient client;
+        public bool isConnected;
+        public event EventHandler<string> MessageReceived;
+        public event EventHandler<bool> CheckConnection;
+
+        public static GUIClient GetInstance()
+        {
+            if (instance == null) instance = new GUIClient();
+            return instance;
+        }
+
+        private GUIClient()
+        {
+            clientChannel = new TCPClientChannel(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000));
+            clientChannel.OnMessageFromServer += ReceiveMessageFromServer;
+            ConnectToServer();
+        }
+
+        public bool ConnectToServer()
+        {
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
+            client = new TcpClient();
+            try
+            {
+                client.Connect(ep);
+                isConnected = true;
+                Console.WriteLine("You are connected");
+                return true;
+            }
+            catch
+            {
+                Console.WriteLine("Unable to connect to server. Please check your connection.");
+                isConnected = false;
+                return false;
+            }
+        }
+
+        public void SendMessageToServer(CommandEnum commandID, string[] args)
+        {
+            if (!client.Connected)
+            {
+                ConnectToServer();
+                CheckConnection?.Invoke(this, client.Connected);
+                //return;
+                //   if (!ConnectToServer()) return;
+            }
+            clientChannel.SendMessageToServer(client, commandID, args);
+        }
+
+        public void ReceiveMessageFromServer(object sender, CommandEventArgs args)
+        {
+            MessageReceived?.Invoke(this, args);
+        }
+        
+        //client channel should do this
+        public void DisconnectFromServer()
+        {
+            client.Close();
+        }
+    }
+}
+}

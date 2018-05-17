@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ImageService.Logging.Model;
+using ImageServieGUI.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,8 +13,9 @@ namespace ImageServieGUI.ViewModel
 {
     class LogsViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<LogInfo> logs;
-        public ObservableCollection<LogInfo> Logs
+        private LogsModel logsModel;
+        public ObservableCollection<MessageRecievedEventArgs> logs;
+        public ObservableCollection<MessageRecievedEventArgs> Logs
         {
             get { return logs; }
             set
@@ -24,7 +27,7 @@ namespace ImageServieGUI.ViewModel
         }
 
 
-        public Brush LogTypeColor
+        /*public Brush LogTypeColor
         {
             get
             {
@@ -39,14 +42,21 @@ namespace ImageServieGUI.ViewModel
                 }
                 return Brushes.Transparent;
             }
-        }
+        }*/
 
         public LogsViewModel()
         {
-            logs = new ObservableCollection<LogInfo>();
-            logs.Add(new LogInfo() { Name = "Liora", LogType = 1 });
+            logsModel = new LogsModel();
+            logsModel.ReceivedLog += OnLogReceived;
+            logs = new ObservableCollection<MessageRecievedEventArgs>();
+            logs.Add(new MessageRecievedEventArgs("Liora", MessageTypeEnum.INFO));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnLogReceived(object sender, MessageRecievedEventArgs log)
+        {
+            logs.Add(log);
+        }
     }
 }
