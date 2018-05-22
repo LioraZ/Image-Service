@@ -29,3 +29,7 @@ C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Deb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Infrastructure.pdb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Logging.exe
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Logging.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Communications.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Communications.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServieGUI\bin\Debug\Newtonsoft.Json.xml

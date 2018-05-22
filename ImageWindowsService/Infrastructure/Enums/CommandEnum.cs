@@ -15,7 +15,9 @@ namespace ImageService.Infrastructure.Enums
         CloseCommand,
         GetConfigCommand,
         LogCommand,
-        RemoveHandlerCommand
+        RemoveHandlerCommand,
+        DisconnectClientCommand,
+        GetAllLogsCommand
     }
     public static class ProgramMain
     {

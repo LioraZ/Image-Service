@@ -1,5 +1,7 @@
 ﻿using ImageService.Commands;
+using ImageService.Controller.Handlers;
 using ImageService.Infrastructure.Enums;
+using ImageService.Server;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,7 +26,10 @@ namespace ImageWindowsService.ImageService.Commands
                 config.AppSettings.Settings["Handler"].Value = newHandlersList;
                 config.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings");
+                //DirectoryHandler ha = new DirectoryHandler();
+                //h.DirectoryClose(h);
                 
+
                 result = true;
                 return commandID + h + "successfully removed from handlers list";
             }

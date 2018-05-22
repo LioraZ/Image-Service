@@ -49,14 +49,19 @@ namespace ImageServieGUI.ViewModel
             logsModel = new LogsModel();
             logsModel.ReceivedLog += OnLogReceived;
             logs = new ObservableCollection<MessageRecievedEventArgs>();
-            logs.Add(new MessageRecievedEventArgs("Liora", MessageTypeEnum.INFO));
+            //logs.Add(new MessageRecievedEventArgs("Liora", MessageTypeEnum.INFO));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnLogReceived(object sender, MessageRecievedEventArgs log)
         {
-            logs.Add(log);
+            App.Current.Dispatcher.Invoke((System.Action)delegate
+            {
+                logs.Add(log);
+            });
         }
+
+        //public void OnAllLogsReceived(object sender, List<>)
     }
 }

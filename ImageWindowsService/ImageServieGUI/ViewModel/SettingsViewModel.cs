@@ -11,13 +11,14 @@ using System.Windows.Input;
 using Prism.Commands;
 using ImageService.Infrastructure.Enums;
 using ImageServieGUI.Model;
+using System.Windows.Data;
 
 namespace ImageServieGUI.ViewModel
 {
     class SettingsViewModel : INotifyPropertyChanged
     {
         private IModel settingsModel;
-        public ObservableCollection<HandlerDir> handlers = new ObservableCollection<HandlerDir>();
+        public ObservableCollection<HandlerDir> handlers;
         public ObservableCollection<HandlerDir> Handlers
         {
             get { return handlers; }
@@ -47,15 +48,59 @@ namespace ImageServieGUI.ViewModel
         public ICommand AddHandler { get; set; }
         public ICommand RemoveHandler { get; set; }
 
-        public string OutputDir { get; set; }
-        public string SourceName { get; set; }
-        public string LogName { get; set; }
-        public int ThumbnailSize { get; set; }
+        private string outputDir = String.Empty;
+        public string OutputDir
+        {
+            get { return outputDir; }
+            set
+            {
+                if (value != outputDir)
+                    outputDir = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OutputDir"));
+            }
+        }
+
+        private string sourceName = String.Empty;
+        public string SourceName
+        {
+            get { return sourceName; }
+            set
+            {
+                if (value != sourceName)
+                    sourceName = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceName"));
+            }
+        }
+
+        private string logName = String.Empty;
+        public string LogName
+        {
+            get { return logName; }
+            set
+            {
+                if (value != logName)
+                    logName = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LogName"));
+            }
+        }
+
+        private int thumbnailSize = 0;
+        public int ThumbnailSize
+        {
+            get { return thumbnailSize; }
+            set
+            {
+                if (value != thumbnailSize)
+                    thumbnailSize = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ThumbnailSize"));
+            }
+        }
 
         public SettingsViewModel()
         {
             this.settingsModel = new SettingsModel();
             settingsModel.changeInModel += this.SettingsEvent;
+            handlers = new ObservableCollection<HandlerDir>();
             this.RemoveHandler = new DelegateCommand<object>(this.OnRemoveHandler, this.CanRemoveHandler);
             this.AddHandler = new DelegateCommand(this.OnAddHandler);
         }
@@ -104,14 +149,17 @@ namespace ImageServieGUI.ViewModel
         public void SettingsEvent(object sender, SettingsEventArgs e)
         {
             Debug.WriteLine("Settings Event in settings view model");
-            OutputDir = e.OutputDir;
-            SourceName = e.SourceName;
-            LogName = e.LogName;
-            ThumbnailSize = e.ThumbnailSize;
-            foreach (string handler in e.Handlers)
+            App.Current.Dispatcher.Invoke((System.Action)delegate
             {
-                handlers.Add(new HandlerDir() { Name = handler });
-            }
+                OutputDir = e.OutputDir;
+                SourceName = e.SourceName;
+                LogName = e.LogName;
+                ThumbnailSize = e.ThumbnailSize;
+                foreach (string handler in e.Handlers)
+                {
+                    handlers.Add(new HandlerDir() { Name = handler });
+                }
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

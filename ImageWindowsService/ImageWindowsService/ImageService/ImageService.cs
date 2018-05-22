@@ -51,8 +51,7 @@ namespace ImageService
             model = new ImageServiceModel();
             controller = new ImageController(model);
             imageServer = new ImageServer(logger, controller);
-            //imageServer.Start();
-            Task.Run(() => { imageServer.Start(); } );
+            //Task.Run(() => { imageServer.Start(); } );
             logger.MessageReceived += onMessageReceived;
             CreateHandlers();
 
@@ -73,6 +72,7 @@ namespace ImageService
         protected override void OnStop()
         {
             imageServer.SendCommand("Close Handler", "", null);
+            //imageServer.Stop();
             logger.Log("In onStop", MessageTypeEnum.INFO);
         }
 

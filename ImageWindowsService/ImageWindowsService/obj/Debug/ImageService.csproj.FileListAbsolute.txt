@@ -11,3 +11,7 @@ C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bi
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Infrastructure.pdb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Logging.exe
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Logging.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Communications.exe
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Communications.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\Newtonsoft.Json.xml

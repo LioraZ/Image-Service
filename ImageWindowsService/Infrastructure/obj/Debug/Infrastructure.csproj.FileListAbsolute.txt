@@ -4,3 +4,5 @@ C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\bin\Deb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\bin\Debug\Infrastructure.pdb
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\obj\Debug\Infrastructure.exe
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\obj\Debug\Infrastructure.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Infrastructure\bin\Debug\Newtonsoft.Json.xml

@@ -1,4 +1,6 @@
-﻿using ImageService.Infrastructure.Enums;
+﻿using Communications.Channels;
+using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Event;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace ImageServieGUI.Communication
 {
-    class GUIClient
+    public class GUIClient
     {
         private static GUIClient instance = null;
         private TCPClientChannel clientChannel;
-        private TcpClient client;
+       // private TcpClient client;
         public bool isConnected;
-        public event EventHandler<string> MessageReceived;
+        public event EventHandler<CommandEventArgs> MessageReceived;
         public event EventHandler<bool> CheckConnection;
 
         public static GUIClient GetInstance()
@@ -27,12 +29,15 @@ namespace ImageServieGUI.Communication
 
         private GUIClient()
         {
-            clientChannel = new TCPClientChannel(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000));
+            clientChannel = new TCPClientChannel();
             clientChannel.OnMessageFromServer += ReceiveMessageFromServer;
-            ConnectToServer();
+            clientChannel.DisconnectedFromServer += OnDisconnectFromServer;
+            isConnected = clientChannel.ConnectToServer(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000));
+            CheckConnection?.Invoke(this, isConnected);
+            //ConnectToServer();
         }
 
-        public bool ConnectToServer()
+        /**public bool ConnectToServer()
         {
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             client = new TcpClient();
@@ -49,30 +54,35 @@ namespace ImageServieGUI.Communication
                 isConnected = false;
                 return false;
             }
-        }
+        }*/
 
         public void SendMessageToServer(CommandEnum commandID, string[] args)
         {
-            if (!client.Connected)
+            /**if (!client.Connected)
             {
                 ConnectToServer();
                 CheckConnection?.Invoke(this, client.Connected);
                 //return;
                 //   if (!ConnectToServer()) return;
-            }
-            clientChannel.SendMessageToServer(client, commandID, args);
+            }*/
+            Task.Run(()=>clientChannel.SendMessageToServer(new CommandEventArgs() { CommandID = commandID, CommandArgs = args }));
         }
 
         public void ReceiveMessageFromServer(object sender, CommandEventArgs args)
         {
             MessageReceived?.Invoke(this, args);
         }
+
+        public void OnDisconnectFromServer(object sender, bool connected)
+        {
+            isConnected = connected;
+            CheckConnection?.Invoke(this, isConnected);
+        }
         
         //client channel should do this
         public void DisconnectFromServer()
         {
-            client.Close();
+            //client.Close();
         }
     }
-}
 }

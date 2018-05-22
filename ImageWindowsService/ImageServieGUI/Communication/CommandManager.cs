@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImageServieGUI.Communication
 {
-    class CommandManager
+    /*class CommandManager
     {
        // private delegate CommunicationProcedure(CommandEnum, string);
         private Dictionary<CommandEnum, Task> communicationProcedureDict;
@@ -42,5 +42,5 @@ namespace ImageServieGUI.Communication
         {
 
         }
-    }
+    }*/
 }

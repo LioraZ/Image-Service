@@ -24,7 +24,8 @@ namespace ImageService.Controller
             {
                 {(int)CommandEnum.NewFileCommand, new NewFileCommand(model)},
                 {(int)CommandEnum.GetConfigCommand, new GetCongigCommand() },
-                {(int)CommandEnum.RemoveHandlerCommand, new RemoveHandlerCommand() }
+                {(int)CommandEnum.RemoveHandlerCommand, new RemoveHandlerCommand() },
+                {(int)CommandEnum.GetAllLogsCommand, new GetAllLogsCommand() }
             };
         }
 
@@ -39,7 +40,8 @@ namespace ImageService.Controller
         {
             if (commands.ContainsKey(commandID))
             {
-                return commands[commandID].Execute(args, out resultSuccesful);
+                string message = commands[commandID].Execute(args, out resultSuccesful);
+                return message;
             }
             resultSuccesful = false;
             return "Wrong command!";

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageService.Logging.Model;
 using ImageServieGUI.Communication;
+using ImageService.Infrastructure.Event;
+using System.Diagnostics;
 
 namespace ImageServieGUI.Model
 {
@@ -15,8 +17,9 @@ namespace ImageServieGUI.Model
 
         public LogsModel()
         {
-            CLient client = CLient.GetInstance();
+            GUIClient client = GUIClient.GetInstance();
             client.MessageReceived += MessageFromServer;
+            Task.Run(()=>client.SendMessageToServer(CommandEnum.GetAllLogsCommand, new string[] { }));
         }
 
         public MessageRecievedEventArgs ParseLogFromString(string log)
@@ -27,17 +30,32 @@ namespace ImageServieGUI.Model
             return new MessageRecievedEventArgs(message, status);
         }
 
-        public void MessageFromServer(object sender, string message)
+        public void MessageFromServer(object sender, CommandEventArgs args)
         {
-            int commandID = int.Parse(message[0].ToString());
-            if (commandID == (int)CommandEnum.LogCommand)
+            CommandEnum commandID = args.CommandID;
+            if (commandID == CommandEnum.GetAllLogsCommand)
             {
-                CLient client = (CLient)sender;
-                string log = message.Substring(1);
-                MessageRecievedEventArgs args = ParseLogFromString(log);
-                ReceivedLog?.Invoke(this, args);
+                GUIClient client = (GUIClient)sender;
+                string message = args.CommandArgs[0];
+                Debug.WriteLine("In message from server logs model message recieved is" + message);
+                //string allLogs = message.Substring(1);
+                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageRecievedEventArgs>>(message);
+                foreach (MessageRecievedEventArgs log in (List<MessageRecievedEventArgs>)obj)
+                {
+                    ReceivedLog?.Invoke(this, log);
+                }
             }
-
+            else if (commandID == CommandEnum.LogCommand)
+            {
+                GUIClient client = (GUIClient)sender;
+                string message = args.CommandArgs[0];
+                Debug.WriteLine("In message from server logs model message recieved is" + message);
+                string log = message.Substring(1);
+                MessageRecievedEventArgs logInfo = ParseLogFromString(log);
+                ReceivedLog?.Invoke(this, logInfo);
+                //SettingsEventArgs e = ParseSettingsFromString(settings);
+                //changeInModel?.Invoke(this, e);
+            }
         }
     }
 }

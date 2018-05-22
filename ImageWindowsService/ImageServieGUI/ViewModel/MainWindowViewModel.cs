@@ -15,7 +15,6 @@ namespace ImageServieGUI.ViewModel
 {
     class MainWindowViewModel : INotifyPropertyChanged
     {
-        //private TcpClient client;
         private bool serverConnected;
         public bool ServerConnected {
             get { return serverConnected; }
@@ -31,7 +30,7 @@ namespace ImageServieGUI.ViewModel
 
         public MainWindowViewModel()
         {
-            CLient client = CLient.GetInstance();
+            GUIClient client = GUIClient.GetInstance();
             ServerConnected = client.isConnected;
             client.CheckConnection += CheckConnection;
             WindowColor = Brushes.Gray;

@@ -7,18 +7,22 @@ using ImageServieGUI.Communication;
 using ImageService.Infrastructure.Enums;
 using System.Diagnostics;
 using ImageServieGUI.ViewModel;
+using ImageService.Infrastructure.Event;
+using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace ImageServieGUI.Model
 {
     class SettingsModel : IModel
     {
+        
         public override event EventHandler<SettingsEventArgs> changeInModel;
 
         public SettingsModel()
         {
-            CLient client = CLient.GetInstance();
+            GUIClient client = GUIClient.GetInstance();
             client.MessageReceived += MessageFromServer;
-            client.SendMessageToServer(CommandEnum.GetConfigCommand, "");
+            Task.Run(()=>client.SendMessageToServer(CommandEnum.GetConfigCommand, new string[] { "" }));
         }
 
         private SettingsEventArgs ParseSettingsFromString(string settings)
@@ -35,13 +39,15 @@ namespace ImageServieGUI.Model
             return e;
         } 
         
-        public override void MessageFromServer(object sender, string message)
+        public override void MessageFromServer(object sender, CommandEventArgs args)
         {
-            Debug.WriteLine("In message from server settings model meessage recieved is" + message);
-            int commadID = int.Parse(message[0].ToString());
-            if (commadID == (int)CommandEnum.GetConfigCommand)
+            // int commadID = int.Parse(message[0].ToString());
+            CommandEnum commandID = args.CommandID;
+            if (commandID == CommandEnum.GetConfigCommand)
             {
-                CLient client = (CLient)sender;
+                GUIClient client = (GUIClient)sender;
+                string message = args.CommandArgs[0];
+                Debug.WriteLine("In message from server settings model meessage recieved is" + message);
                 string settings = message.Substring(1);
                 SettingsEventArgs e = ParseSettingsFromString(settings);
                 changeInModel?.Invoke(this, e);
@@ -50,8 +56,8 @@ namespace ImageServieGUI.Model
 
         public override void SendMessageToServer(CommandEnum commandID, string args)
         {
-            CLient client = CLient.GetInstance();
-            client.SendMessageToServer(commandID, args);
+            GUIClient client = GUIClient.GetInstance();
+            client.SendMessageToServer(commandID, new string[] { args });
         }
     }
 }

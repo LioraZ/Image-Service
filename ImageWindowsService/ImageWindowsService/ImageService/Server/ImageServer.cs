@@ -1,9 +1,12 @@
-﻿using ImageService.Controller;
+﻿using Communications.Channels;
+using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Event;
 using ImageService.Logging;
 using ImageService.Logging.Model;
 using ImageService.Model;
+using ImageWindowsService.ImageService.Server;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +14,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Communication;
+
 
 namespace ImageService.Server
 {
@@ -22,7 +25,7 @@ namespace ImageService.Server
         private ILoggingService logger;             // The Image Service Event Logger
         private Dictionary<string, int> commands;   // The Commands Dictionary
         #endregion
-        private TcpListener listener;
+        //private TcpListener listener;
         private TCPServerChannel serverChannel;
         private bool stop = false;
 
@@ -45,13 +48,14 @@ namespace ImageService.Server
                 {"Close Handler", (int)CommandEnum.CloseCommand },
                 {"GetConfigCommand", (int)CommandEnum.GetConfigCommand }
             };
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-            listener = new TcpListener(ep);
-            //serverChannel = new TCPServerChannel(listener);
+            
+            ClientHandler clientHandler = new ClientHandler(controller, logger);
+            serverChannel = new TCPServerChannel(clientHandler);
             serverChannel.OnMessageToServer += OnMessageToServerReceived;
+            serverChannel.Start(); //maybe outer task it instead of inner task
         }
 
-        public void Start()
+        /**public void Start()
         {///do this in task
 
             
@@ -97,25 +101,31 @@ namespace ImageService.Server
 
         public void Stop()
         {
-            listener.Stop();
-        }
+            serverChannel.Stop();
+            //listener.Stop();
+        }*/
 
         public void OnLogMessageReceived(object sender, MessageRecievedEventArgs args)
         {
             bool result;
             string message = controller.ExecuteCommand((int)CommandEnum.LogCommand, new string[] { args.Message, args.Status.ToString()}, out result);
-            serverChannel.SendMessageToClient(new CommandEventArgs() { CommandID = CommandEnum.LogCommand, CommandArgs = new string[] { args.Message, args.Status.ToString() } });
+            if (!result) return;//see if there is any way i can log message without causing loop.
+            Task.Run(()=>serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = CommandEnum.LogCommand, CommandArgs = new string[] { args.Message, args.Status.ToString() } }));
             //Task.Run(() => OpenCommunicationStream(client));
         }
 
         public void OnMessageToServerReceived(object sender, CommandEventArgs args)
         {
             bool result;
+            TcpClient client = (TcpClient)sender;
             string logMessage = controller.ExecuteCommand((int)args.CommandID, args.CommandArgs, out result); //make sure controller has try/catch
             if (!result)
             {
                 logger.Log(logMessage, MessageTypeEnum.FAIL);
+                return;
             }
+            Task.Run(()=>serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = args.CommandID, CommandArgs = new string[] { logMessage } }));
+            //Task.Run(()=> serverChannel.SendMessageToClient(client, new CommandEventArgs() { CommandID = args.CommandID, CommandArgs = new string[] { logMessage } }));
         }
 
         /// <summary>
@@ -158,7 +168,7 @@ namespace ImageService.Server
                 IDirectoryHandler h = (DirectoryHandler)sender;
                 CommandReceived -= h.OnCommandRecieved;
                 h.DirectoryClose -= OnCloseServer;
-                Stop();
+                serverChannel.Stop();
             }
             catch
             {
