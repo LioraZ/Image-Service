@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using Prism.Commands;
 using ImageService.Infrastructure.Enums;
 using ImageServieGUI.Model;
-using System.Windows.Data;
+using Infrastructure.Event;
 
 namespace ImageServieGUI.ViewModel
 {
     class SettingsViewModel : INotifyPropertyChanged
     {
-        private IModel settingsModel;
+        private ISettingsModel settingsModel;
         public ObservableCollection<HandlerDir> handlers;
         public ObservableCollection<HandlerDir> Handlers
         {
@@ -104,6 +100,7 @@ namespace ImageServieGUI.ViewModel
             this.RemoveHandler = new DelegateCommand<object>(this.OnRemoveHandler, this.CanRemoveHandler);
             this.AddHandler = new DelegateCommand(this.OnAddHandler);
         }
+
         private bool isSelected;
         public bool IsSelected
         {

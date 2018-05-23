@@ -1,15 +1,12 @@
 ﻿using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Event;
+using Infrastructure.Event;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageServieGUI.Model
 {
-    abstract class IModel
+    abstract class ISettingsModel
     {
         public virtual event EventHandler<SettingsEventArgs> changeInModel;
         protected virtual void InvokeEvent(SettingsEventArgs e)

@@ -1,4 +1,7 @@
-﻿namespace ImageService.Controller
+﻿using ImageService.Commands;
+using ImageService.Infrastructure.Enums;
+
+namespace ImageService.Controller
 {
     public interface IImageController
     {
@@ -9,6 +12,7 @@
         /// <param name="args"></param> THe command's args.
         /// <param name="result"></param> The result of the command, success/failure.
         /// <returns></returns>
-        string ExecuteCommand(int commandID, string[] args, out bool result);
+        string ExecuteCommand(CommandEnum commandID, string[] args, out bool result);
+        
     }
 }

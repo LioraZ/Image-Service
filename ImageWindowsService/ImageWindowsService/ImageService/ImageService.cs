@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Threading.Tasks;
 using ImageService.Logging;
 using ImageService.Logging.Model;
+using System.Threading;
 
 namespace ImageService
 {
@@ -51,7 +52,6 @@ namespace ImageService
             model = new ImageServiceModel();
             controller = new ImageController(model);
             imageServer = new ImageServer(logger, controller);
-            //Task.Run(() => { imageServer.Start(); } );
             logger.MessageReceived += onMessageReceived;
             CreateHandlers();
 
@@ -84,7 +84,6 @@ namespace ImageService
         private void onMessageReceived(object sender, MessageRecievedEventArgs args)
         {
             eventLog1.WriteEntry(args.Message, logger.GetMessageType(args.Status));
-            //EventLogEntryCollection entries = eventLog1.Entries;
         }
 
         /// <summary>

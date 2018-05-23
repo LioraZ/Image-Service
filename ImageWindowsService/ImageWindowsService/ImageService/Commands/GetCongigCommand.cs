@@ -1,5 +1,6 @@
 ﻿using ImageService.Commands;
 using ImageService.Infrastructure.Enums;
+using Infrastructure.Event;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -13,15 +14,15 @@ namespace ImageWindowsService.ImageService.Commands
     {
         public string Execute(string[] args, out bool result)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(((int)CommandEnum.GetConfigCommand).ToString());
-            sb.Append(ConfigurationManager.AppSettings["OutputDir"] + "|");
-            sb.Append(ConfigurationManager.AppSettings["SourceName"] + "|");
-            sb.Append(ConfigurationManager.AppSettings["LogName"] + "|");
-            sb.Append(ConfigurationManager.AppSettings["ThumbnailSize"] + "|");
-            sb.Append(ConfigurationManager.AppSettings["Handler"]);
+            SettingsEventArgs settings = new SettingsEventArgs(); 
+            settings.OutputDir = ConfigurationManager.AppSettings["OutputDir"];
+            settings.SourceName = ConfigurationManager.AppSettings["SourceName"];
+            settings.LogName =  ConfigurationManager.AppSettings["LogName"];
+            settings.ThumbnailSize = int.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]); //might throw exception
+            string handlers = ConfigurationManager.AppSettings["Handler"];
+            settings.Handlers = handlers.Split(';');
             result = true;
-            return sb.ToString();
+            return Newtonsoft.Json.JsonConvert.SerializeObject(settings); ;
         }
     }
 }

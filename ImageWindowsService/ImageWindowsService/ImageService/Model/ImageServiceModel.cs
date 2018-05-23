@@ -28,7 +28,7 @@ namespace ImageService.Model
           //  bool result;
           //  CreateFolder(outputFolder, out result);
           //  CreateFolder(outputFolder + "\\Thumbnails", out result);
-        }
+        } 
 
         /// <summary>
         /// The method adds the moves the given file to the output folder.
@@ -73,7 +73,7 @@ namespace ImageService.Model
         public void TryDeleteFile(string path)
         {
             const int NumberOfRetries = 3;
-            const int DelayOnRetry = 1000;
+            const int DelayOnRetry = 100;
             for (int i = 1; i <= NumberOfRetries; ++i)
             {
                 try

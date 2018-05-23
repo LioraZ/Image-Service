@@ -46,25 +46,20 @@ namespace ImageWindowsService.ImageService.Server
                             string jsonString = reader.ReadString();
                             //mutex.ReleaseMutex();
                             var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommandEventArgs>(jsonString);
-                            CommandEventArgs args = (CommandEventArgs)obj; //make sure tanslate from jason
-                            //Task.Run(() => OnMessageToServer?.Invoke(client, (CommandEventArgs)obj));
+                            CommandEventArgs args = (CommandEventArgs)obj;
                             bool result;
-                            string logMessage = controller.ExecuteCommand((int)args.CommandID, args.CommandArgs, out result); //make sure controller has try/catch
-                            logger.Log(logMessage, MessageTypeEnum.INFO);
+                            logger.Log("Command " + args.CommandID.ToString() + " received", MessageTypeEnum.INFO);
+                            string logMessage = controller.ExecuteCommand(args.CommandID, args.CommandArgs, out result); //make sure controller has try/catch
                             if (!result)
                             {
                                 logger.Log(logMessage, MessageTypeEnum.FAIL);
                                 return;
                             }
-
+                            logger.Log("Arguments returned:\n" + logMessage, MessageTypeEnum.INFO);
                             jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(new CommandEventArgs() { CommandID = args.CommandID, CommandArgs = new string[] { logMessage } });
-                            //string message = ""; //make it in jason
                             mutex.WaitOne();
                             writer.Write(jsonString);
                             mutex.ReleaseMutex();
-                            //stop = true;
-                            //serverChannel.SendMessageToClient(client, new CommandEventArgs() { CommandID = args.CommandID, CommandArgs = new string[] { logMessage } });
-                            //serverChannel.SendMessageToClient(client, new CommandEventArgs() { CommandID = args.CommandID, CommandArgs = new string[] { logMessage } });
                         }
                         catch { Thread.Sleep(5); }
                     }

@@ -26,7 +26,8 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
-
+        private MessageRecievedEventArgs log;
+        public MessageRecievedEventArgs Log { get; set; }
         /*public Brush LogTypeColor
         {
             get

@@ -77,9 +77,8 @@
     </ApplicationDefinition>
     <Compile Include="Communication\CommandManager.cs" />
     <Compile Include="Communication\GUIClient.cs" />
-    <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\ISettingsModel.cs" />
     <Compile Include="Model\LogsModel.cs" />
-    <Compile Include="Model\SettingsEventArgs.cs" />
     <Compile Include="Model\SettingsModel.cs" />
     <Compile Include="ViewModel\HandlerDir.cs" />
     <Compile Include="ViewModel\LogInfo.cs" />

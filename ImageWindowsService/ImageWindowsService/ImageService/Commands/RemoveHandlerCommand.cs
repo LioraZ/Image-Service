@@ -1,6 +1,7 @@
 ﻿using ImageService.Commands;
 using ImageService.Controller.Handlers;
 using ImageService.Infrastructure.Enums;
+using ImageService.Model;
 using ImageService.Server;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,21 @@ namespace ImageWindowsService.ImageService.Commands
 {
     class RemoveHandlerCommand : ICommand
     {
+        public event EventHandler<string> RemoveHandler;
+        public RemoveHandlerCommand()
+        {
+            //RemoveHandler += imageServer.OnRemoveHandler;
+        }
+
         public string Execute(string[] args, out bool result)
         {
-            int commandID = (int)CommandEnum.RemoveHandlerCommand; 
-            string h = args[0];
+
+            //int commandID = (int)CommandEnum.RemoveHandlerCommand;
+            RemoveHandler?.Invoke(this, args[0]);
+
+            result = true;
+            return "";
+            /*string h = args[0];
             string handlers = ConfigurationManager.AppSettings["Handler"];
             int handlerIndex = handlers.IndexOf(h);
             if (handlerIndex >= 0)
@@ -37,7 +49,7 @@ namespace ImageWindowsService.ImageService.Commands
             {
                 result = false;
                 return commandID + "couldn't remove handler";
-            }
+            }*/
            
             //throw new NotImplementedException();
         }

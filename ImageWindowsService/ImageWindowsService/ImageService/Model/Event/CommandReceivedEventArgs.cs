@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ImageService.Infrastructure.Enums;
+using System;
 
 namespace ImageService.Model
 {
     public class CommandReceivedEventArgs : EventArgs
     {
-        public int CommandID { get; set; }           // The Command ID
+        public CommandEnum CommandID { get; set; }           // The Command ID
         public string[] Args { get; set; }           // The Command Args
         public string RequestDirPath { get; set; }   // The Request Directory
 
@@ -14,7 +15,7 @@ namespace ImageService.Model
         /// <param name="id"></param> THe command ID.
         /// <param name="args"></param> The command args.
         /// <param name="path"></param> The request directory.
-        public CommandReceivedEventArgs(int id, string[] args, string path)
+        public CommandReceivedEventArgs(CommandEnum id, string[] args, string path)
         {
             CommandID = id;
             Args = args;

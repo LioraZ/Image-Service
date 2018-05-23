@@ -3,6 +3,7 @@ using ImageService.Infrastructure.Enums;
 using ImageService.Model;
 using ImageWindowsService.ImageService.Commands;
 using System.Collections.Generic;
+using System;
 
 namespace ImageService.Controller
 {
@@ -10,7 +11,7 @@ namespace ImageService.Controller
     {
         #region Members
         private IImageServiceModel model;                      // The Image Model
-        private Dictionary<int, ICommand> commands;            // The Commads Dictionary
+        private Dictionary<CommandEnum, ICommand> commands;            // The Commads Dictionary
         #endregion
 
         /// <summary>
@@ -20,12 +21,12 @@ namespace ImageService.Controller
         public ImageController(IImageServiceModel imageModel)
         {
             model = imageModel;
-            commands = new Dictionary<int, ICommand>()
+            commands = new Dictionary<CommandEnum, ICommand>()
             {
-                {(int)CommandEnum.NewFileCommand, new NewFileCommand(model)},
-                {(int)CommandEnum.GetConfigCommand, new GetCongigCommand() },
-                {(int)CommandEnum.RemoveHandlerCommand, new RemoveHandlerCommand() },
-                {(int)CommandEnum.GetAllLogsCommand, new GetAllLogsCommand() }
+                {CommandEnum.NewFileCommand, new NewFileCommand(model)},
+                {CommandEnum.GetConfigCommand, new GetCongigCommand() },
+                {CommandEnum.RemoveHandlerCommand, new RemoveHandlerCommand() },
+                {CommandEnum.GetAllLogsCommand, new GetAllLogsCommand() }
             };
         }
 
@@ -36,7 +37,7 @@ namespace ImageService.Controller
         /// <param name="args"></param> THe command's args.
         /// <param name="resultSuccessful"></param> The result of the command, success/failure.
         /// <returns></returns>
-        public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
+        public string ExecuteCommand(CommandEnum commandID, string[] args, out bool resultSuccesful)
         {
             if (commands.ContainsKey(commandID))
             {
