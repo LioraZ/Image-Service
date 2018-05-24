@@ -34,7 +34,7 @@ namespace ImageServieGUI.ViewModel
             ServerConnected = client.isConnected;
             client.CheckConnection += CheckConnection;
             WindowColor = Brushes.Gray;
-            if (ServerConnected) WindowColor = Brushes.Pink;
+            if (ServerConnected) WindowColor = Brushes.MediumVioletRed;
         }
 
         public void CheckConnection(object sender, bool isConnected)

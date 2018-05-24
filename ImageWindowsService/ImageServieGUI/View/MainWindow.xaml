@@ -6,7 +6,13 @@
         xmlns:local="clr-namespace:ImageServieGUI.View"
         mc:Ignorable="d"
         Background="{Binding WindowColor}"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Image Service" Height="350" Width="525" Icon="icon.ico">
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="Pink"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <TabControl Grid.ColumnSpan="4">
             <TabItem Header="Settings">

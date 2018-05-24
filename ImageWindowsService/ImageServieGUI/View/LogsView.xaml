@@ -4,26 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ImageServieGUI.View"
+             xmlns:converter="clr-namespace:ImageServieGUI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converter:MessageTypeEnumConverter x:Key="MessageTypeEnumConverter"/>
+    </UserControl.Resources>
     <StackPanel>
         <TextBlock Height="35"></TextBlock>
-        <TextBlock Text="Logs" HorizontalAlignment="Center" Margin="138,0,122,0" RenderTransformOrigin="0.554,3.183" Height="18" Width="40"/>
+        <TextBlock Text="Logs" HorizontalAlignment="Center" Margin="138,0,122,0" RenderTransformOrigin="0.554,3.183" Height="30" Width="40" FontSize="20"/>
         <DataGrid
-            AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto"
+            IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto"
             HorizontalAlignment="Center" Margin="15,33,5,0" 
                   VerticalAlignment="Top" ItemsSource="{Binding Logs}"  Height="188" Width="280">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}">
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" >
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
-                            <Setter Property="Background" Value="{Binding Status, Converter={StaticResource NameToBrushConverter}}" />
+                            <Setter Property="Background" Value="{Binding Status, Converter={StaticResource MessageTypeEnumConverter}}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Message" Binding="{Binding Message}"/>
             </DataGrid.Columns>
         </DataGrid>
-
     </StackPanel>
 </UserControl>

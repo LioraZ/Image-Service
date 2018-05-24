@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ImageWindowsService.ImageService.Server
 {
-    class ClientHandler : IClientHandler
+    public class ClientHandler : IClientHandler
     {
         private IImageController controller;
         private ILoggingService logger;
@@ -42,30 +42,35 @@ namespace ImageWindowsService.ImageService.Server
 
                         try
                         {
-                            //mutex.WaitOne();
+                            mutex.WaitOne();
                             string jsonString = reader.ReadString();
-                            //mutex.ReleaseMutex();
+                            mutex.ReleaseMutex();
                             var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommandEventArgs>(jsonString);
                             CommandEventArgs args = (CommandEventArgs)obj;
                             bool result;
-                            logger.Log("Command " + args.CommandID.ToString() + " received", MessageTypeEnum.INFO);
                             string logMessage = controller.ExecuteCommand(args.CommandID, args.CommandArgs, out result); //make sure controller has try/catch
                             if (!result)
                             {
                                 logger.Log(logMessage, MessageTypeEnum.FAIL);
                                 return;
                             }
-                            logger.Log("Arguments returned:\n" + logMessage, MessageTypeEnum.INFO);
                             jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(new CommandEventArgs() { CommandID = args.CommandID, CommandArgs = new string[] { logMessage } });
                             mutex.WaitOne();
                             writer.Write(jsonString);
                             mutex.ReleaseMutex();
+                           // logger.Log("Command " + args.CommandID.ToString() + " received" + System.Environment.NewLine + 
+                             //   "Arguments returned:\n"  + logMessage, MessageTypeEnum.INFO);
                         }
                         catch { Thread.Sleep(5); }
                     }
                 }
-                catch { }// stop = true; }
+                catch { }
             }
+        }
+
+        public Mutex UpdateMutex()
+        {
+            return mutex;
         }
     }
 }

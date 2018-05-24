@@ -1,5 +1,6 @@
 ﻿using ImageService.Commands;
 using ImageService.Infrastructure.Enums;
+using System.Collections.Generic;
 
 namespace ImageService.Controller
 {
@@ -13,6 +14,6 @@ namespace ImageService.Controller
         /// <param name="result"></param> The result of the command, success/failure.
         /// <returns></returns>
         string ExecuteCommand(CommandEnum commandID, string[] args, out bool result);
-        
+        void AddCommand(CommandEnum commandID, ICommand command);
     }
 }

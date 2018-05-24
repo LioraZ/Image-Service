@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.Commands;
@@ -104,14 +103,9 @@ namespace ImageServieGUI.ViewModel
         private bool isSelected;
         public bool IsSelected
         {
-            get
-            {
-                Debug.WriteLine("GetSelected");
-                return isSelected;
-            }
+            get { return isSelected; }
             set
             {
-                Debug.WriteLine("SetSelected");
                 if (value != isSelected) isSelected = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSelected"));
             }
@@ -119,13 +113,7 @@ namespace ImageServieGUI.ViewModel
 
         private bool CanRemoveHandler(object obj)
         {
-            if (selectedHandler != null)
-            {
-                Debug.WriteLine(selectedHandler.ToString());
-                return true;
-            }
-            Debug.WriteLine("nothing selected yet!");
-            return false;
+            return selectedHandler != null;
         }
         private void RaiseCanExecuteChange()
         {
@@ -136,7 +124,6 @@ namespace ImageServieGUI.ViewModel
         {
             Task.Run(() => { settingsModel.SendMessageToServer(CommandEnum.RemoveHandlerCommand, selectedHandler.Name); });
             handlers.Remove(selectedHandler);
-            //settingsModel.MessageFromServer()
             selectedHandler = null;
         }
         private void OnAddHandler() {
@@ -145,7 +132,6 @@ namespace ImageServieGUI.ViewModel
 
         public void SettingsEvent(object sender, SettingsEventArgs e)
         {
-            Debug.WriteLine("Settings Event in settings view model");
             App.Current.Dispatcher.Invoke((System.Action)delegate
             {
                 OutputDir = e.OutputDir;

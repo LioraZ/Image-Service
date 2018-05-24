@@ -28,18 +28,16 @@
                 <ColumnDefinition Width="300*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
         </Grid>
-        <DockPanel Margin="10">
-            <StackPanel DockPanel.Dock="Right" Margin="10,0,0,0">
-                <Button x:Name="addHandlerButton" Margin="4" Padding="4" Height="20" Command="{Binding AddHandler}" Content="+"/>
-                <Button x:Name="btnDeleteUser" Margin="4" Padding="4" Height="20" Width="150" 
-                        Command="{Binding RemoveHandler}" Content="-" AutomationProperties.AutomationId="btnDeleteUser" >
-                </Button>
-            </StackPanel>
-           
-            <ListBox Name ="handlersList" ItemsSource="{Binding Handlers}" SelectedItem="{Binding SelectedHandler}">
-               
-            </ListBox>
-        </DockPanel>
+        <StackPanel DockPanel.Dock="Right" Margin="10,0,0,0" Orientation="Horizontal">
+            <ListBox Name ="handlersList" ItemsSource="{Binding Handlers}" SelectedItem="{Binding SelectedHandler}" Width="206"/>
+            <Button x:Name="btnDeleteUser" Margin="4" Padding="4" Height="50" Width="50" 
+                        Command="{Binding RemoveHandler}" Content="-" Foreground="Red" FontSize="30"
+                    AutomationProperties.AutomationId="btnDeleteUser" />
+            <Button x:Name="addHandlerButton" Margin="4" Padding="4" Height="20" Command="{Binding AddHandler}" Content="+"/>
+
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10,10,20,10" Height="50">
+        </StackPanel>
     </StackPanel>
-    
+
 </UserControl>

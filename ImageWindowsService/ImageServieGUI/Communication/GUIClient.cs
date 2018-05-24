@@ -16,7 +16,6 @@ namespace ImageServieGUI.Communication
     {
         private static GUIClient instance = null;
         private TCPClientChannel clientChannel;
-       // private TcpClient client;
         public bool isConnected;
         public event EventHandler<CommandEventArgs> MessageReceived;
         public event EventHandler<bool> CheckConnection;
@@ -34,7 +33,6 @@ namespace ImageServieGUI.Communication
             clientChannel.DisconnectedFromServer += OnDisconnectFromServer;
             isConnected = clientChannel.ConnectToServer(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000));
             CheckConnection?.Invoke(this, isConnected);
-            //ConnectToServer();
         }
 
         /**public bool ConnectToServer()
@@ -58,13 +56,6 @@ namespace ImageServieGUI.Communication
 
         public void SendMessageToServer(CommandEnum commandID, string[] args)
         {
-            /**if (!client.Connected)
-            {
-                ConnectToServer();
-                CheckConnection?.Invoke(this, client.Connected);
-                //return;
-                //   if (!ConnectToServer()) return;
-            }*/
             Task.Run(()=>clientChannel.SendMessageToServer(new CommandEventArgs() { CommandID = commandID, CommandArgs = args }));
         }
 

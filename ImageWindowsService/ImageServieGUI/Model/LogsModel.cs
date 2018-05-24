@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageService.Logging.Model;
 using ImageServieGUI.Communication;
 using ImageService.Infrastructure.Event;
-using System.Diagnostics;
 
 namespace ImageServieGUI.Model
 {
@@ -37,24 +34,19 @@ namespace ImageServieGUI.Model
             {
                 GUIClient client = (GUIClient)sender;
                 string message = args.CommandArgs[0];
-                Debug.WriteLine("In message from server logs model message recieved is" + message);
-                //string allLogs = message.Substring(1);
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageRecievedEventArgs>>(message);
-                foreach (MessageRecievedEventArgs log in (List<MessageRecievedEventArgs>)obj)
-                {
-                    ReceivedLog?.Invoke(this, log);
-                }
+                foreach (MessageRecievedEventArgs log in (List<MessageRecievedEventArgs>)obj) { ReceivedLog?.Invoke(this, log); }
             }
             else if (commandID == CommandEnum.LogCommand)
             {
                 GUIClient client = (GUIClient)sender;
                 string message = args.CommandArgs[0];
-                Debug.WriteLine("In message from server logs model message recieved is" + message);
-                string log = message.Substring(1);
-                MessageRecievedEventArgs logInfo = ParseLogFromString(log);
+                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageRecievedEventArgs>(args.CommandArgs[0]);
+                //string log = message.Substring(1);
+                // string log = message;
+                // MessageRecievedEventArgs logInfo = ParseLogFromString(log);
+                MessageRecievedEventArgs logInfo = (MessageRecievedEventArgs)obj;
                 ReceivedLog?.Invoke(this, logInfo);
-                //SettingsEventArgs e = ParseSettingsFromString(settings);
-                //changeInModel?.Invoke(this, e);
             }
         }
     }

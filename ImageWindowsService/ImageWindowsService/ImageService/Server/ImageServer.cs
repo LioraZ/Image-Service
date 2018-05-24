@@ -1,4 +1,5 @@
 ﻿using Communications.Channels;
+using ImageService.Commands;
 using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Infrastructure.Enums;
@@ -6,9 +7,11 @@ using ImageService.Infrastructure.Event;
 using ImageService.Logging;
 using ImageService.Logging.Model;
 using ImageService.Model;
+using ImageWindowsService.ImageService.Commands;
 using ImageWindowsService.ImageService.Server;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -42,29 +45,34 @@ namespace ImageService.Server
             controller = imageController;
             logger = imageLogger;
             logger.MessageReceived += OnLogMessageReceived;
-            commands = new Dictionary<string, CommandEnum>()
-            {
-                {"Close Handler", CommandEnum.CloseCommand },
-                {"GetConfigCommand", CommandEnum.GetConfigCommand }
-            };
-            ClientHandler clientHandler = new ClientHandler(controller, logger);
-            serverChannel = new TCPServerChannel(clientHandler);
+            RemoveHandlerCommand removeHandlerCommand = new RemoveHandlerCommand();
+            removeHandlerCommand.RemoveHandler += OnRemoveHandler;
+            controller.AddCommand(CommandEnum.RemoveHandlerCommand, removeHandlerCommand);
+            commands = new Dictionary<string, CommandEnum>(){{"Close Handler", CommandEnum.CloseCommand }};
+            serverChannel = new TCPServerChannel(new ClientHandler(controller, logger));
+            
+            serverChannel.Start();
+            //CreateHandlers();
            // serverChannel.OnMessageToServer += OnMessageToServerReceived;
-            serverChannel.Start(); //maybe outer task it instead of inner task
+             //maybe outer task it instead of inner task
+        }
+
+        public void Start()
+        {
+            serverChannel.Start();
         }
 
         public void OnLogMessageReceived(object sender, MessageRecievedEventArgs args)
         {
-            bool result;
-            string message = controller.ExecuteCommand(CommandEnum.LogCommand, new string[] { args.Message, args.Status.ToString()}, out result);
-            if (!result) return;//see if there is any way i can log message without causing loop.
-            Task.Run(()=>serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = CommandEnum.LogCommand, CommandArgs = new string[] { args.Message, args.Status.ToString() } }));
-            //Task.Run(() => OpenCommunicationStream(client));
+            //bool result;
+            //string message = controller.ExecuteCommand(CommandEnum.LogCommand, new string[] { args.Message, args.Status.ToString()}, out result);
+            //if (!result) return;//see if there is any way i can log message without causing loop.
+            string jsonMessage = Newtonsoft.Json.JsonConvert.SerializeObject(args);
+            Task.Run(()=>serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = CommandEnum.LogCommand, CommandArgs = new string[] { jsonMessage } }));
         }
 
         public void OnRemoveHandler(object sender, string path)
         {
-            
             SendCommand("Close Handler", path, new string[] { });
         }
 
@@ -130,4 +138,6 @@ namespace ImageService.Server
             }
         }
     }
+
+   
 }

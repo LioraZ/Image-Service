@@ -12,11 +12,11 @@ namespace ImageServieGUI.Converters
             switch ((MessageTypeEnum)value)
             {
                 case MessageTypeEnum.INFO:
-                    return Brushes.LightGreen;
+                    return Brushes.YellowGreen;
                 case MessageTypeEnum.WARNING:
-                    return Brushes.Red;
-                case MessageTypeEnum.FAIL:
                     return Brushes.Yellow;
+                case MessageTypeEnum.FAIL:
+                    return Brushes.Tomato;
             }
             return Brushes.Transparent;
         }

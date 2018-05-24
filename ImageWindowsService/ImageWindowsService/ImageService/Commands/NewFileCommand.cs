@@ -19,6 +19,10 @@ namespace ImageService.Commands
         /// <param name="args"></param> The command's arguments contain the file's path.
         /// <param name="result"></param> The command's result.
         /// <returns></returns>
-        public string Execute(string[] args, out bool result) { return model.AddFile(args[0], out result); }
+        public string Execute(string[] args, out bool result) {
+            string msg = model.AddFile(args[0], out result);
+            if (result) return "Image" + args[0] + "moved to output directory";
+            else { return "Couldn't move image" + args[0] + "to output dir"; }
+        }
     }
 }

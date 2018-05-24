@@ -12,46 +12,15 @@ using System.Threading.Tasks;
 
 namespace ImageWindowsService.ImageService.Commands
 {
-    class RemoveHandlerCommand : ICommand
+    public class RemoveHandlerCommand : ICommand
     {
         public event EventHandler<string> RemoveHandler;
-        public RemoveHandlerCommand()
-        {
-            //RemoveHandler += imageServer.OnRemoveHandler;
-        }
 
         public string Execute(string[] args, out bool result)
         {
-
-            //int commandID = (int)CommandEnum.RemoveHandlerCommand;
             RemoveHandler?.Invoke(this, args[0]);
-
             result = true;
             return "";
-            /*string h = args[0];
-            string handlers = ConfigurationManager.AppSettings["Handler"];
-            int handlerIndex = handlers.IndexOf(h);
-            if (handlerIndex >= 0)
-            {
-                string newHandlersList = handlers.Remove(handlerIndex);//make sure to change
-                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["Handler"].Value = newHandlersList;
-                config.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection("appSettings");
-                //DirectoryHandler ha = new DirectoryHandler();
-                //h.DirectoryClose(h);
-                
-
-                result = true;
-                return commandID + h + "successfully removed from handlers list";
-            }
-            else
-            {
-                result = false;
-                return commandID + "couldn't remove handler";
-            }*/
-           
-            //throw new NotImplementedException();
         }
     }
 }

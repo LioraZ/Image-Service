@@ -1,0 +1,1 @@
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\Communication\bin\Debug\Communication.exe.config

@@ -1,5 +1,6 @@
 ﻿using ImageService.Commands;
 using ImageService.Infrastructure.Enums;
+using ImageService.Logging.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,14 @@ namespace ImageWindowsService.ImageService.Commands
         public string Execute(string[] args, out bool result)
         {
             string message = args[0];
-            int messageType = int.Parse(args[1]);
             result = true;
-            return CommandEnum.LogCommand.ToString() + message + ";" + messageType;  
+            try
+            {
+                int messageType = int.Parse(args[1]);
+                return message + ";" + messageType;
+            }
+            catch { }
+            return message + ";" + ((int)MessageTypeEnum.INFO).ToString();
         }
-
-
     }
 }

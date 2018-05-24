@@ -54,17 +54,18 @@ namespace ImageService.Controller.Handlers
         /// <param name="e"></param> The argumetns.
         public void OnCommandRecieved(object sender, CommandReceivedEventArgs e)
         {
+            if (!IsSubFile(e.RequestDirPath)) return;
             string msg;
             bool result = true;
-            if (e.CommandID == (int)CommandEnum.CloseCommand)
+            if (e.CommandID == CommandEnum.CloseCommand)
             {
                 msg = "Directory " + dirPath + " is closing";
                 dirWatcher.EnableRaisingEvents = false;
                 DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(dirPath, msg));
+                //logger.Log(msg, MessageTypeEnum.INFO);
             }
             else
             {
-                if (!IsSubFile(e.RequestDirPath)) return;
                 msg = controller.ExecuteCommand(e.CommandID, e.Args, out result);
             }
             logger.Log(msg, GetMessageType(result));

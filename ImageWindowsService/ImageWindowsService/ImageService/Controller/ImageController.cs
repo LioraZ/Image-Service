@@ -27,6 +27,7 @@ namespace ImageService.Controller
                 {CommandEnum.GetConfigCommand, new GetCongigCommand() },
                 {CommandEnum.RemoveHandlerCommand, new RemoveHandlerCommand() },
                 {CommandEnum.GetAllLogsCommand, new GetAllLogsCommand() }
+              //  {CommandEnum.LogCommand, new LogCommand() }
             };
         }
 
@@ -46,6 +47,12 @@ namespace ImageService.Controller
             }
             resultSuccesful = false;
             return "Wrong command!";
+        }
+
+        public void AddCommand(CommandEnum commandID, ICommand command)
+        {
+            if (commands.ContainsKey(commandID)) commands[commandID] = command;
+            else commands.Add(commandID, command);
         }
     }
 }

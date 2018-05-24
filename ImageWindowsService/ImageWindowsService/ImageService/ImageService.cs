@@ -47,23 +47,32 @@ namespace ImageService
         protected override void OnStart(string[] args)
         {
             eventLog1.WriteEntry("In OnStart");
+            try
+            {
+                logger = new LoggingService();
+                model = new ImageServiceModel();
+                controller = new ImageController(model);
+                imageServer = new ImageServer(logger, controller);
 
-            logger = new LoggingService();
-            model = new ImageServiceModel();
-            controller = new ImageController(model);
-            imageServer = new ImageServer(logger, controller);
-            logger.MessageReceived += onMessageReceived;
-            CreateHandlers();
+                logger.MessageReceived += onMessageReceived;
+                CreateHandlers();
+                //imageServer.Start();
 
-            // Update the service state to Start Pending.  
-            ServiceStatus serviceStatus = new ServiceStatus();
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
-            serviceStatus.dwWaitHint = 100000;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+                // Update the service state to Start Pending.  
+                ServiceStatus serviceStatus = new ServiceStatus();
+                serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
+                serviceStatus.dwWaitHint = 100000;
+                SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            // Update the service state to Running.  
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+                // Update the service state to Running.  
+                serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
+                SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            }
+            catch (Exception e)
+            {
+                eventLog1.WriteEntry(e.StackTrace);
+            }
+            
         }
 
         /// <summary>
@@ -71,7 +80,7 @@ namespace ImageService
         /// </summary>
         protected override void OnStop()
         {
-            imageServer.SendCommand("Close Handler", "", null);
+            //imageServer.SendCommand("Close Handler", "", null);
             //imageServer.Stop();
             logger.Log("In onStop", MessageTypeEnum.INFO);
         }

@@ -26,25 +26,6 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
-        private MessageRecievedEventArgs log;
-        public MessageRecievedEventArgs Log { get; set; }
-        /*public Brush LogTypeColor
-        {
-            get
-            {
-                switch (LogInfo.LogType)
-                {
-                    case 1:
-                        return Brushes.LightGreen;
-                    case 2:
-                        return Brushes.Red;
-                    case 3:
-                        return Brushes.Yellow;
-                }
-                return Brushes.Transparent;
-            }
-        }*/
-
         public LogsViewModel()
         {
             logsModel = new LogsModel();
@@ -59,7 +40,8 @@ namespace ImageServieGUI.ViewModel
         {
             App.Current.Dispatcher.Invoke((System.Action)delegate
             {
-                logs.Add(log);
+                if (logs.Count >= 0) logs.Insert(0, log);
+                else logs.Add(log);
             });
         }
 
