@@ -9,7 +9,7 @@ namespace ImageServieGUI.Model
 {
     class SettingsModel : ISettingsModel
     {
-        
+        public override event EventHandler<string> OnHandlerRemoved;
         public override event EventHandler<SettingsEventArgs> changeInModel;
 
         public SettingsModel()
@@ -42,6 +42,13 @@ namespace ImageServieGUI.Model
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<SettingsEventArgs>(jsonSettings);
                 changeInModel?.Invoke(this, (SettingsEventArgs)obj);
             }    
+            if (commandID == CommandEnum.RemoveHandlerCommand)
+            {
+                string jsonHandler = args.CommandArgs[0];
+                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<string>(jsonHandler);
+                OnHandlerRemoved?.Invoke(this, (string)obj);
+                //changeInModel?.Invoke(this, (SettingsEventArgs)obj);
+            }
         }
 
         public override void SendMessageToServer(CommandEnum commandID, string args)

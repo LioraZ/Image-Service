@@ -8,6 +8,7 @@ namespace ImageServieGUI.Model
 {
     abstract class ISettingsModel
     {
+        public virtual event EventHandler<string> OnHandlerRemoved;
         public virtual event EventHandler<SettingsEventArgs> changeInModel;
         protected virtual void InvokeEvent(SettingsEventArgs e)
         {

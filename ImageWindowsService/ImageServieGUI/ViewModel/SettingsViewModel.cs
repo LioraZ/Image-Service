@@ -39,8 +39,7 @@ namespace ImageServieGUI.ViewModel
                 RaiseCanExecuteChange();
             }
         }
-
-        public ICommand AddHandler { get; set; }
+        
         public ICommand RemoveHandler { get; set; }
 
         private string outputDir = String.Empty;
@@ -95,9 +94,9 @@ namespace ImageServieGUI.ViewModel
         {
             this.settingsModel = new SettingsModel();
             settingsModel.changeInModel += this.SettingsEvent;
+            settingsModel.OnHandlerRemoved += RemoveSelectedHandler;
             handlers = new ObservableCollection<HandlerDir>();
             this.RemoveHandler = new DelegateCommand<object>(this.OnRemoveHandler, this.CanRemoveHandler);
-            this.AddHandler = new DelegateCommand(this.OnAddHandler);
         }
 
         private bool isSelected;
@@ -122,9 +121,16 @@ namespace ImageServieGUI.ViewModel
         }
         private void OnRemoveHandler(object obj)
         {
-            Task.Run(() => { settingsModel.SendMessageToServer(CommandEnum.RemoveHandlerCommand, selectedHandler.Name); });
-            handlers.Remove(selectedHandler);
+            string handler = selectedHandler.Name;
+            Task.Run(() => { settingsModel.SendMessageToServer(CommandEnum.RemoveHandlerCommand, handler); });
+            //handlers.Remove(selectedHandler);
             selectedHandler = null;
+        }
+        private void RemoveSelectedHandler(object sender, string handler)
+        {
+            handlers.Remove(new HandlerDir() { Name = handler });
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Handlers"));
+            //selectedHandler = null;
         }
         private void OnAddHandler() {
             handlers.Add(new HandlerDir() { Name = "Liora" });

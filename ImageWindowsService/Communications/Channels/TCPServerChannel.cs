@@ -24,6 +24,7 @@ namespace Communications.Channels
             listener = new TcpListener(ep);
             clientHandler = handler;
             mutex = handler.UpdateMutex();
+            clientHandler.ClientDisconnect += OnClientDisconnect;
             stop = false;
         }
 
@@ -43,7 +44,13 @@ namespace Communications.Channels
             });
         }
 
-        public void ReceiveMessageFromClient(TcpClient client)
+        private void OnClientDisconnect(object sender, TcpClient client)
+        {
+            mutex.WaitOne();
+            clients.Remove(client);
+            mutex.ReleaseMutex();
+        }
+        /*public void ReceiveMessageFromClient(TcpClient client)
         {
             while (!stop)
             {
@@ -65,23 +72,32 @@ namespace Communications.Channels
                 }
                 catch { break; }
             }
-        }
+        }*/
 
         public void SendMessageToClient(TcpClient client, CommandEventArgs commandArgs)
         {
-            using (NetworkStream stream = client.GetStream())
-            using (BinaryWriter writer = new BinaryWriter(stream))
-            {
-                var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(commandArgs);
-                mutex.WaitOne();
-                writer.Write(jsonString);
-                mutex.ReleaseMutex();
-            }
+            NetworkStream stream = client.GetStream();
+            BinaryWriter writer = new BinaryWriter(stream);
+            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(commandArgs);
+           // mutex.WaitOne();
+            writer.Write(jsonString);
+            //mutex.ReleaseMutex();
         }
 
         public void SendMessageToAllClients(CommandEventArgs commandArgs)
         {
-            for (int i = clients.Count - 1; i >= 0; i--) if (!clients[i].Connected) clients.RemoveAt(i);
+            /*for (int i = clients.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    BinaryWriter writer = new BinaryWriter(clients[i].GetStream());
+                    writer.Write("");
+                }
+                catch {
+                    //clients[i].Close();
+                    clients.RemoveAt(i);
+                }
+            }*/
 
             List<TcpClient> tempClients = clients;
             foreach (TcpClient client in tempClients)

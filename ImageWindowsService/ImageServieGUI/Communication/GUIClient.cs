@@ -16,7 +16,7 @@ namespace ImageServieGUI.Communication
     {
         private static GUIClient instance = null;
         private TCPClientChannel clientChannel;
-        public bool isConnected;
+        public static bool isConnected { get; set; }
         public event EventHandler<CommandEventArgs> MessageReceived;
         public event EventHandler<bool> CheckConnection;
 

@@ -10,6 +10,7 @@ namespace Communications.Channels
 {
     public interface IClientHandler
     {
+        event EventHandler<TcpClient>ClientDisconnect;
         Mutex UpdateMutex(); 
         void HandleClient(TcpClient client);
     }

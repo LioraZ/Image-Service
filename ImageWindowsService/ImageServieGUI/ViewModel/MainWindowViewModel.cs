@@ -21,7 +21,7 @@ namespace ImageServieGUI.ViewModel
             set
             {
                 serverConnected = value;
-                if (serverConnected) WindowColor = Brushes.Pink;
+                if (serverConnected) WindowColor = Brushes.MediumVioletRed;
                 else WindowColor = Brushes.Gray;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WindowColor"));
             }
@@ -31,7 +31,7 @@ namespace ImageServieGUI.ViewModel
         public MainWindowViewModel()
         {
             GUIClient client = GUIClient.GetInstance();
-            ServerConnected = client.isConnected;
+            ServerConnected = GUIClient.isConnected;
             client.CheckConnection += CheckConnection;
             WindowColor = Brushes.Gray;
             if (ServerConnected) WindowColor = Brushes.MediumVioletRed;
@@ -42,42 +42,5 @@ namespace ImageServieGUI.ViewModel
             ServerConnected = isConnected;
         }
         public event PropertyChangedEventHandler PropertyChanged;
-
-        /*public void ConnectToServer()
-        {
-            WindowColor = Brushes.Gray;
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-            client = new TcpClient();
-            try
-            {
-                client.Connect(ep);
-                WindowColor = Brushes.Pink;
-                Console.WriteLine("You are connected");
-            }
-            catch
-            {
-                Console.WriteLine("Unable to connect to server. Please check your connection.");
-            }
-            
-            /*using (NetworkStream stream = client.GetStream())
-            using (BinaryReader reader = new BinaryReader(stream))
-            using (BinaryWriter writer = new BinaryWriter(stream))
-            {
-                // Send data to server
-                Console.Write("Please enter a number: ");
-                
-                //int num = int.Parse(Console.ReadLine());
-                //writer.Write(num);
-                // Get result from server
-                //nt result = reader.ReadInt32();
-                //Console.WriteLine("Result = {0}", result);
-            }
-            
-        }*/
-        /* public void DisconnectFromServer()
-         {
-             WindowColor = Brushes.Gray;
-             client.Close();
-         }*/
     }
 }

@@ -20,7 +20,7 @@ namespace ImageWindowsService.ImageService.Commands
         {
             RemoveHandler?.Invoke(this, args[0]);
             result = true;
-            return "";
+            return args[0];
         }
     }
 }

@@ -16,10 +16,12 @@ namespace ImageWindowsService.ImageService.Server
 {
     public class ClientHandler : IClientHandler
     {
+        public event EventHandler<TcpClient> ClientDisconnect;
         private IImageController controller;
         private ILoggingService logger;
         private bool stop;
         private static Mutex mutex;
+
 
         public ClientHandler(IImageController imageController, ILoggingService imageLogger)
         {
@@ -42,9 +44,9 @@ namespace ImageWindowsService.ImageService.Server
 
                         try
                         {
-                            mutex.WaitOne();
+                           // mutex.WaitOne();
                             string jsonString = reader.ReadString();
-                            mutex.ReleaseMutex();
+                           // mutex.ReleaseMutex();
                             var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommandEventArgs>(jsonString);
                             CommandEventArgs args = (CommandEventArgs)obj;
                             bool result;
@@ -58,13 +60,21 @@ namespace ImageWindowsService.ImageService.Server
                             mutex.WaitOne();
                             writer.Write(jsonString);
                             mutex.ReleaseMutex();
-                           // logger.Log("Command " + args.CommandID.ToString() + " received" + System.Environment.NewLine + 
-                             //   "Arguments returned:\n"  + logMessage, MessageTypeEnum.INFO);
+                            logger.Log("Command " + args.CommandID.ToString() + " received" + System.Environment.NewLine + 
+                               "Arguments returned:\n"  + logMessage, MessageTypeEnum.INFO);
                         }
-                        catch { Thread.Sleep(5); }
+                        catch
+                        {
+                            ClientDisconnect?.Invoke(this, client);
+                            break;
+                        }
                     }
                 }
-                catch { }
+                catch
+                {
+                    ClientDisconnect?.Invoke(this, client);
+                    break;
+                }
             }
         }
 

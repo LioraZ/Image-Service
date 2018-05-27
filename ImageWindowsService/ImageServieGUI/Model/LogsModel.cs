@@ -35,7 +35,10 @@ namespace ImageServieGUI.Model
                 GUIClient client = (GUIClient)sender;
                 string message = args.CommandArgs[0];
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageRecievedEventArgs>>(message);
+                List<MessageRecievedEventArgs> logs = (List<MessageRecievedEventArgs>)obj;
+                logs.Reverse();
                 foreach (MessageRecievedEventArgs log in (List<MessageRecievedEventArgs>)obj) { ReceivedLog?.Invoke(this, log); }
+                //for (int i = logs.Count - 1; i >= 0; i++) {  ReceivedLog?.Invoke(this, logs[i]); }
             }
             else if (commandID == CommandEnum.LogCommand)
             {

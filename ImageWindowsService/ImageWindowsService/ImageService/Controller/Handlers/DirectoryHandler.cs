@@ -61,7 +61,7 @@ namespace ImageService.Controller.Handlers
             {
                 msg = "Directory " + dirPath + " is closing";
                 dirWatcher.EnableRaisingEvents = false;
-                DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(dirPath, msg));
+                DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(e.RequestDirPath, msg));
                 //logger.Log(msg, MessageTypeEnum.INFO);
             }
             else

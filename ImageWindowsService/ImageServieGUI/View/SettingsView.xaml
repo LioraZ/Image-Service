@@ -33,7 +33,6 @@
             <Button x:Name="btnDeleteUser" Margin="4" Padding="4" Height="50" Width="50" 
                         Command="{Binding RemoveHandler}" Content="-" Foreground="Red" FontSize="30"
                     AutomationProperties.AutomationId="btnDeleteUser" />
-            <Button x:Name="addHandlerButton" Margin="4" Padding="4" Height="20" Command="{Binding AddHandler}" Content="+"/>
 
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10,10,20,10" Height="50">

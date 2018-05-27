@@ -45,8 +45,9 @@ namespace Communications.Channels
         {
             if (!client.Connected)
             {
-                DisconnectedFromServer?.Invoke(this, client.Connected);
-                Stop = true;
+                DisconnectFromServer();
+                //DisconnectedFromServer?.Invoke(this, client.Connected);
+                //Stop = true;
                 return;
             }
             NetworkStream stream = client.GetStream();
@@ -58,7 +59,14 @@ namespace Communications.Channels
                     string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(commandArgs);
                     mutex.WaitOne();
                     writer.Write(jsonString);
+                    jsonString = reader.ReadString();
+                    var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommandEventArgs>(jsonString);
+                    if (obj != null)
+                    {
+                        OnMessageFromServer?.Invoke(this, (CommandEventArgs)obj);
+                    }
                     mutex.ReleaseMutex();
+
                 }
                 catch { Debug.WriteLine("Can't write to server"); }
             }
@@ -87,16 +95,17 @@ namespace Communications.Channels
                         }
                         else { Thread.Sleep(2); }
                     }
-                    catch { Stop = true; }
+                    catch { DisconnectFromServer(); }
                 }
-                catch { Stop = true; }
+                catch { DisconnectFromServer(); }
             }      
         }
 
         public void DisconnectFromServer()
         {
             Stop = true;
-            DisconnectedFromServer?.Invoke(this, true);
+          //  client.Close();
+            DisconnectedFromServer?.Invoke(this, false);
         }
     }
 }

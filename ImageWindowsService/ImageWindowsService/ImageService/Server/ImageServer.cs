@@ -64,9 +64,6 @@ namespace ImageService.Server
 
         public void OnLogMessageReceived(object sender, MessageRecievedEventArgs args)
         {
-            //bool result;
-            //string message = controller.ExecuteCommand(CommandEnum.LogCommand, new string[] { args.Message, args.Status.ToString()}, out result);
-            //if (!result) return;//see if there is any way i can log message without causing loop.
             string jsonMessage = Newtonsoft.Json.JsonConvert.SerializeObject(args);
             Task.Run(()=>serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = CommandEnum.LogCommand, CommandArgs = new string[] { jsonMessage } }));
         }
@@ -74,6 +71,7 @@ namespace ImageService.Server
         public void OnRemoveHandler(object sender, string path)
         {
             SendCommand("Close Handler", path, new string[] { });
+        //    serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = CommandEnum.RemoveHandlerCommand, CommandArgs = new string[] { path } });
         }
 
         /*public void OnMessageToServerReceived(object sender, CommandEventArgs args)
