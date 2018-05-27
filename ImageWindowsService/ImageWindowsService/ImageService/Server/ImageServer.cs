@@ -57,21 +57,34 @@ namespace ImageService.Server
              //maybe outer task it instead of inner task
         }
 
+        /// <summary>
+        /// Starts this instance.
+        /// </summary>
         public void Start()
         {
             serverChannel.Start();
         }
 
+        /// <summary>
+        /// Handles the <see cref="E:LogMessageReceived" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="MessageRecievedEventArgs"/> instance containing the event data.</param>
         public void OnLogMessageReceived(object sender, MessageRecievedEventArgs args)
         {
             string jsonMessage = Newtonsoft.Json.JsonConvert.SerializeObject(args);
             Task.Run(()=>serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = CommandEnum.LogCommand, CommandArgs = new string[] { jsonMessage } }));
         }
 
+        /// <summary>
+        /// Called when [remove handler].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="path">The path.</param>
         public void OnRemoveHandler(object sender, string path)
         {
             SendCommand("Close Handler", path, new string[] { });
-        //    serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = CommandEnum.RemoveHandlerCommand, CommandArgs = new string[] { path } });
+            Task.Run(()=>serverChannel.SendMessageToAllClients(new CommandEventArgs() { CommandID = CommandEnum.RemoveHandlerCommand, CommandArgs = new string[] { path } }));
         }
 
         /*public void OnMessageToServerReceived(object sender, CommandEventArgs args)
@@ -128,7 +141,6 @@ namespace ImageService.Server
                 IDirectoryHandler h = (DirectoryHandler)sender;
                 CommandReceived -= h.OnCommandRecieved;
                 h.DirectoryClose -= OnCloseServer;
-                //serverChannel.Stop();
             }
             catch
             {

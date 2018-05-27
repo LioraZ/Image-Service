@@ -12,6 +12,9 @@ namespace ImageServieGUI.Model
         public override event EventHandler<string> OnHandlerRemoved;
         public override event EventHandler<SettingsEventArgs> changeInModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsModel"/> class.
+        /// </summary>
         public SettingsModel()
         {
             GUIClient client = GUIClient.GetInstance();
@@ -32,7 +35,12 @@ namespace ImageServieGUI.Model
             Debug.WriteLine(e.OutputDir + e.SourceName + e.LogName + e.ThumbnailSize);
             return e;
         } */
-        
+
+        /// <summary>
+        /// Messages from server.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="CommandEventArgs"/> instance containing the event data.</param>
         public override void MessageFromServer(object sender, CommandEventArgs args)
         {
             CommandEnum commandID = args.CommandID;
@@ -45,12 +53,15 @@ namespace ImageServieGUI.Model
             if (commandID == CommandEnum.RemoveHandlerCommand)
             {
                 string jsonHandler = args.CommandArgs[0];
-                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<string>(jsonHandler);
-                OnHandlerRemoved?.Invoke(this, (string)obj);
-                //changeInModel?.Invoke(this, (SettingsEventArgs)obj);
+                OnHandlerRemoved?.Invoke(this, jsonHandler);
             }
         }
 
+        /// <summary>
+        /// Sends the message to server.
+        /// </summary>
+        /// <param name="commandID">The command identifier.</param>
+        /// <param name="args">The arguments.</param>
         public override void SendMessageToServer(CommandEnum commandID, string args)
         {
             GUIClient client = GUIClient.GetInstance();

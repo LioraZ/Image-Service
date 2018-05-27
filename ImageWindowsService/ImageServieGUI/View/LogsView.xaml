@@ -11,12 +11,12 @@
         <converter:MessageTypeEnumConverter x:Key="MessageTypeEnumConverter"/>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Height="35"></TextBlock>
-        <TextBlock Text="Logs" HorizontalAlignment="Center" Margin="138,0,122,0" RenderTransformOrigin="0.554,3.183" Height="30" Width="40" FontSize="20"/>
+        <TextBlock Height="25"></TextBlock>
+        <TextBlock Text="Logs" HorizontalAlignment="Center" Margin="138,0,122,0" RenderTransformOrigin="0.554,3.183" Height="30" Width="100" FontSize="20"/>
         <DataGrid
             IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto"
-            HorizontalAlignment="Center" Margin="15,33,5,0" 
-                  VerticalAlignment="Top" ItemsSource="{Binding Logs}"  Height="188" Width="280">
+            HorizontalAlignment="Center" Margin="15,33,5,0" HorizontalScrollBarVisibility="Auto"
+                  VerticalAlignment="Top" ItemsSource="{Binding Logs}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" >
                     <DataGridTextColumn.CellStyle>

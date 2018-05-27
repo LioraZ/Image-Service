@@ -54,11 +54,11 @@ namespace ImageService.Controller.Handlers
         /// <param name="e"></param> The argumetns.
         public void OnCommandRecieved(object sender, CommandReceivedEventArgs e)
         {
-            if (!IsSubFile(e.RequestDirPath)) return;
             string msg;
             bool result = true;
             if (e.CommandID == CommandEnum.CloseCommand)
             {
+                if (e.RequestDirPath != dirPath) return;
                 msg = "Directory " + dirPath + " is closing";
                 dirWatcher.EnableRaisingEvents = false;
                 DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(e.RequestDirPath, msg));
@@ -66,6 +66,7 @@ namespace ImageService.Controller.Handlers
             }
             else
             {
+                if (!IsSubFile(e.RequestDirPath)) return;
                 msg = controller.ExecuteCommand(e.CommandID, e.Args, out result);
             }
             logger.Log(msg, GetMessageType(result));
@@ -78,6 +79,7 @@ namespace ImageService.Controller.Handlers
         /// <returns></returns> True if the path is in the current directory, and else false.
         private bool IsSubFile(string file)
         {
+            //if (file == dirPath) return true;
             while (Directory.GetParent(file).Name != dirPath) file = Directory.GetParent(file).Name;
             return file != "";
         }
@@ -85,8 +87,10 @@ namespace ImageService.Controller.Handlers
         /// <summary>
         /// The method returns the Messgae Type given a boolean value.
         /// </summary>
-        /// <param name="result"></param> The given boolean value.
-        /// <returns></returns> INFO or FAIL based on boolen value.
+        /// <param name="result">if set to <c>true</c> [result].</param>
+        /// <returns>MessageTypeEnum.</returns>
+        /// The given boolean value.
+        /// INFO or FAIL based on boolen value.
         private MessageTypeEnum GetMessageType(bool result)
         {
             if (result) return MessageTypeEnum.INFO;

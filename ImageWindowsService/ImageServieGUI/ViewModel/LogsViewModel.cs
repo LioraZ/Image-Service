@@ -9,12 +9,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
+/// <summary>
+/// The ViewModel namespace.
+/// </summary>
 namespace ImageServieGUI.ViewModel
 {
+    /// <summary>
+    /// Class LogsViewModel.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     class LogsViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The logs model
+        /// </summary>
         private LogsModel logsModel;
         public ObservableCollection<MessageRecievedEventArgs> logs;
+        /// <summary>
+        /// Gets or sets the logs.
+        /// </summary>
+        /// <value>The logs.</value>
         public ObservableCollection<MessageRecievedEventArgs> Logs
         {
             get { return logs; }
@@ -26,6 +40,9 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogsViewModel"/> class.
+        /// </summary>
         public LogsViewModel()
         {
             logsModel = new LogsModel();
@@ -36,6 +53,11 @@ namespace ImageServieGUI.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Handles the <see cref="E:LogReceived" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="log">The <see cref="MessageRecievedEventArgs"/> instance containing the event data.</param>
         public void OnLogReceived(object sender, MessageRecievedEventArgs log)
         {
             App.Current.Dispatcher.Invoke((System.Action)delegate

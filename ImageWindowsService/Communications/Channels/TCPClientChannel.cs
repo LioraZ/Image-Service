@@ -9,14 +9,27 @@ using System.Threading.Tasks;
 
 namespace Communications.Channels
 {
+    /// <summary>
+    /// Class ReceiveMessageFromServer.
+    /// </summary>
     public class TCPClientChannel
     {
         public event EventHandler<bool> DisconnectedFromServer;
         public event EventHandler<CommandEventArgs> OnMessageFromServer;
         protected TcpClient client;
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TCPClientChannel"/> is stop.
+        /// </summary>
+        /// <value><c>true</c> if stop; otherwise, <c>false</c>.</value>
         public bool Stop { get; set; }
+        /// <summary>
+        /// The mutex
+        /// </summary>
         protected static Mutex mutex;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TCPClientChannel"/> class.
+        /// </summary>
         public TCPClientChannel()
         {
             client = new TcpClient();
@@ -24,6 +37,11 @@ namespace Communications.Channels
             mutex = new Mutex();
         }
 
+        /// <summary>
+        /// Connects to server.
+        /// </summary>
+        /// <param name="ep">The ep.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ConnectToServer(IPEndPoint ep)
         {
             try
@@ -41,6 +59,10 @@ namespace Communications.Channels
             }
         }
 
+        /// <summary>
+        /// Sends the message to server.
+        /// </summary>
+        /// <param name="commandArgs">The <see cref="CommandEventArgs" /> instance containing the event data.</param>
         public void SendMessageToServer(CommandEventArgs commandArgs)
         {
             if (!client.Connected)
@@ -60,18 +82,21 @@ namespace Communications.Channels
                     mutex.WaitOne();
                     writer.Write(jsonString);
                     jsonString = reader.ReadString();
+                    mutex.ReleaseMutex();
                     var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommandEventArgs>(jsonString);
                     if (obj != null)
                     {
                         OnMessageFromServer?.Invoke(this, (CommandEventArgs)obj);
                     }
-                    mutex.ReleaseMutex();
 
                 }
                 catch { Debug.WriteLine("Can't write to server"); }
             }
         }
 
+        /// <summary>
+        /// Receives the message from server.
+        /// </summary>
         public void ReceiveMessageFromServer()
         {
             while (!Stop)
@@ -98,13 +123,16 @@ namespace Communications.Channels
                     catch { DisconnectFromServer(); }
                 }
                 catch { DisconnectFromServer(); }
-            }      
+            }
         }
 
+        /// <summary>
+        /// Disconnects from server.
+        /// </summary>
         public void DisconnectFromServer()
         {
             Stop = true;
-          //  client.Close();
+            //  client.Close();
             DisconnectedFromServer?.Invoke(this, false);
         }
     }

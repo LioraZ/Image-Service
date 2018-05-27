@@ -13,8 +13,15 @@ using System.Windows.Media;
 
 namespace ImageServieGUI.ViewModel
 {
+    /// <summary>
+    /// Class MainWindowViewModel.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     class MainWindowViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The server connected
+        /// </summary>
         private bool serverConnected;
         public bool ServerConnected {
             get { return serverConnected; }
@@ -26,8 +33,15 @@ namespace ImageServieGUI.ViewModel
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WindowColor"));
             }
         }
+        /// <summary>
+        /// Gets or sets the color of the window.
+        /// </summary>
+        /// <value>The color of the window.</value>
         public Brush WindowColor { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
+        /// </summary>
         public MainWindowViewModel()
         {
             GUIClient client = GUIClient.GetInstance();
@@ -37,6 +51,11 @@ namespace ImageServieGUI.ViewModel
             if (ServerConnected) WindowColor = Brushes.MediumVioletRed;
         }
 
+        /// <summary>
+        /// Checks the connection.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="isConnected">if set to <c>true</c> [is connected].</param>
         public void CheckConnection(object sender, bool isConnected)
         {
             ServerConnected = isConnected;

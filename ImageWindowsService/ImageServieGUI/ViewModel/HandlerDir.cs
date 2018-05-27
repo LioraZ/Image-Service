@@ -7,10 +7,17 @@ using System.Threading.Tasks;
 
 namespace ImageServieGUI.ViewModel
 {
+    /// <summary>
+    /// Class HandlerDir.
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     class HandlerDir : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// The name
+        /// </summary>
         private string name = string.Empty;
         public string Name
         {
@@ -23,6 +30,10 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString() { return name; }
     }
 }

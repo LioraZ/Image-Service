@@ -9,15 +9,34 @@ using ImageService.Infrastructure.Event;
 
 namespace Communications.Channels
 {
+    /// <summary>
+    /// Class TCPServerChannel.
+    /// </summary>
     public class TCPServerChannel
     {
         private bool stop;
+        /// <summary>
+        /// The listener
+        /// </summary>
         private TcpListener listener;
+        /// <summary>
+        /// The clients
+        /// </summary>
         private List<TcpClient> clients = new List<TcpClient>();
         public event EventHandler<CommandEventArgs> OnMessageToServer;
+        /// <summary>
+        /// The mutex
+        /// </summary>
         private Mutex mutex;
+        /// <summary>
+        /// The client handler
+        /// </summary>
         private IClientHandler clientHandler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TCPServerChannel"/> class.
+        /// </summary>
+        /// <param name="handler">The handler.</param>
         public TCPServerChannel(IClientHandler handler)
         {
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
@@ -28,6 +47,9 @@ namespace Communications.Channels
             stop = false;
         }
 
+        /// <summary>
+        /// Starts this instance.
+        /// </summary>
         public void Start()
         {
             Task.Run(() => {
@@ -44,68 +66,42 @@ namespace Communications.Channels
             });
         }
 
+        /// <summary>
+        /// Called when [client disconnect].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="client">The client.</param>
         private void OnClientDisconnect(object sender, TcpClient client)
         {
             mutex.WaitOne();
             clients.Remove(client);
             mutex.ReleaseMutex();
         }
-        /*public void ReceiveMessageFromClient(TcpClient client)
-        {
-            while (!stop)
-            {
-                try
-                {
-                    using (NetworkStream stream = client.GetStream())
-                    using (BinaryReader reader = new BinaryReader(stream))
-                    {
-                        try
-                        {
-                            mutex.WaitOne();
-                            string jsonString = reader.ReadString();
-                            mutex.ReleaseMutex();
-                            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommandEventArgs>(jsonString);
-                            Task.Run(() => OnMessageToServer?.Invoke(client, (CommandEventArgs)obj));
-                        }
-                        catch { Thread.Sleep(1); }
-                    }
-                }
-                catch { break; }
-            }
-        }*/
-
         public void SendMessageToClient(TcpClient client, CommandEventArgs commandArgs)
         {
             NetworkStream stream = client.GetStream();
             BinaryWriter writer = new BinaryWriter(stream);
             var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(commandArgs);
-           // mutex.WaitOne();
+            mutex.WaitOne();
             writer.Write(jsonString);
-            //mutex.ReleaseMutex();
+            mutex.ReleaseMutex();
         }
 
+        /// <summary>
+        /// Sends the message to all clients.
+        /// </summary>
+        /// <param name="commandArgs">The <see cref="CommandEventArgs"/> instance containing the event data.</param>
         public void SendMessageToAllClients(CommandEventArgs commandArgs)
         {
-            /*for (int i = clients.Count - 1; i >= 0; i--)
-            {
-                try
-                {
-                    BinaryWriter writer = new BinaryWriter(clients[i].GetStream());
-                    writer.Write("");
-                }
-                catch {
-                    //clients[i].Close();
-                    clients.RemoveAt(i);
-                }
-            }*/
-
-            List<TcpClient> tempClients = clients;
-            foreach (TcpClient client in tempClients)
+            foreach (TcpClient client in clients)
             {
                 SendMessageToClient(client, commandArgs);
             }
         }
 
+        /// <summary>
+        /// Stops this instance.
+        /// </summary>
         public void Stop()
         {
             stop = true;

@@ -8,10 +8,16 @@ using ImageService.Infrastructure.Event;
 
 namespace ImageServieGUI.Model
 {
+    /// <summary>
+    /// Class LogsModel.
+    /// </summary>
     class LogsModel
     {
         public event EventHandler<MessageRecievedEventArgs> ReceivedLog;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogsModel"/> class.
+        /// </summary>
         public LogsModel()
         {
             GUIClient client = GUIClient.GetInstance();
@@ -19,6 +25,11 @@ namespace ImageServieGUI.Model
             Task.Run(()=>client.SendMessageToServer(CommandEnum.GetAllLogsCommand, new string[] { }));
         }
 
+        /// <summary>
+        /// Parses the log from string.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <returns>MessageRecievedEventArgs.</returns>
         public MessageRecievedEventArgs ParseLogFromString(string log)
         {
             string[] args = log.Split(';');
@@ -27,6 +38,11 @@ namespace ImageServieGUI.Model
             return new MessageRecievedEventArgs(message, status);
         }
 
+        /// <summary>
+        /// Messages from server.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="CommandEventArgs" /> instance containing the event data.</param>
         public void MessageFromServer(object sender, CommandEventArgs args)
         {
             CommandEnum commandID = args.CommandID;

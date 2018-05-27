@@ -5,12 +5,16 @@ namespace ImageService.Commands
 {
     public class NewFileCommand : ICommand
     {
+        /// <summary>
+        /// The model
+        /// </summary>
         private IImageServiceModel model;       // The Image Model
 
         /// <summary>
         /// The NewfileCommand's constructor.
         /// </summary>
-        /// <param name="imageModel"></param> The image model.
+        /// <param name="imageModel">The image model.</param>
+        /// The image model.
         public NewFileCommand(IImageServiceModel imageModel) { model = imageModel; }
 
         /// <summary>

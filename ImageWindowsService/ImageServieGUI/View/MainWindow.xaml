@@ -9,7 +9,7 @@
         Title="Image Service" Height="350" Width="525" Icon="icon.ico">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="Pink"/>
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Arial"/>
         </Style>
     </Window.Resources>

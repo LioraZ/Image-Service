@@ -10,8 +10,20 @@ using System.Threading.Tasks;
 
 namespace ImageWindowsService.ImageService.Commands
 {
+    /// <summary>
+    /// Class GetAllLogsCommand.
+    /// </summary>
+    /// <seealso cref="ImageService.Commands.ICommand" />
     class GetAllLogsCommand : ICommand
     {
+        /// <summary>
+        /// The method will execute the given command with its arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="result">if set to <c>true</c> [result].</param>
+        /// <returns>System.String.</returns>
+        /// The command's arguments.
+        /// The result of the command success/failure.
         public string Execute(string[] args, out bool result)
         {
             List<MessageRecievedEventArgs> logsList = new List<MessageRecievedEventArgs>();

@@ -12,8 +12,18 @@ namespace ImageServieGUI.ViewModel
 {
     class SettingsViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The settings model
+        /// </summary>
         private ISettingsModel settingsModel;
+        /// <summary>
+        /// The handlers
+        /// </summary>
         public ObservableCollection<HandlerDir> handlers;
+        /// <summary>
+        /// Gets or sets the handlers.
+        /// </summary>
+        /// <value>The handlers.</value>
         public ObservableCollection<HandlerDir> Handlers
         {
             get { return handlers; }
@@ -25,6 +35,9 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
+        /// <summary>
+        /// The selected handler
+        /// </summary>
         private HandlerDir selectedHandler;
         public HandlerDir SelectedHandler
         {
@@ -39,10 +52,18 @@ namespace ImageServieGUI.ViewModel
                 RaiseCanExecuteChange();
             }
         }
-        
+
+        /// <summary>
+        /// Gets or sets the remove handler.
+        /// </summary>
+        /// <value>The remove handler.</value>
         public ICommand RemoveHandler { get; set; }
 
         private string outputDir = String.Empty;
+        /// <summary>
+        /// Gets or sets the output dir.
+        /// </summary>
+        /// <value>The output dir.</value>
         public string OutputDir
         {
             get { return outputDir; }
@@ -54,6 +75,9 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
+        /// <summary>
+        /// The source name
+        /// </summary>
         private string sourceName = String.Empty;
         public string SourceName
         {
@@ -66,6 +90,9 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
+        /// <summary>
+        /// The log name
+        /// </summary>
         private string logName = String.Empty;
         public string LogName
         {
@@ -78,6 +105,9 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
+        /// <summary>
+        /// The thumbnail size
+        /// </summary>
         private int thumbnailSize = 0;
         public int ThumbnailSize
         {
@@ -90,6 +120,9 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsViewModel"/> class.
+        /// </summary>
         public SettingsViewModel()
         {
             this.settingsModel = new SettingsModel();
@@ -99,6 +132,9 @@ namespace ImageServieGUI.ViewModel
             this.RemoveHandler = new DelegateCommand<object>(this.OnRemoveHandler, this.CanRemoveHandler);
         }
 
+        /// <summary>
+        /// The is selected
+        /// </summary>
         private bool isSelected;
         public bool IsSelected
         {
@@ -110,32 +146,53 @@ namespace ImageServieGUI.ViewModel
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance [can remove handler] the specified object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns><c>true</c> if this instance [can remove handler] the specified object; otherwise, <c>false</c>.</returns>
         private bool CanRemoveHandler(object obj)
         {
             return selectedHandler != null;
         }
+        /// <summary>
+        /// Raises the can execute change.
+        /// </summary>
         private void RaiseCanExecuteChange()
         {
             DelegateCommand<object> command = RemoveHandler as DelegateCommand<object>;
             command.RaiseCanExecuteChanged();
         }
+        /// <summary>
+        /// Called when [remove handler].
+        /// </summary>
+        /// <param name="obj">The object.</param>
         private void OnRemoveHandler(object obj)
         {
             string handler = selectedHandler.Name;
+            selectedHandler = null;
             Task.Run(() => { settingsModel.SendMessageToServer(CommandEnum.RemoveHandlerCommand, handler); });
             //handlers.Remove(selectedHandler);
-            selectedHandler = null;
+            
         }
+        /// <summary>
+        /// Removes the selected handler.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="handler">The handler.</param>
         private void RemoveSelectedHandler(object sender, string handler)
         {
-            handlers.Remove(new HandlerDir() { Name = handler });
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Handlers"));
-            //selectedHandler = null;
-        }
-        private void OnAddHandler() {
-            handlers.Add(new HandlerDir() { Name = "Liora" });
+            HandlerDir removedHandler = new HandlerDir() { Name = handler };
+            foreach (HandlerDir h in handlers) {  if (removedHandler.Name == h.Name) removedHandler = h; }
+            try  { App.Current.Dispatcher.Invoke((System.Action)delegate { handlers.Remove(removedHandler);}); }
+            catch { }
         }
 
+        /// <summary>
+        /// Settingses the event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="SettingsEventArgs"/> instance containing the event data.</param>
         public void SettingsEvent(object sender, SettingsEventArgs e)
         {
             App.Current.Dispatcher.Invoke((System.Action)delegate

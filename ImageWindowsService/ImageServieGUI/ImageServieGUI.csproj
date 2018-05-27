@@ -93,7 +93,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Communication\CommandManager.cs" />
     <Compile Include="Communication\GUIClient.cs" />
     <Compile Include="Converters\MessageTypeEnumConverter.cs" />
     <Compile Include="Model\ISettingsModel.cs" />

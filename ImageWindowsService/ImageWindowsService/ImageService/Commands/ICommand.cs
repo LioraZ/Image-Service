@@ -1,5 +1,8 @@
 ﻿namespace ImageService.Commands
 {
+    /// <summary>
+    /// Interface ICommand
+    /// </summary>
     public interface ICommand
     {
         /// <summary>
