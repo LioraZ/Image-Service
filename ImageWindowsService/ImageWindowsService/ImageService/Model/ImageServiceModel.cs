@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ImageService.Model
 {
@@ -221,6 +222,30 @@ namespace ImageService.Model
                 case (12): return "Dec";
             }
             return "";
+        }
+
+        public int GetNumImages(out bool result)
+        {
+            int counter = 0;
+            try
+            {
+                string[] directories = Directory.GetDirectories(outputFolder);
+
+                foreach (string directory in directories)
+                {
+                    string[] directoryFiles = Directory.GetFiles(directory);
+                    foreach (string filePath in directoryFiles)
+                    {
+                        if (Path.GetExtension(filePath) == "jpg" || Path.GetExtension(filePath) == "png"
+                            || Path.GetExtension(filePath) == "bmp" || Path.GetExtension(filePath) == "jpeg"
+                            || Path.GetExtension(filePath) == "gif")
+                            counter++;
+                    }
+                }
+                result = true;
+            }
+            catch { result = false; }
+            return counter;
         }
     }
 }

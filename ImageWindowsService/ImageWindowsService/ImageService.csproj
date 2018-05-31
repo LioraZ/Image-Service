@@ -58,7 +58,9 @@
   <ItemGroup>
     <Compile Include="ImageService\Commands\GetAllLogsCommand.cs" />
     <Compile Include="ImageService\Commands\GetCongigCommand.cs" />
+    <Compile Include="ImageService\Commands\GetStudentsInfoCommand.cs" />
     <Compile Include="ImageService\Commands\ICommand.cs" />
+    <Compile Include="ImageService\Commands\GetNumImagesCommand.cs" />
     <Compile Include="ImageService\Commands\LogCommand.cs" />
     <Compile Include="ImageService\Commands\NewFileCommand.cs" />
     <Compile Include="ImageService\Commands\RemoveHandlerCommand.cs" />

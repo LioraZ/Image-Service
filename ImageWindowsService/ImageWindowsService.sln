@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications", "Communications\Communications.csproj", "{59F0DC10-0874-4B6B-833D-6CDAA04D7367}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageServiceWeb", "ImageServiceWeb\ImageServiceWeb.csproj", "{7A7B0245-6698-4B54-847B-723959CA8BF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{59F0DC10-0874-4B6B-833D-6CDAA04D7367}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59F0DC10-0874-4B6B-833D-6CDAA04D7367}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59F0DC10-0874-4B6B-833D-6CDAA04D7367}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A7B0245-6698-4B54-847B-723959CA8BF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A7B0245-6698-4B54-847B-723959CA8BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A7B0245-6698-4B54-847B-723959CA8BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A7B0245-6698-4B54-847B-723959CA8BF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
