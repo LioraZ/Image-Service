@@ -1,5 +1,7 @@
 ﻿using ImageServiceWeb.Models.Communication;
+using ImageServiceWeb.Models.Config;
 using ImageServiceWeb.Models.ImageWeb;
+using ImageServiceWeb.Models.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +18,17 @@ namespace ImageServiceWeb.Controllers
         };
         private IWebClient client;
         private ImageWebModel imageWebModel;
+        private ConfigModel configModel;
+        private LogsModel logsModel;
 
         public HomeController()
         {
             client = new WebClient();
-            imageWebModel = new ImageWebModel(client);
             client.Connect();
+            imageWebModel = new ImageWebModel(client);
+            configModel = new ConfigModel(client);
+            logsModel = new LogsModel(client);
+            
             //Session.Add["TcpConnection"] = client;
         }
 
@@ -38,7 +45,12 @@ namespace ImageServiceWeb.Controllers
 
         public ActionResult Config()
         {
-            return View();
+            return View(configModel);
+        }
+
+        public ActionResult Logs()
+        {
+            return View(logsModel);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using ImageServiceWeb.Models.Communication;
+﻿using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Event;
+using ImageServiceWeb.Models.Communication;
 using ImageServiceWeb.Models.Enums;
 using Infrastructure.WebAppInfo;
 using System;
@@ -31,10 +33,18 @@ namespace ImageServiceWeb.Models.ImageWeb
             //students.Add(new StudentInfo() { FirstName = "Lio", LastName = "Zaid", StudentID = 323 });
             status = ServiceStatusEnum.INACTIVE;
             client = webClient;
+            client.OnDataReceived += GetData;
         }
-        public void GetData()
+        public void GetData(object sender, CommandEventArgs e)
         {
-            
+            if (e.CommandID == CommandEnum.GetStudentsInfo)
+            {
+                string jsonString = e.CommandArgs[0];
+                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<StudentInfo>>(jsonString);
+                students = (List<StudentInfo>)obj;
+            }
+           // if (e.CommandID == CommandEnum.)
+           //add on disconnect server
         }
     }
 }

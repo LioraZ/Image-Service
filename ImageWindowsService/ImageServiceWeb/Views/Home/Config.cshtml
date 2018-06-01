@@ -1,0 +1,27 @@
+﻿@model ImageServiceWeb.Models.Config.ConfigModel
+@{
+    ViewBag.Title = "Config";
+}
+
+<h2>Config</h2>
+<p>
+    @Html.DisplayForModel()
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Handlers)
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.Handlers)
+    {
+        <tr>
+            <td>
+                @Html.DisplayNameFor(modelItem => item)
+            </td>
+        </tr>
+    }
+
+</table>
+

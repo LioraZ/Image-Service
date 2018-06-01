@@ -76,6 +76,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -138,9 +142,11 @@
     </Compile>
     <Compile Include="Models\Communication\IWebClient.cs" />
     <Compile Include="Models\Communication\WebClient.cs" />
+    <Compile Include="Models\Config\ConfigModel.cs" />
     <Compile Include="Models\Enums\ServiceStatusEnum.cs" />
     <Compile Include="Models\ImageWeb\ImageWebModel.cs" />
     <Compile Include="Models\ImageWeb\StudentInfo.cs" />
+    <Compile Include="Models\Logs\LogsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +162,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\Config.cshtml" />
+    <Content Include="Views\Home\Logs.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -174,6 +182,10 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{7f63acc4-1e84-405e-99a0-f14f89a583cb}</Project>
       <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{d0ac5591-d2a0-41e6-b138-55a79bfa5887}</Project>
+      <Name>Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -13,6 +13,8 @@ namespace ImageServiceWeb.Models.Communication
     {
         private TCPClientChannel client;
 
+        public event EventHandler<CommandEventArgs> OnDataReceived;
+
         public WebClient()
         {
             client = new TCPClientChannel();
@@ -21,7 +23,7 @@ namespace ImageServiceWeb.Models.Communication
 
         private void Client_OnMessageFromServer(object sender, CommandEventArgs e)
         {
-            throw new NotImplementedException();
+            OnDataReceived?.Invoke(this, e);
         }
 
         public void SendCommand(CommandEnum commandID)
