@@ -1,7 +1,29 @@
-﻿
+﻿@model ImageServiceWeb.Models.Logs.LogsModel
 @{
     ViewBag.Title = "Logs";
 }
 
 <h2>Logs</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Message")
+        </th>
+        <th>
+            @Html.DisplayName("Status")
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.Logs)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+        </tr>
+    }
 
+</table>

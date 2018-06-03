@@ -1,7 +1,10 @@
-﻿using ImageServiceWeb.Models.Communication;
+﻿using ImageService.Logging.Model;
+using ImageServiceWeb.Models.Communication;
 using ImageServiceWeb.Models.Config;
+using ImageServiceWeb.Models.Enums;
 using ImageServiceWeb.Models.ImageWeb;
 using ImageServiceWeb.Models.Logs;
+using ImageServiceWeb.Models.PhotosModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +23,17 @@ namespace ImageServiceWeb.Controllers
         private ImageWebModel imageWebModel;
         private ConfigModel configModel;
         private LogsModel logsModel;
+        private PhotosModel photosModel;
 
         public HomeController()
         {
             client = new WebClient();
-            client.Connect();
+            bool connected = client.Connect();
             imageWebModel = new ImageWebModel(client);
+            imageWebModel.status = ServiceStatusEnum.RUNNING;//obvs need to check if connected
             configModel = new ConfigModel(client);
             logsModel = new LogsModel(client);
+            photosModel = new PhotosModel();
             
             //Session.Add["TcpConnection"] = client;
         }
@@ -50,7 +56,17 @@ namespace ImageServiceWeb.Controllers
 
         public ActionResult Logs()
         {
+            /*List<MessageRecievedEventArgs> logsList = new List<MessageRecievedEventArgs>()
+            {
+                new MessageRecievedEventArgs("Hello",MessageTypeEnum.INFO)
+            };*/
+            //logsModel.Logs = logsList;
             return View(logsModel);
         }
+        public ActionResult Photos()
+        {
+            return View(photosModel);
+        }
+        
     }
 }

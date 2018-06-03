@@ -4,9 +4,9 @@
 }
 
 <h2>Home</h2>
-This is my firsts page!!WooHooooo!!!!
 <p>
     @Html.DisplayNameFor(model =>model.status)
+    @Html.DisplayFor(model => model.status)
 </p>
 <table class="table">
     <tr>
@@ -25,13 +25,13 @@ This is my firsts page!!WooHooooo!!!!
     {
         <tr>
             <td>
-                @Html.DisplayNameFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
-                @Html.DisplayNameFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayNameFor(modelItem => item.StudentID)
+                @Html.DisplayFor(modelItem => item.StudentID)
             </td>
         </tr>
     }

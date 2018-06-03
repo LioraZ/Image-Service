@@ -147,6 +147,7 @@
     <Compile Include="Models\ImageWeb\ImageWebModel.cs" />
     <Compile Include="Models\ImageWeb\StudentInfo.cs" />
     <Compile Include="Models\Logs\LogsModel.cs" />
+    <Compile Include="Models\PhotosModel\PhotosModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Config.cshtml" />
     <Content Include="Views\Home\Logs.cshtml" />
+    <Content Include="Views\Photos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

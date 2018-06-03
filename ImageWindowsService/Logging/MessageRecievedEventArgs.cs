@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace ImageService.Logging.Model
@@ -16,7 +17,12 @@ namespace ImageService.Logging.Model
             Message = message;
         }
 
+        [DataType(DataType.Text)]
+        [Display(Name = "Status")]
         public MessageTypeEnum Status { get; set; }     // The Message Type
+
+        [DataType(DataType.Text)]
+        [Display(Name = "Message")]
         public string Message { get; set; }             // The Message To Be Logged
 
         public static MessageTypeEnum ConvertType(EventLogEntryType type)
