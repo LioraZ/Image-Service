@@ -41,7 +41,8 @@ namespace ImageServiceWeb.Models.Config
         {
             client = webClient;
             client.OnDataReceived += GetData;
-            Task.Run(()=> client.SendCommand(CommandEnum.GetConfigCommand));
+            //Task.Run(()=> client.SendCommand(CommandEnum.GetConfigCommand));
+            client.SendCommand(CommandEnum.GetConfigCommand);
         }
 
         private void GetData(object sender, CommandEventArgs e)

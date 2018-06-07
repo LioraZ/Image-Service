@@ -1,0 +1,18 @@
+﻿.classname
+{
+    background: url(../Images/image.gif) no-repeat top left;
+     display: block;
+     width: 150px;
+     height: 150px;
+     /*text-indent: -9999px;  hides the link text */
+}
+.button {
+    background-color: Red; /* Red */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}

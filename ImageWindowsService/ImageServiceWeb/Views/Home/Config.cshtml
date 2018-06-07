@@ -7,6 +7,38 @@
 <p>
     @Html.DisplayForModel()
 </p>
+<h1>@Html.DisplayNameFor(model => model.Handlers)</h1>
+<script>
+            $(function () {
+                $('#ClickMe').click(function () {
+                   window.open('height=' + (window.screen.height - 100) + ',width=200,left=' + (window.screen.width - 250) + ',top=10,status=no,toolbar=no,resizable=yes,scrollbars=yes');
+                });
+            });
+</script>
+<dl style="list-style-type:disc">
+    @foreach (var item in Model.Handlers)
+    {
+        <dd>
+            @Html.DisplayFor(modelItem => item)
+            <input type="button" id="delete" name="Delete" Value="Delete" />
+    </dd>
+    <dt>@Html.ActionLink("Delete", "Config", new { controller = "Home" }, new { onclick = "return confirm('Are you sure you wish to delete the following handler: " + @item + "?');" })</dt>
+        <dt>@Html.ActionLink("Delete", "Delete", "Home", new { id = item}, new { onclick = "return confirm('Are you sure you wish to delete the following handler: " + @item + "?');" })</dt>
+        <dt>@Html.ActionLink("Delete", "Delete", new { controller = "Home" } , new { @class = "button" }) </dt>
+        <dt>@Html.ActionLink("Delete", "Delete", "Home", new { target = "_blank" }) </dt>
+        <dt>@Html.ActionLink("Delete", "Delete", "Home", new { id = item })</dt>
+    }
+</dl>
+<script src="jquery-3.3.1.min.js">
+    $('#delete').click(function () {
+        window.open('\Home\Delete', 'height=' + (window.screen.height - 100) + ',width=200,left=' + (window.screen.width - 250) + ',top=10,status=no,toolbar=no,resizable=yes,scrollbars=yes');
+    });
+</script>
+<script src="jquery-3.3.1.min.js">
+    $("dt").click(function () {
+        window.open('height=' + (window.screen.height - 100) + ',width=200,left=' + (window.screen.width - 250) + ',top=10,status=no,toolbar=no,resizable=yes,scrollbars=yes')
+    })
+</script>
 <table class="table">
     <tr>
         <th>

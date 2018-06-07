@@ -126,12 +126,52 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="OutputDir\2016\Aug\IMG_2645.JPG" />
+    <Content Include="OutputDir\2016\Jul\IMG_2441.PNG" />
+    <Content Include="OutputDir\2016\Mar\IMG_0184%281%29.JPG" />
+    <Content Include="OutputDir\2016\Mar\IMG_0184.JPG" />
+    <Content Include="OutputDir\2016\May\IMG_1001.JPG" />
+    <Content Include="OutputDir\2016\Sep\IMG_4185.PNG" />
+    <Content Include="OutputDir\2016\Sep\IMG_5036.JPG" />
+    <Content Include="OutputDir\2017\Apr\IMG_0521%281%29.JPG" />
+    <Content Include="OutputDir\2017\Apr\IMG_0521.JPG" />
+    <Content Include="OutputDir\2017\Jun\IMG_1313.JPG" />
+    <Content Include="OutputDir\2017\Jun\profile%281%29.PNG" />
+    <Content Include="OutputDir\2017\Jun\profile%282%29.PNG" />
+    <Content Include="OutputDir\2017\Jun\profile.PNG" />
+    <Content Include="OutputDir\2018\Apr\busy work GIF-source%281%29.gif" />
+    <Content Include="OutputDir\2018\Apr\busy work GIF-source.gif" />
+    <Content Include="OutputDir\2018\Apr\heartdownload.png" />
+    <Content Include="OutputDir\2018\Jan\othelloPic%281%29.JPG" />
+    <Content Include="OutputDir\2018\Jan\othelloPic%282%29.JPG" />
+    <Content Include="OutputDir\2018\Jan\othelloPic.JPG" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EmbeddedResource Include="images\othelloPic%282%29.thumb" />
+    <Content Include="OutputDir\Thumbnails\2016\Aug\IMG_2645.thumb" />
+    <Content Include="OutputDir\Thumbnails\2016\Jul\IMG_2441.thumb" />
+    <Content Include="OutputDir\Thumbnails\2016\Mar\IMG_0184%281%29.thumb" />
+    <Content Include="OutputDir\Thumbnails\2016\Mar\IMG_0184.thumb" />
+    <Content Include="OutputDir\Thumbnails\2016\May\IMG_1001.thumb" />
+    <Content Include="OutputDir\Thumbnails\2016\Sep\IMG_4185.thumb" />
+    <Content Include="OutputDir\Thumbnails\2016\Sep\IMG_5036.thumb" />
+    <Content Include="OutputDir\Thumbnails\2017\Apr\IMG_0521%281%29.thumb" />
+    <Content Include="OutputDir\Thumbnails\2017\Apr\IMG_0521.thumb" />
+    <Content Include="OutputDir\Thumbnails\2017\Jun\IMG_1313.thumb" />
+    <Content Include="OutputDir\Thumbnails\2017\Jun\profile%281%29.thumb" />
+    <Content Include="OutputDir\Thumbnails\2017\Jun\profile%282%29.thumb" />
+    <Content Include="OutputDir\Thumbnails\2017\Jun\profile.thumb" />
+    <Content Include="OutputDir\Thumbnails\2018\Apr\busy work GIF-source%281%29.thumb" />
+    <Content Include="OutputDir\Thumbnails\2018\Apr\busy work GIF-source.thumb" />
+    <Content Include="OutputDir\Thumbnails\2018\Apr\heartdownload.thumb" />
+    <Content Include="OutputDir\Thumbnails\2018\Jan\othelloPic%281%29.thumb" />
+    <Content Include="OutputDir\Thumbnails\2018\Jan\othelloPic%282%29.thumb" />
+    <Content Include="OutputDir\Thumbnails\2018\Jan\othelloPic.thumb" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Styles\basic_styles.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +187,7 @@
     <Compile Include="Models\ImageWeb\ImageWebModel.cs" />
     <Compile Include="Models\ImageWeb\StudentInfo.cs" />
     <Compile Include="Models\Logs\LogsModel.cs" />
+    <Compile Include="Models\PhotosModel\PhotoInfo.cs" />
     <Compile Include="Models\PhotosModel\PhotosModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -165,7 +206,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Config.cshtml" />
     <Content Include="Views\Home\Logs.cshtml" />
-    <Content Include="Views\Photos.cshtml" />
+    <Content Include="Views\Home\Photos.cshtml" />
+    <Content Include="Views\Home\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

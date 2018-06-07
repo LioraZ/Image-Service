@@ -13,12 +13,21 @@ namespace ImageServiceWeb.Models.Communication
     {
         private TCPClientChannel client;
 
+        private static WebClient instance;
+
         public event EventHandler<CommandEventArgs> OnDataReceived;
 
-        public WebClient()
+        public static WebClient GetInstance()
+        {
+            if (instance == null) instance = new WebClient();
+            return instance;
+        }
+
+        private WebClient()
         {
             client = new TCPClientChannel();
             client.OnMessageFromServer += Client_OnMessageFromServer;
+            Connect();
         }
 
         private void Client_OnMessageFromServer(object sender, CommandEventArgs e)
