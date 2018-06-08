@@ -75,11 +75,9 @@ namespace ImageServiceWeb.Controllers
 
         public ActionResult Delete(string handler)
         {
-           return View();
-        }
-
-        public ActionResult OnDelete(string handler)
-        {
+           ViewBag.Handler = handler;
+            configModel = new ConfigModel(WebClient.GetInstance());
+            handler = Session["Handler"] as string;
             List<string> handlers = new List<string>(configModel.Handlers);
             handlers.Remove(handler);
             configModel.Handlers = handlers.ToArray();
@@ -87,5 +85,40 @@ namespace ImageServiceWeb.Controllers
             return View();
         }
 
+        /// <exclude />
+        [HttpPost]
+        public ActionResult OnDelete(string handler)
+        {
+            configModel = new ConfigModel(WebClient.GetInstance());
+            handler = Session["Handler"] as string;
+            List<string> handlers = new List<string>(configModel.Handlers);
+            handlers.Remove(handler);
+            configModel.Handlers = handlers.ToArray();
+
+            return RedirectToAction("Config", configModel);
+        }
+
+        [HttpPost]
+        public ActionResult Photos(PhotoInfo photo)
+        {
+            return RedirectToAction("PhotosView", new { model = photo });
+        }
+
+        public ActionResult PhotosView()
+        {
+            return View();
+        }
+        public ActionResult PhotosDelete()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public PartialViewResult GetDeletePartial(string id)
+        {
+            //var deleteItem = db.Items.Find(id);  // I'm using 'Items' as a generic term for whatever item you have
+
+            return PartialView("Delete", id);  // assumes your delete view is named "Delete"
+        }
     }
 }

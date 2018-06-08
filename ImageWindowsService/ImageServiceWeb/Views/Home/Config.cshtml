@@ -4,46 +4,62 @@
 }
 
 <h2>Config</h2>
-<p>
-    @Html.DisplayForModel()
-</p>
-<h1>@Html.DisplayNameFor(model => model.Handlers)</h1>
-<script>
-            $(function () {
-                $('#ClickMe').click(function () {
-                   window.open('height=' + (window.screen.height - 100) + ',width=200,left=' + (window.screen.width - 250) + ',top=10,status=no,toolbar=no,resizable=yes,scrollbars=yes');
-                });
-            });
-</script>
-<dl style="list-style-type:disc">
-    @foreach (var item in Model.Handlers)
-    {
-        <dd>
-            @Html.DisplayFor(modelItem => item)
-            <input type="button" id="delete" name="Delete" Value="Delete" />
-    </dd>
-    <dt>@Html.ActionLink("Delete", "Config", new { controller = "Home" }, new { onclick = "return confirm('Are you sure you wish to delete the following handler: " + @item + "?');" })</dt>
-        <dt>@Html.ActionLink("Delete", "Delete", "Home", new { id = item}, new { onclick = "return confirm('Are you sure you wish to delete the following handler: " + @item + "?');" })</dt>
-        <dt>@Html.ActionLink("Delete", "Delete", new { controller = "Home" } , new { @class = "button" }) </dt>
-        <dt>@Html.ActionLink("Delete", "Delete", "Home", new { target = "_blank" }) </dt>
-        <dt>@Html.ActionLink("Delete", "Delete", "Home", new { id = item })</dt>
-    }
-</dl>
-<script src="jquery-3.3.1.min.js">
-    $('#delete').click(function () {
-        window.open('\Home\Delete', 'height=' + (window.screen.height - 100) + ',width=200,left=' + (window.screen.width - 250) + ',top=10,status=no,toolbar=no,resizable=yes,scrollbars=yes');
-    });
-</script>
-<script src="jquery-3.3.1.min.js">
-    $("dt").click(function () {
-        window.open('height=' + (window.screen.height - 100) + ',width=200,left=' + (window.screen.width - 250) + ',top=10,status=no,toolbar=no,resizable=yes,scrollbars=yes')
-    })
-</script>
+<!-- Modal -->
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="deleteModalLabel">Delete Item</h4>
+            </div>
+            <div id="deleteModalBody" class="modal-body"></div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" id="confirmDelete" data-dismiss="modal">Yes</a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                @using (Html.BeginForm("OnDelete", "Home", FormMethod.Post, new { id = "deleteForm"}))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Yes" class="btn btn-default" /> |
+                        @Html.ActionLink("OnDelete", "OnDelete", "Home")
+                    </div>
+                }
+                <script>
+                    $("#confirmDelete").on("click", function () {
+                        $("#deleteForm").submit();
+                    })
+                </script>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Handlers)
-        </th>
+        <td>@Html.DisplayNameFor(model => model.OutputDir)</td>
+        <th>@Html.DisplayFor(model => model.OutputDir)</th>
+    </tr>
+    <tr>
+        <td>@Html.DisplayNameFor(model => model.SourceName)</td>
+        <th>@Html.DisplayFor(model => model.SourceName)</th>
+    </tr>
+    <tr>
+        <td>@Html.DisplayNameFor(model => model.LogName)</td>
+        <th>@Html.DisplayFor(model => model.LogName)</th>
+    </tr>
+    <tr>
+        <td>@Html.DisplayNameFor(model => model.ThumbnailSize)</td>
+        <th>@Html.DisplayFor(model => model.ThumbnailSize)</th>
+    </tr>
+</table>
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Handlers)</th>
         <th></th>
     </tr>
     @foreach (var item in Model.Handlers)
@@ -51,9 +67,18 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item)
+                <a href="#" class="deleteLink" id="@item">delete</a>
+                <script>
+                    $("#deleteModal").modal("hide");//hides pop up till needed
+                    $(".deleteLink").on("click", function () {
+                        $.get('@Url.Action("GetDeletePartial")', { id: $(this).prop("id") }, function (data) {
+                            $("#deleteModalBody").html(data);
+                            $("#deleteModal").modal("show");
+                        });
+                    });
+                </script>
             </td>
         </tr>
     }
-
 </table>
 

@@ -9,7 +9,7 @@
        @foreach (var item in Model.Photos)
        {
             <div class="thumbnail">
-                <img src=@Url.Content(item.RelativeThumbnailPath) class="img-rounded" alt=@item.Name>
+                <img src=@Url.Content(item.RelativePath) class="img-rounded" alt=@item.Name>
                 <div class="caption">
                     <h3>@item.Name</h3>
                     <p>@item.Date</p>
