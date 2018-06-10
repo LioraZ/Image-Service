@@ -52,3 +52,4 @@ C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServiceWeb\bin\In
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServiceWeb\bin\Newtonsoft.Json.xml
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServiceWeb\bin\Logging.exe
 C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServiceWeb\bin\Logging.pdb
+C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServiceWeb\obj\Debug\ImageServiceWeb.g.resources

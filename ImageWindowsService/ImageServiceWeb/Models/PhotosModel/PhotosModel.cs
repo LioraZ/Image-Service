@@ -60,11 +60,32 @@ namespace ImageServiceWeb.Models.PhotosModel
             Photos = tempPhotos.ToArray<PhotoInfo>();
         }
 
-        public string MakeRelative(string filePath)
+        private string MakeRelative(string filePath)
         {
             var fileUri = new Uri(filePath);
             var referenceUri = new Uri(OutputDir);
             return "~/" + referenceUri.MakeRelativeUri(fileUri).ToString();
+        }
+
+        public void DeletePhoto(string photo)
+        {
+            List<PhotoInfo> tempPhotos = new List<PhotoInfo>(Photos);
+            foreach (PhotoInfo photoInfo in Photos)
+            {
+                if (photoInfo.RelativeThumbnailPath == photo)
+                {
+                    tempPhotos.Remove(photoInfo);
+                    break;
+                }
+            }
+            Photos = tempPhotos.ToArray();
+        }
+
+        public PhotoInfo GetPhotoInfo(string photoName)
+        {
+            //List<PhotoInfo> tempPhotos = new List<PhotoInfo>(Photos);
+            foreach (PhotoInfo photoInfo in Photos) { if (photoInfo.Name == photoName) return photoInfo; }
+            return null;
         }
     }
 }

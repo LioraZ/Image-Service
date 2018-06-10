@@ -43,12 +43,6 @@ namespace ImageServiceWeb.Controllers
         public ActionResult Index()
         {
             imageWebModel = new ImageWebModel(WebClient.GetInstance());
-            /*List<StudentInfo> students = new List<StudentInfo>(){
-            new StudentInfo() { FirstName = "Liora", LastName = "Zaidner", StudentID = 32377 },
-            new StudentInfo() { FirstName = "Lio", LastName = "Zaid", StudentID = 323 }
-            };
-            imageWebModel.Students = students;
-            imageWebModel.status = ServiceStatusEnum.RUNNING;*/
             return View(imageWebModel);
         }
 
@@ -76,13 +70,7 @@ namespace ImageServiceWeb.Controllers
 
         public ActionResult Delete(string handler)
         {
-           ViewBag.Handler = handler;
-            /*configModel = new ConfigModel(WebClient.GetInstance());
-            handler = Session["Handler"] as string;
-            List<string> handlers = new List<string>(configModel.Handlers);
-            handlers.Remove(handler);
-            configModel.Handlers = handlers.ToArray();*/
-            
+            ViewBag.Handler = handler;
             return View();
         }
 
@@ -93,7 +81,6 @@ namespace ImageServiceWeb.Controllers
             configModel = new ConfigModel(WebClient.GetInstance());
             //handler = Session["Handler"] as string;
             configModel.RemoveHandler(removedHandler);
-
             return RedirectToAction("Config", configModel);
         }
 
@@ -103,22 +90,28 @@ namespace ImageServiceWeb.Controllers
             return RedirectToAction("PhotosView", new { model = photo });
         }
 
-        public ActionResult PhotosView()
+        /// <summary>
+        /// Photoses the view.
+        /// </summary>
+        /// <returns>PartialViewResult.</returns>
+        public PartialViewResult PhotosDelete(string photo)
         {
-            return View();
+            photosModel = new PhotosModel();
+            return PartialView("PhotosDelete", photo); //check that is not null
         }
-        public ActionResult PhotosDelete()
+
+        [HttpGet]
+        public PartialViewResult PhotosView(string id)
         {
-            return View();
+            photosModel = new PhotosModel();
+            return PartialView("PhotosView", photosModel.GetPhotoInfo(id)); //check that is not null
         }
 
         [HttpGet]
         public PartialViewResult GetDeletePartial(string id)
         {
-            //var deleteItem = db.Items.Find(id);  // I'm using 'Items' as a generic term for whatever item you have
-
             removedHandler = id;
-            return PartialView("Delete", id);  // assumes your delete view is named "Delete"
+            return PartialView("Delete", id); 
         }
 
         [HttpPost]
