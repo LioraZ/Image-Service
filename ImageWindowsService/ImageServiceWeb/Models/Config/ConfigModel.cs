@@ -59,5 +59,13 @@ namespace ImageServiceWeb.Models.Config
                 Handlers = settings.Handlers;
             }
         }
+
+        public void RemoveHandler(string handler)
+        {
+            client.SendCommand(CommandEnum.RemoveHandlerCommand, new string[] { handler });
+            List<string> handlers = new List<string>(Handlers);
+            handlers.Remove(handler);
+            Handlers = handlers.ToArray();
+        }
     }
 }

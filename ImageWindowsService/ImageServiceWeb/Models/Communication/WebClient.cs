@@ -9,11 +9,15 @@ using System.Web;
 
 namespace ImageServiceWeb.Models.Communication
 {
+
+
     public class WebClient : IWebClient
     {
         private TCPClientChannel client;
 
         private static WebClient instance;
+
+        public bool Connected { get; set; }
 
         public event EventHandler<CommandEventArgs> OnDataReceived;
 
@@ -37,14 +41,23 @@ namespace ImageServiceWeb.Models.Communication
 
         public void SendCommand(CommandEnum commandID)
         {
-            client.SendMessageToServer(new CommandEventArgs() { CommandID = commandID, CommandArgs = new string[] { } } );
-            //client.
-            return;
+            SendCommand(commandID, new string[] { });
         }
 
         public bool Connect()
         {
-            return client.ConnectToServer(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000));
+             Connected = client.ConnectToServer(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000));
+             return Connected;
+        }
+
+        public bool isConnected()
+        {
+            return Connected;
+        }
+
+        public void SendCommand(CommandEnum commandID, string[] args)
+        {
+            client.SendMessageToServer(new CommandEventArgs() { CommandID = commandID, CommandArgs = args });
         }
     }
 }

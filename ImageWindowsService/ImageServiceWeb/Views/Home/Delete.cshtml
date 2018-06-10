@@ -5,16 +5,4 @@
 
 <h2>Delete</h2>
 Are you sure you would like to remove this handler?
-<p>@Model</p>
-<footer>
-    <a class="btn btn-primary" id="confirmDelete" data-dismiss="modal">Yes</a>
-    <button type="button" class="btn btn-danger" onclick="javascript:window.close()">Cancel</button>
-    <script>
-                    $('#confirmDelete').on('click', function() {
-                        $.post('@Url.Action("OnDelete")', { id: $(this).prop("id") }, function (data) {
-                            $("#deleteModalBody").html(data);
-                            $("#deleteModal").modal("show");
-                        });
-                    })
-    </script>
-</footer>
+<p id="handler">@Model</p>

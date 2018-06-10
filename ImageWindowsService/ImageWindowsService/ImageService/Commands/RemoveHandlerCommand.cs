@@ -19,7 +19,7 @@ namespace ImageWindowsService.ImageService.Commands
     public class RemoveHandlerCommand : ICommand
     {
         public event EventHandler<string> RemoveHandler;
-
+        
         /// <summary>
         /// The method will execute the given command with its arguments.
         /// </summary>
@@ -30,6 +30,7 @@ namespace ImageWindowsService.ImageService.Commands
         /// The result of the command success/failure.
         public string Execute(string[] args, out bool result)
         {
+            if (GetCongigCommand.handlers.Contains(args[0])) GetCongigCommand.handlers.Remove(args[0]);
             RemoveHandler?.Invoke(this, args[0]);
             result = true;
             return args[0];

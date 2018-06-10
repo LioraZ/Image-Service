@@ -7,29 +7,28 @@
 <!-- Modal -->
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="deleteModalLabel">Delete Item</h4>
             </div>
-            <div id="deleteModalBody" class="modal-body"></div>
-            <div class="modal-footer">
-                <a class="btn btn-primary" id="confirmDelete" data-dismiss="modal">Yes</a>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                @using (Html.BeginForm("OnDelete", "Home", FormMethod.Post, new { id = "deleteForm"}))
+            <div id="deleteModalBody" class="modal-body">
+            </div>
+            <div id="deleteModalFooter"class="modal-footer">
+                <script>
+                    var handler = document.getElementById("handler").id;
+                </script>
+                <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel"/>
+                @using (Html.BeginForm("OnDelete", "Home", FormMethod.Post, new { id = "deleteForm" }))
                 {
                     @Html.AntiForgeryToken()
-
-                    <div class="form-actions no-color">
-                        <input type="submit" value="Yes" class="btn btn-default" /> |
-                        @Html.ActionLink("OnDelete", "OnDelete", "Home")
-                    </div>
+                        <input type="submit" value="Yes" class="btn btn-primary" />
                 }
                 <script>
                     $("#confirmDelete").on("click", function () {
-                        $("#deleteForm").submit();
+                        ("#deleteForm").submit();
                     })
                 </script>
                 

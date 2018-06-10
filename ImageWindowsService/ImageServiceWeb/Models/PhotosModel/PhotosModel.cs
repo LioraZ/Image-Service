@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ImageServiceWeb.Models.Communication;
+using ImageServiceWeb.Models.Config;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,13 +12,14 @@ namespace ImageServiceWeb.Models.PhotosModel
     {
         public string OutputDir { get; set; }
         public string[] ThumbnailPaths { get; set; }
-        //Uri uriAddress { get; set; }
 
         public PhotoInfo[] Photos { get; set; }
 
         public PhotosModel()
         {
-            OutputDir = "C:\\Users\\Liora\\Documents\\ImageService\\ImageWindowsService\\ImageServiceWeb\\OutputDir";
+            ConfigModel configModel = new ConfigModel(WebClient.GetInstance());
+            OutputDir = configModel.OutputDir;
+            //OutputDir = "C:\\Users\\Liora\\Documents\\ImageService\\ImageWindowsService\\ImageServiceWeb\\OutputDir";
             List<string> yearDirs = new List<string>(Directory.GetDirectories(OutputDir));
             string thumbnailPath = OutputDir + "\\Thumbnails";
             yearDirs.Remove(thumbnailPath);
@@ -37,23 +40,24 @@ namespace ImageServiceWeb.Models.PhotosModel
                         photoInfo.FullPath = photo;
                         photoInfo.RelativePath = MakeRelative(photo);
                         string photoThumbnail = Path.ChangeExtension(photo, "thumb");
-                        photoInfo.ThumbnailPath = photoThumbnail.Replace(OutputDir, thumbnailPath);
+                        photoThumbnail = photoThumbnail.Replace(OutputDir, thumbnailPath);
+                        //photoInfo.ThumbnailPath = photoThumbnail.Replace(OutputDir, thumbnailPath);
+                        Path.ChangeExtension(photoThumbnail, Path.GetExtension(photo));
+                        photoInfo.ThumbnailPath = photoThumbnail.Replace(".thumb", Path.GetExtension(photo));
+                        //photoInfo.ThumbnailPath = photo.Replace(OutputDir, thumbnailPath);
+                        /* if (Path.GetExtension(photoInfo.ThumbnailPath) == "thumb")
+                         {
+                             Path.ChangeExtension(photoInfo.ThumbnailPath, Path.GetExtension(photo));
+                         }*/
+                        // photoInfo.ThumbnailPath = photo + "//120x120";
                         photoInfo.RelativeThumbnailPath = MakeRelative(photoInfo.ThumbnailPath);
                         photoInfo.Name = Path.GetFileName(photo);
-                        photoInfo.Date = month + year;
+                        photoInfo.Date = month + " " + year;
                         tempPhotos.Add(photoInfo);
                     }
                 }
             }
             Photos = tempPhotos.ToArray<PhotoInfo>();
-            /**ThumbnailPaths = Directory.GetFiles(OutputDir, "*.thumb", SearchOption.AllDirectories);
-            uriAddress = new Uri("file://server/filename.ext");
-            
-            for (int i = 0; i < ThumbnailPaths.Length; i++)
-            {
-                ThumbnailPaths[i] = HttpContext.Current.Server.MapPath(ThumbnailPaths[i]);
-                ThumbnailPaths[i] = MakeRelative(ThumbnailPaths[i], "C:\\Users\\Liora\\Documents\\ImageService\\ImageWindowsService\\ImageServiceWeb\\Views\\Home");
-            }*/
         }
 
         public string MakeRelative(string filePath)

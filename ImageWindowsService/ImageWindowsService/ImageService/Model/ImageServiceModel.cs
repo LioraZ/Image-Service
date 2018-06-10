@@ -147,7 +147,8 @@ namespace ImageService.Model
                 string thumbnailPath = fileName.Replace(outputFolder, outputFolder + "\\Thumbnails");
                 string thumbnailFolder = thumbnailPath.Replace("\\" + Path.GetFileName(thumbnailPath), "");
                 msg = CreateFolder(thumbnailFolder, out result);
-                if (result) { thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb")); }
+                if (result) { thumb.Save(thumbnailPath); }
+                //if (result) { thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb")); }
             }
             return msg;
         }

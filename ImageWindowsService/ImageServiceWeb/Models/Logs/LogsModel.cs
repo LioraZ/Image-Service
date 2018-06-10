@@ -23,7 +23,6 @@ namespace ImageServiceWeb.Models.Logs
         {
             client = webClient;
             client.OnDataReceived += GetData;
-            //Task.Run(() => client.SendCommand(CommandEnum.GetAllLogsCommand));
             client.SendCommand(CommandEnum.GetAllLogsCommand);
         }
 
@@ -35,26 +34,7 @@ namespace ImageServiceWeb.Models.Logs
                 string message = e.CommandArgs[0];
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MessageRecievedEventArgs>>(message);
                 Logs = obj;
-                //List<MessageRecievedEventArgs> logs;
-                //= (List<MessageRecievedEventArgs>)obj;
-                //logs.Reverse();
-                //Logs = logs;
-                /*foreach (MessageRecievedEventArgs log in (List<MessageRecievedEventArgs>)obj)
-                {
-                    //var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageRecievedEventArgs>(e.CommandArgs[0]);
-                    MessageRecievedEventArgs logInfo = (MessageRecievedEventArgs)Newtonsoft.Json.JsonConvert.DeserializeObject<MessageRecievedEventArgs>("");
-                    if (Logs.Count >= 0) Logs.Insert(0, logInfo);
-                    else Logs.Add(logInfo);
-                }*/
             }
-            /*else if (commandID == CommandEnum.LogCommand)
-            {
-                string message = e.CommandArgs[0];
-                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageRecievedEventArgs>(e.CommandArgs[0]);
-                MessageRecievedEventArgs logInfo = (MessageRecievedEventArgs)obj;
-                if (Logs.Count >= 0) Logs.Insert(0, logInfo);
-                else Logs.Add(logInfo);
-            }*/
         }
     }
 }

@@ -17,6 +17,12 @@ namespace ImageWindowsService.ImageService.Commands
     /// <seealso cref="ImageService.Commands.ICommand" />
     class GetCongigCommand : ICommand
     {
+        public static List<string> handlers;
+
+        public GetCongigCommand()
+        {
+            //if (handlers == null) handlers = new List<string>();
+        }
         /// <summary>
         /// The method will execute the given command with its arguments.
         /// </summary>
@@ -32,8 +38,16 @@ namespace ImageWindowsService.ImageService.Commands
             settings.SourceName = ConfigurationManager.AppSettings["SourceName"];
             settings.LogName =  ConfigurationManager.AppSettings["LogName"];
             settings.ThumbnailSize = int.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]); //might throw exception
-            string handlers = ConfigurationManager.AppSettings["Handler"];
-            settings.Handlers = handlers.Split(';');
+            if (GetCongigCommand.handlers == null)
+            {
+                string handlersArr = ConfigurationManager.AppSettings["Handler"];
+                settings.Handlers = handlersArr.Split(';');
+                GetCongigCommand.handlers = new List<string>(settings.Handlers);
+            }
+            else
+            {
+                settings.Handlers = GetCongigCommand.handlers.ToArray();
+            }
             result = true;
             return Newtonsoft.Json.JsonConvert.SerializeObject(settings); ;
         }

@@ -28,12 +28,10 @@ namespace ImageServiceWeb.Models.ImageWeb
 
         public ImageWebModel(IWebClient webClient)
         {
-            //students = new List<StudentInfo>();
-            //students.Add(new StudentInfo() { FirstName = "Liora", LastName = "Zaidner", StudentID = 32377 });
-            //students.Add(new StudentInfo() { FirstName = "Lio", LastName = "Zaid", StudentID = 323 });
-            status = ServiceStatusEnum.INACTIVE;
             client = webClient;
             client.OnDataReceived += GetData;
+            status = StatusConverter(client.isConnected());
+            client.SendCommand(CommandEnum.GetStudentsInfo);
         }
         public void GetData(object sender, CommandEventArgs e)
         {
@@ -41,10 +39,16 @@ namespace ImageServiceWeb.Models.ImageWeb
             {
                 string jsonString = e.CommandArgs[0];
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<StudentInfo>>(jsonString);
-                students = (List<StudentInfo>)obj;
+                Students = (List<StudentInfo>)obj;
             }
            // if (e.CommandID == CommandEnum.)
            //add on disconnect server
+        }
+
+        private ServiceStatusEnum StatusConverter(bool connected)
+        {
+            if (connected) return ServiceStatusEnum.RUNNING;
+            return ServiceStatusEnum.INACTIVE;
         }
     }
 }

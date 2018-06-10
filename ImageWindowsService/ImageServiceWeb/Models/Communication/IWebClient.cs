@@ -14,6 +14,9 @@ namespace ImageServiceWeb.Models.Communication
         event EventHandler<CommandEventArgs> OnDataReceived;
 
         void SendCommand(CommandEnum commandID);
+        void SendCommand(CommandEnum commandID, string[] args);
+
         bool Connect();
+        bool isConnected();
     }
 }

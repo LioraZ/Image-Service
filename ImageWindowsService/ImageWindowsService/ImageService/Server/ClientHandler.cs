@@ -82,6 +82,7 @@ namespace ImageWindowsService.ImageService.Server
                                 logger.Log(logMessage, MessageTypeEnum.FAIL);
                                 return;
                             }
+                            
                             jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(new CommandEventArgs() { CommandID = args.CommandID, CommandArgs = new string[] { logMessage } });
                             mutex.WaitOne();
                             if (args.CommandID != CommandEnum.RemoveHandlerCommand)
@@ -89,6 +90,10 @@ namespace ImageWindowsService.ImageService.Server
                                 writer.Write(jsonString);
                                 mutex.ReleaseMutex();
                                 mutex.WaitOne();
+                            }
+                            if (args.CommandID == CommandEnum.GetAllLogsCommand)
+                            {
+                                logMessage = "List of all commands...";
                             }
                             logger.Log("Command " + args.CommandID.ToString() + " received" + System.Environment.NewLine + 
                                "Arguments returned:\n"  + logMessage, MessageTypeEnum.INFO);
