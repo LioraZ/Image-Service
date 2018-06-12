@@ -27,8 +27,8 @@ namespace ImageService.Controller
                 {CommandEnum.GetConfigCommand, new GetCongigCommand() },
                 {CommandEnum.RemoveHandlerCommand, new RemoveHandlerCommand() },
                 {CommandEnum.GetAllLogsCommand, new GetAllLogsCommand() },
-                {CommandEnum.GetStudentsInfo, new GetStudentsInfoCommand() }
-               // {CommandEnum.GetStudentsInfo, new NumImagesCommand(model) }
+                {CommandEnum.GetStudentsInfo, new GetStudentsInfoCommand() },
+                {CommandEnum.GetNumImages, new NumImagesCommand(model) }
               //  {CommandEnum.LogCommand, new LogCommand() }
             };
         }

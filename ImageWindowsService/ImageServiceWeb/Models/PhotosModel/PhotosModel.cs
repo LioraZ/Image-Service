@@ -15,10 +15,10 @@ namespace ImageServiceWeb.Models.PhotosModel
 
         public PhotoInfo[] Photos { get; set; }
 
-        public PhotosModel()
+        public PhotosModel(string outputDir)
         {
-            ConfigModel configModel = new ConfigModel(WebClient.GetInstance());
-            OutputDir = configModel.OutputDir;
+            //ConfigModel configModel = new ConfigModel(WebClient.GetInstance());
+            OutputDir = outputDir;
             //OutputDir = "C:\\Users\\Liora\\Documents\\ImageService\\ImageWindowsService\\ImageServiceWeb\\OutputDir";
             List<string> yearDirs = new List<string>(Directory.GetDirectories(OutputDir));
             string thumbnailPath = OutputDir + "\\Thumbnails";

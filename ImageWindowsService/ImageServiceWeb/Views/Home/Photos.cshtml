@@ -18,27 +18,38 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-xs-18 col-sm-6 col-md-3">
-       @foreach (var item in Model.Photos)
-       {
-            <div class="thumbnail">
-                <img src=@Url.Content(item.RelativeThumbnailPath) class="img-circle" alt=@item.Name>
-                <div class="caption">
-                    <h3>@item.Name</h3>
-                    <p>@item.Date</p>
-                    <p>
-                        <a href="#" id ="@item.Name" class="btn btn-primary" role="button">View</a>
-                        <a href="#" class="btn btn-danger" role="button">Delete</a>
-                        <script>
-                            $("#deleteModal").modal("hide");//hides pop up till needed
-                            $(".btn btn-primary").on("click", function () {
-                                $.get('@Url.Action("PhotosView")', { id: $(this).prop("id") }, function (data) {
-                                    $("#deleteModalBody").html(data);
-                                    $("#deleteModal").modal("show");
-                                });
-                            });
 
+@foreach (var item in Model.Photos)
+{
+    <div class="col-xs-18 col-sm-6 col-md-3">
+        <div class="thumbnail" style="background-color:#222222;overflow:hidden;width:2500px;height:350px;">
+            <img src=@Url.Content(item.RelativePath) class="img-circle" alt=@item.Name style="width:200px;height:200px;overflow:hidden;">
+            <div class="caption">
+                <h3 style="color:white">@item.Name</h3>
+                <p style="color:white">@item.Date</p>
+                <p>
+                    <button id="@item.Name" class="btn btn-primary" onclick="setId()" >View</button>
+                    <a href="#" class="btn btn-danger" role="button">Delete</a>
+                    
+                  
+                    <script>
+                       var  idName=""
+                        function setId(){
+                            idName = "<%=item.Name>";
+                            $.ajax({
+                                url: "../Controllers/HomeController/PhotosView",
+                                type: "POST",
+                                data: JSON.stringify({
+                                    "id": idName
+                                }),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json"
+
+                            });
+                        }
+                        
+                    </script>
+                    <script>
                             $("#deleteModal").modal("hide");//hides pop up till needed
                             $(".btn btn-danger").on("click", function () {
                                 $.get('@Url.Action("GetDeletePartial")', { id: $(this).prop("id") }, function (data) {
@@ -46,12 +57,9 @@
                                     $("#deleteModal").modal("show");
                                 });
                             });
-                        </script>
-                    </p>
-                </div>
+                    </script>
+                </p>
             </div>
-        }
+        </div>
     </div>
-</div>
-
-
+}

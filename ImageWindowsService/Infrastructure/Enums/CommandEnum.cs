@@ -18,7 +18,8 @@ namespace ImageService.Infrastructure.Enums
         RemoveHandlerCommand,
         DisconnectClientCommand,
         GetAllLogsCommand,
-        GetStudentsInfo
+        GetStudentsInfo,
+        GetNumImages
     }
     public static class ProgramMain
     {

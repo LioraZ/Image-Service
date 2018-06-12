@@ -15,34 +15,28 @@ namespace ImageServiceWeb.Controllers
 {
     public class HomeController : Controller
     {
-        List<StudentInfo> students = new List<StudentInfo>(){
-            new StudentInfo() { FirstName = "Liora", LastName = "Zaidner", StudentID = 32377 },
-            new StudentInfo() { FirstName = "Lio", LastName = "Zaid", StudentID = 323 }
-        };
-        private IWebClient client;
+       // private IWebClient client;
         private ImageWebModel imageWebModel;
         private ConfigModel configModel;
         private LogsModel logsModel;
         private PhotosModel photosModel;
         private static string removedHandler;
+        private static string outputDir;
 
         public HomeController()
         {
-            client = WebClient.GetInstance();
-            //bool connected = client.Connect();
-           // imageWebModel = new ImageWebModel(client);
-            //imageWebModel.status = ServiceStatusEnum.RUNNING;//obvs need to check if connected
-            //configModel = new ConfigModel(client);
-            //logsModel = new LogsModel(client);
-            //photosModel = new PhotosModel();
-            
-            //Session.Add["TcpConnection"] = client;
+            IWebClient client = WebClient.GetInstance();
+            if (client.isConnected() && outputDir == null)
+            {
+                configModel = new ConfigModel(client);
+                outputDir = configModel.OutputDir;
+            }
         }
 
         // GET: Home
         public ActionResult Index()
         {
-            imageWebModel = new ImageWebModel(WebClient.GetInstance());
+            imageWebModel = new ImageWebModel(WebClient.GetInstance(), outputDir);
             return View(imageWebModel);
         }
 
@@ -64,7 +58,7 @@ namespace ImageServiceWeb.Controllers
         }
         public ActionResult Photos()
         {
-            photosModel = new PhotosModel();
+            photosModel = new PhotosModel(outputDir);
             return View(photosModel);
         }
 
@@ -96,15 +90,15 @@ namespace ImageServiceWeb.Controllers
         /// <returns>PartialViewResult.</returns>
         public PartialViewResult PhotosDelete(string photo)
         {
-            photosModel = new PhotosModel();
+            photosModel = new PhotosModel(outputDir);
             return PartialView("PhotosDelete", photo); //check that is not null
         }
 
-        [HttpGet]
-        public PartialViewResult PhotosView(string id)
+        [HttpPost]
+        public ActionResult PhotosView(string id)
         {
-            photosModel = new PhotosModel();
-            return PartialView("PhotosView", photosModel.GetPhotoInfo(id)); //check that is not null
+            photosModel = new PhotosModel(outputDir);
+            return View(photosModel.GetPhotoInfo(id)); //check that is not null
         }
 
         [HttpGet]
