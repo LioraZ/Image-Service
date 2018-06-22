@@ -28,6 +28,7 @@ namespace ImageService.Server
         private ILoggingService logger;             // The Image Service Event Logger
         private Dictionary<string, CommandEnum> commands;   // The Commands Dictionary
         private TCPServerChannel serverChannel;
+        private TCPImageServer imageServer;
         #endregion
 
 
@@ -49,9 +50,10 @@ namespace ImageService.Server
             removeHandlerCommand.RemoveHandler += OnRemoveHandler;
             controller.AddCommand(CommandEnum.RemoveHandlerCommand, removeHandlerCommand);
             commands = new Dictionary<string, CommandEnum>(){{"Close Handler", CommandEnum.CloseCommand }};
-            serverChannel = new TCPServerChannel(new ClientHandler(controller, logger));
-            
-            serverChannel.Start();
+            //serverChannel = new TCPServerChannel(new ClientHandler(controller, logger));
+            imageServer = new TCPImageServer(new ImageHandler(controller, logger));
+            //serverChannel.Start();
+            imageServer.Start();
             //CreateHandlers();
            // serverChannel.OnMessageToServer += OnMessageToServerReceived;
              //maybe outer task it instead of inner task
@@ -62,7 +64,7 @@ namespace ImageService.Server
         /// </summary>
         public void Start()
         {
-            serverChannel.Start();
+            //serverChannel.Start();
         }
 
         /// <summary>

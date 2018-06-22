@@ -7,14 +7,29 @@
 <!-- Modal -->
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true" style="background-color:#222222;">
+    <div class="modal-dialog" style="background-color:#222222;color:white;">
+        <div class="modal-content" style="background-color:#222222;color:white;">
+            <div class="modal-header" style="background-color:#222222;color:white;">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="deleteModalLabel">Delete Item</h4>
             </div>
-            <div id="deleteModalBody" class="modal-body"></div>
+            <div id="deleteModalBody" class="modal-body">
+            </div>
+            <div id="deleteModalFooter" class="modal-footer">
+                @using (Html.BeginForm("OnDeletePhoto", "Home", FormMethod.Post, new { id = "deleteForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel" />
+                    <input type="submit" value="Yes" class="btn btn-primary" />
+                }
+                <script>
+                    $("#confirmDelete").on("click", function () {
+                        ("#deleteForm").submit();
+                    })
+                </script>
+
+            </div>
         </div>
     </div>
 </div>
@@ -28,37 +43,21 @@
                 <h3 style="color:white">@item.Name</h3>
                 <p style="color:white">@item.Date</p>
                 <p>
-                    <button id="@item.Name" class="btn btn-primary" onclick="setId()" >View</button>
-                    <a href="#" class="btn btn-danger" role="button">Delete</a>
-                    
-                  
+                    <a href="#">@Html.ActionLink("View","ViewPhoto", new { photo = item.Name }, new { @class = "btn btn-primary btn-xs" })</a>
+                    <a href="#" class="deleteLink" id="@item.Name">
+                        <span class="btn btn-danger btn-xs">Delete</span>
+                    </a>
                     <script>
-                       var  idName=""
-                        function setId(){
-                            idName = "<%=item.Name>";
-                            $.ajax({
-                                url: "../Controllers/HomeController/PhotosView",
-                                type: "POST",
-                                data: JSON.stringify({
-                                    "id": idName
-                                }),
-                                contentType: "application/json; charset=utf-8",
-                                dataType: "json"
-
-                            });
-                        }
-                        
-                    </script>
-                    <script>
-                            $("#deleteModal").modal("hide");//hides pop up till needed
-                            $(".btn btn-danger").on("click", function () {
-                                $.get('@Url.Action("GetDeletePartial")', { id: $(this).prop("id") }, function (data) {
-                                    $("#deleteModalBody").html(data);
-                                    $("#deleteModal").modal("show");
-                                });
-                            });
+                    $("#deleteModal").modal("hide");
+                    $(".deleteLink").on("click", function () {
+                        $.get('@Url.Action("PhotosDelete")', { id: $(this).prop("id") }, function (data) {
+                            $("#deleteModalBody").html(data);
+                            $("#deleteModal").modal("show");
+                        });
+                    });
                     </script>
                 </p>
+               
             </div>
         </div>
     </div>

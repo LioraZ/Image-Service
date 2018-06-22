@@ -17,10 +17,10 @@ namespace ImageServiceWeb.Models.ImageWeb
         private IWebClient client;
 
         [DataType(DataType.Text)]
-        [Display(Name = "Service Status")]
+        [Display(Name = "Service Status: ")]
         public ServiceStatusEnum status { get; set; }
         [DataType(DataType.Text)]
-        [Display(Name = "Number Of Images")]
+        [Display(Name = "Number Of Images: ")]
         public int NumPictures { get; set; }
 
         private List<StudentInfo> students = new List<StudentInfo>();
@@ -32,10 +32,10 @@ namespace ImageServiceWeb.Models.ImageWeb
             client = webClient;
             client.OnDataReceived += GetData;
             status = StatusConverter(client.isConnected());
-           // Students = GetStudentInfo();
-            client.SendCommand(CommandEnum.GetStudentsInfo);
-            client.SendCommand(CommandEnum.GetNumImages);
-           // NumPictures = GetNumImages(outputDir);
+            Students = GetStudentInfo();
+           // client.SendCommand(CommandEnum.GetStudentsInfo);
+            //client.SendCommand(CommandEnum.GetNumImages);
+            NumPictures = GetNumImages(outputDir);
 
         }
         public void GetData(object sender, CommandEventArgs e)
@@ -69,13 +69,16 @@ namespace ImageServiceWeb.Models.ImageWeb
 
                 foreach (string directory in directories)
                 {
-                    string[] directoryFiles = Directory.GetFiles(directory);
-                    foreach (string filePath in directoryFiles)
+                    string[] subDirectories = Directory.GetDirectories(directory);
+                    foreach (string subDirectory in subDirectories)
                     {
-                        if (Path.GetExtension(filePath) == "jpg" || Path.GetExtension(filePath) == "png"
-                            || Path.GetExtension(filePath) == "bmp" || Path.GetExtension(filePath) == "jpeg"
-                            || Path.GetExtension(filePath) == "gif" || Path.GetExtension(filePath) == "thumb")
-                            counter++;
+                        string[] directoryFiles = Directory.GetFiles(subDirectory);
+                        foreach (string filePath in directoryFiles)
+                        {
+                            string extension = Path.GetExtension(filePath);
+                            if (extension == ".jpg" || extension == ".png" || extension == ".bmp" || extension == ".jpeg" 
+                                || extension == ".gif" || extension == ".thumb") counter++;
+                        }
                     }
                 }
             }
@@ -86,7 +89,7 @@ namespace ImageServiceWeb.Models.ImageWeb
         private List<StudentInfo> GetStudentInfo()
         {
             List<StudentInfo> students = new List<StudentInfo>();
-            System.IO.StreamReader file = new System.IO.StreamReader(@"IndexFiles\StudentsInformation.txt");
+            System.IO.StreamReader file = new System.IO.StreamReader(@"C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageServiceWeb\Models\ImageWeb\StudentsInformation.txt");
             string line;
             while ((line = file.ReadLine()) != null)
             {

@@ -129,7 +129,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Models\ImageWeb\IndexFiles\StudentsInformation.txt" />
+    <Content Include="Models\ImageWeb\StudentsInformation.txt" />
     <Content Include="OutputDir\2016\Aug\IMG_2645.JPG" />
     <Content Include="OutputDir\2016\Jul\IMG_2441.PNG" />
     <Content Include="OutputDir\2016\Mar\IMG_0184%281%29.JPG" />
@@ -214,6 +214,7 @@
     <Content Include="Views\Home\Delete.cshtml" />
     <Content Include="Views\Home\PhotosView.cshtml" />
     <Content Include="Views\Home\PhotosDelete.cshtml" />
+    <Content Include="Views\Home\ViewPhoto.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

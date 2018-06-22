@@ -118,7 +118,7 @@ namespace ImageService.Model
             string dst = dstFolder + "\\" + Path.GetFileName(src);
             try
             {
-                if (File.Exists(dst)) dst = CreateCopy(dst);
+                if (File.Exists(dst)) File.Delete(dst);
                 File.Move(src, dst);
                 string errorMsg = CreateThumbnail(dst, out result);
                 if (!result) return errorMsg;

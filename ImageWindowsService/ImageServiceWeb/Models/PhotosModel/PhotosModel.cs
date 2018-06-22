@@ -17,9 +17,7 @@ namespace ImageServiceWeb.Models.PhotosModel
 
         public PhotosModel(string outputDir)
         {
-            //ConfigModel configModel = new ConfigModel(WebClient.GetInstance());
             OutputDir = outputDir;
-            //OutputDir = "C:\\Users\\Liora\\Documents\\ImageService\\ImageWindowsService\\ImageServiceWeb\\OutputDir";
             List<string> yearDirs = new List<string>(Directory.GetDirectories(OutputDir));
             string thumbnailPath = OutputDir + "\\Thumbnails";
             yearDirs.Remove(thumbnailPath);
@@ -41,15 +39,8 @@ namespace ImageServiceWeb.Models.PhotosModel
                         photoInfo.RelativePath = MakeRelative(photo);
                         string photoThumbnail = Path.ChangeExtension(photo, "thumb");
                         photoThumbnail = photoThumbnail.Replace(OutputDir, thumbnailPath);
-                        //photoInfo.ThumbnailPath = photoThumbnail.Replace(OutputDir, thumbnailPath);
                         Path.ChangeExtension(photoThumbnail, Path.GetExtension(photo));
                         photoInfo.ThumbnailPath = photoThumbnail.Replace(".thumb", Path.GetExtension(photo));
-                        //photoInfo.ThumbnailPath = photo.Replace(OutputDir, thumbnailPath);
-                        /* if (Path.GetExtension(photoInfo.ThumbnailPath) == "thumb")
-                         {
-                             Path.ChangeExtension(photoInfo.ThumbnailPath, Path.GetExtension(photo));
-                         }*/
-                        // photoInfo.ThumbnailPath = photo + "//120x120";
                         photoInfo.RelativeThumbnailPath = MakeRelative(photoInfo.ThumbnailPath);
                         photoInfo.Name = Path.GetFileName(photo);
                         photoInfo.Date = month + " " + year;
@@ -67,25 +58,37 @@ namespace ImageServiceWeb.Models.PhotosModel
             return "~/" + referenceUri.MakeRelativeUri(fileUri).ToString();
         }
 
-        public void DeletePhoto(string photo)
+        public PhotoInfo GetPhotoInfo(string photoName)
         {
-            List<PhotoInfo> tempPhotos = new List<PhotoInfo>(Photos);
+            foreach (PhotoInfo photoInfo in Photos) { if (photoInfo.Name == photoName) return photoInfo; }
+            return null;
+        }
+
+        public void RemovePhoto(string photoName)
+        {
+            PhotoInfo photo = null;
             foreach (PhotoInfo photoInfo in Photos)
             {
-                if (photoInfo.RelativeThumbnailPath == photo)
+                if (photoInfo.Name == photoName)
                 {
-                    tempPhotos.Remove(photoInfo);
+                    photo = photoInfo;
+                    DeletePhoto(photo);
                     break;
                 }
             }
+            List<PhotoInfo> tempPhotos = new List<PhotoInfo>(Photos);
+            if (tempPhotos.Contains(photo)) tempPhotos.Remove(photo);
             Photos = tempPhotos.ToArray();
         }
 
-        public PhotoInfo GetPhotoInfo(string photoName)
+        private void DeletePhoto(PhotoInfo photo)
         {
-            //List<PhotoInfo> tempPhotos = new List<PhotoInfo>(Photos);
-            foreach (PhotoInfo photoInfo in Photos) { if (photoInfo.Name == photoName) return photoInfo; }
-            return null;
+            try
+            {
+                File.Delete(photo.FullPath);
+                File.Delete(photo.ThumbnailPath);
+            }
+            catch { }
         }
     }
 }

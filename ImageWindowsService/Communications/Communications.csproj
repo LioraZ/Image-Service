@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Channels\IClientHandler.cs" />
     <Compile Include="Channels\TCPClientChannel.cs" />
+    <Compile Include="Channels\TCPImageServer.cs" />
     <Compile Include="Channels\TCPServerChannel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

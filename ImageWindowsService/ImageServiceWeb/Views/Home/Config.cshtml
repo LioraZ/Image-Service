@@ -17,11 +17,11 @@
             <div id="deleteModalBody" class="modal-body">
             </div>
             <div id="deleteModalFooter"class="modal-footer">
-                <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel"/>
                 @using (Html.BeginForm("OnDelete", "Home", FormMethod.Post, new { id = "deleteForm" }))
                 {
                     @Html.AntiForgeryToken()
-                        <input type="submit" value="Yes" class="btn btn-primary" />
+                    <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel" />
+                    <input type="submit" value="Yes" class="btn btn-primary" />
                 }
                 <script>
                     $("#confirmDelete").on("click", function () {

@@ -63,6 +63,7 @@
     <Compile Include="ImageService\Commands\GetNumImagesCommand.cs" />
     <Compile Include="ImageService\Commands\LogCommand.cs" />
     <Compile Include="ImageService\Commands\NewFileCommand.cs" />
+    <Compile Include="ImageService\Commands\NewImageCommand.cs" />
     <Compile Include="ImageService\Commands\RemoveHandlerCommand.cs" />
     <Compile Include="ImageService\Controller\Handlers\DirectoryHandler.cs" />
     <Compile Include="ImageService\Controller\Handlers\IDirectoryHandler.cs" />
@@ -76,10 +77,12 @@
     </Compile>
     <Compile Include="ImageService\Model\Event\CommandReceivedEventArgs.cs" />
     <Compile Include="ImageService\Model\Event\DirectoryCloseEventArgs.cs" />
+    <Compile Include="ImageService\Model\Event\ImageData.cs" />
     <Compile Include="ImageService\Model\IImageServiceModel.cs" />
     <Compile Include="ImageService\Model\ImageServiceModel.cs" />
     <Compile Include="ImageService\Program.cs" />
     <Compile Include="ImageService\Server\ClientHandler.cs" />
+    <Compile Include="ImageService\Server\ImageHandler.cs" />
     <Compile Include="ImageService\Server\ImageServer.cs" />
     <Compile Include="ImageWindowsService\ImageService\Infrastructure.cs" />
     <Compile Include="ProjectInstaller.cs">

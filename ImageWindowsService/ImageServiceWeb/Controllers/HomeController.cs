@@ -22,6 +22,7 @@ namespace ImageServiceWeb.Controllers
         private PhotosModel photosModel;
         private static string removedHandler;
         private static string outputDir;
+        private static string removedPhoto;
 
         public HomeController()
         {
@@ -77,6 +78,12 @@ namespace ImageServiceWeb.Controllers
             configModel.RemoveHandler(removedHandler);
             return RedirectToAction("Config", configModel);
         }
+        public ActionResult OnDeletePhoto()
+        {
+            photosModel = new PhotosModel(outputDir);
+            photosModel.RemovePhoto(removedPhoto);
+            return RedirectToAction("Photos", photosModel);
+        }
 
         [HttpPost]
         public ActionResult Photos(PhotoInfo photo)
@@ -84,21 +91,24 @@ namespace ImageServiceWeb.Controllers
             return RedirectToAction("PhotosView", new { model = photo });
         }
 
+
         /// <summary>
         /// Photoses the view.
         /// </summary>
         /// <returns>PartialViewResult.</returns>
-        public PartialViewResult PhotosDelete(string photo)
+        public PartialViewResult PhotosDelete(string id)
         {
+            removedPhoto = id;
             photosModel = new PhotosModel(outputDir);
-            return PartialView("PhotosDelete", photo); //check that is not null
+            return PartialView("PhotosDelete", id); //check that is not null
         }
 
-        [HttpPost]
+    
         public ActionResult PhotosView(string id)
         {
             photosModel = new PhotosModel(outputDir);
-            return View(photosModel.GetPhotoInfo(id)); //check that is not null
+            PhotoInfo p = photosModel.GetPhotoInfo(id);
+            return View(p); //check that is not null
         }
 
         [HttpGet]
@@ -123,6 +133,13 @@ namespace ImageServiceWeb.Controllers
                 logsModel.Logs = tempLogs;
             }
             return View(logsModel);
+        }
+
+        public ActionResult ViewPhoto(string photo)
+        {
+            photosModel = new PhotosModel(outputDir);
+            PhotoInfo p = photosModel.GetPhotoInfo(photo);
+            return View(p);
         }
     }
 }

@@ -94,3 +94,16 @@ Affected parameters are:
    logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
    assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
 Restoring event log to previous state for source ImageService.
+Installing assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe
+Installing service ImageService...
+Service ImageService has been successfully installed.
+Creating EventLog source ImageService in log Application...
+Committing assembly 'C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.InstallLog
+   assemblypath = C:\Users\Liora\Documents\ImageService\ImageWindowsService\ImageWindowsService\bin\Debug\ImageWindowsService.exe

@@ -1,6 +1,13 @@
 ﻿@model ImageServiceWeb.Models.PhotosModel.PhotoInfo
-@{
-    ViewBag.Title = "PhotosView";
+
+@{ 
+    ViewBag.Title = "";
 }
-<img src=@Url.Content(Model.RelativePath) class="img-rounded" alt=@Model.Name>
-<p>@Model.Date</p>
+<h2>Photos</h2>
+<!-- Modal -->
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<div class="thumbnail" style="background-color:#222222;overflow:hidden;width:2500px;height:350px;">
+    <img src="@Href(Model.RelativePath)" class="img-circle" alt=Model.Name style="width:200px;height:200px;overflow:hidden;">
+ </div>

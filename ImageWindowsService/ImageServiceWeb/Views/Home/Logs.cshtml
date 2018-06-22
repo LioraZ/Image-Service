@@ -2,17 +2,11 @@
 @{
     ViewBag.Title = "Logs";
 }
+<p style="font-weight:bold;margin-top:20px;margin-bottom:20px;">
+    <text style="font-size:30px;">Logs  </text> <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+</p>
 
-<h2>Logs</h2>
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
 
-@using (Html.BeginForm())
-{
-    <p>
-        Find by name: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
-    </p>
-}
 <table class="table" id="myTable">
     <tr>
         <th>@Html.DisplayName("Status") </th>
